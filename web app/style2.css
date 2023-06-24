@@ -1,0 +1,104 @@
+body {
+    background-color: #e5e5e5;
+}
+
+button, select {
+    border: none;
+    outline: none;
+    background: none;
+    padding-top: 8px;
+    padding-left: initial;
+}
+
+.container {
+    padding-top: 30px;
+}
+
+.card {
+    border-radius: 0.7rem;
+}
+
+.card-img-top {
+    width: 286.5px;
+    height: 270px;
+    border-top-left-radius: calc(0.8rem - 2px);
+    border-top-right-radius: calc(0.8rem - 2px);
+}
+
+.card.h-100 {
+    transition: transform 0.5s ease-out;
+}
+
+.card.h-100:hover {
+    transform: scale(1.05);
+}
+
+#p_info {
+    color: black;
+}
+
+h2 {
+    color: black;
+    margin-top: 10px;
+    margin-left: 20px;
+}
+
+#divform {
+    margin-top: 10px;
+    margin-left: 10px;
+}
+
+.btn-primary {
+    padding-left: 10px;
+}
+
+.list-group {
+    padding-left: 10px;
+    padding-top: 20px;
+}
+
+.mt-3, .my-3 {
+    margin-bottom: 20px;
+}
+
+.list-group-item {
+    width: 50%;
+    padding-left: 10px;
+}
+
+#centrato {
+    padding-left: 35%;
+}
+
+#bottone_iscr {
+    margin-top: 1px;
+    width: 50%;
+    background-color: #6495ed;
+    border: 1px solid black;
+}
+
+p {
+    margin-top: 10px;
+    margin-left: 20px;
+    color: black;
+}
+
+#div_is {
+    padding-left: 47%;
+}
+
+#scritta_is {
+    text-align: center;
+}
+
+input {
+    border: none;
+}
+
+.form {
+    margin-top: 10px;
+}
+
+.form-control {
+    width: 50%;
+}
