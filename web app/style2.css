@@ -87,6 +87,13 @@ p {
     padding-left: 47%;
 }
 
+#bottone_dis {
+    margin-top: 1px;
+    width: 50%;
+    background-color: brown;
+    border: 1px solid black;
+}
+
 #scritta_is {
     text-align: center;
 }
