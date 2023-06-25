@@ -1091,7 +1091,7 @@ SELECT * FROM unitua.get_carriera('05460A');
 
 --Vista per produrre il calendario completo degli esami:
 CREATE OR REPLACE VIEW unitua.vista_calendario AS
-    SELECT c.codice_appello, c.data_esame, c.ora, c.aula, c.anno_accademico, 
+    SELECT c.codice_appello, c.data_esame, c.ora, c.aula, 
     e.codice AS codice_esame, i.nome_insegnamento,
 	d.id AS codice_docente, d.nome, d.cognome,  d.cdl, 
 	cd.tipologia, cd.descrizione
@@ -1173,3 +1173,60 @@ $$ LANGUAGE plpgsql;
 --Verifica della funzione:
 SELECT * FROM unitua.get_matricola('andrea.galliano@studenti.unitua.it');
 */
+
+SELECT * FROM unitua.iscritti;
+
+--Creazione della vista per disiscrizione/visione iscrizioni confermate:
+CREATE OR REPLACE VIEW unitua.vista_iscrizione AS
+    SELECT isc.studente, c.codice_appello, c.data_esame, c.ora, c.aula, 
+    e.codice AS codice_esame, i.nome_insegnamento,
+    d.id AS codice_docente, d.nome, d.cognome, d.cdl,
+    cd.tipologia, cd.descrizione
+    FROM unitua.iscritti AS isc 
+    JOIN unitua.docente AS d 
+    ON isc.docente = d.id 
+    JOIN unitua.esame AS e 
+    ON isc.esame = e.codice
+    JOIN unitua.insegnamento AS i 
+    ON e.insegnamento = i.codice
+	JOIN unitua.corso_di_laurea AS cd
+	ON i.cdl = cd.codice
+    JOIN unitua.calendario AS c 
+    ON isc.calendario = c.codice_appello;
+
+SELECT * FROM unitua.vista_iscrizione;
+
+--Funzione che restituisce le iscrizioni di uno studente ad uno o più esami:
+CREATE OR REPLACE FUNCTION unitua.get_iscrizioni (
+    matricola_in text
+)
+RETURNS SETOF unitua.vista_iscrizione AS $$
+DECLARE 
+    all_info_iscrizione unitua.vista_iscrizione%ROWTYPE;
+BEGIN
+    FOR all_info_iscrizione IN 
+        SELECT *
+        FROM unitua.vista_iscrizione AS vi 
+        WHERE vi.studente = matricola_in
+    LOOP
+        RETURN NEXT all_info_iscrizione;
+    END LOOP;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+
+--Procedura che disiscrive uno studente da un appello:
+CREATE OR REPLACE PROCEDURE unitua.delete_iscritto (
+    docente_in integer,
+    matricola_in text,
+    esame_in integer,
+    calendario_in integer
+)
+AS $$
+    BEGIN
+        DELETE FROM unitua.iscritti AS i 
+        WHERE i.docente = docente_in AND i.studente = matricola_in AND i.esame = esame_in AND i.calendario = calendario_in;
+    END;
+$$ LANGUAGE plpgsql;
