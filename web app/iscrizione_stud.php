@@ -14,7 +14,7 @@
         include_once('navbar.php');
         include_once("check_login.php");
 
-        $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=3*2da@ELNj@DFP"); 
+        $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=123"); 
 
         $query1 = "SELECT * FROM unitua.get_cdl($1)";
 
