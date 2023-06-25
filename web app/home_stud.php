@@ -35,7 +35,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Disiscrizione agli esami</h5>
                         <p class="card-text">Disiscriviti agli esami a cui non intendi partecipare per permettere uno svolgimento più rapido dell'appello il giorno dell'esame.</p>
-                        <a href="#" class="btn btn-primary">Disiscriviti</a>
+                        <a href="disiscrizione_stud.php" class="btn btn-primary">Disiscriviti</a>
                     </div>
                 </div>
             </div>
@@ -59,7 +59,7 @@
                         <h5 class="card-title">Iscrizioni confermate agli esami</h5>
                         <p class="card-text">Prendi visione di tutte le iscrizioni che hai effettutato agli esami del tuo CDL.</p>
                         <br>
-                        <a href="#" class="btn btn-primary">Visiona</a>
+                        <a href="iscrizioni.php" class="btn btn-primary">Visiona</a>
                     </div>
                 </div>
             </div>
