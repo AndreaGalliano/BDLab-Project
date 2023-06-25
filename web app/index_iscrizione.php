@@ -2,7 +2,7 @@
     session_start();
     if (isset($_POST['codice_appello']) && isset($_POST['codice_docente']) && isset($_POST['codice_esame'])) {
         
-        $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=3*2da@ELNj@DFP"); 
+        $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=123"); 
 
         $query1 = "SELECT * FROM unitua.get_matricola($1)";
 
