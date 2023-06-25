@@ -1,7 +1,7 @@
 <?php
     function login() {
         if (isset($_POST["username"]) && isset($_POST["password"])) {
-                $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=3*2da@ELNj@DFP"); 
+                $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=123"); 
                 $sql = "SELECT * FROM unitua.verifica($1, $2)";
                 $res = pg_prepare($connection, "get_all_esito_attesa_acc", $sql);
 
@@ -56,7 +56,7 @@
                 return;
             }
 
-            $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=3*2da@ELNj@DFP"); 
+            $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=123"); 
 
             $primo_test = "SELECT * FROM unitua.verifica($1, $2)";
 
