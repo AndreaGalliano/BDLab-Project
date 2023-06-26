@@ -45,7 +45,7 @@
                     <div class="card-body">
                         <h5 class="card-title">Consulta la tua carriera</h5>
                         <p class="card-text">Consulta la tua carriera accademica prendendo visione di tutti gli esami finora effettuati e le relative valutazioni.</p>
-                        <a href="#" class="btn btn-primary">Consulta</a>
+                        <a href="carriera.php" class="btn btn-primary">Consulta</a>
                     </div>
                 </div>
             </div>
@@ -70,7 +70,7 @@
                         <h5 class="card-title">Esami superati</h5>
                         <p class="card-text">Consulta l'elenco di tutti gli esami che hai svolto prendendo una valutazione sufficiente.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Consulta</a>
+                        <a href="carriera_suff.php" class="btn btn-primary">Consulta</a>
                     </div>
                 </div>
             </div>
@@ -81,7 +81,7 @@
                         <h5 class="card-title">Insegnamenti di altri CDL</h5>
                         <p class="card-text">Prendi visione di tutti i vari insegnamenti degli altri CDL attivati dal tuo ateneo.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Consulta</a>
+                        <a href="altri_ins.php" class="btn btn-primary">Consulta</a>
                     </div>
                 </div>
             </div>
