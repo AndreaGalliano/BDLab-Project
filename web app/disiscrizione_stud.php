@@ -21,7 +21,7 @@
 
         echo "<h2>Iscrizioni confermate dell'utente: ".$nome." ".$cognome."</h2>";
     
-        $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=123"); 
+        include_once('connection.php'); 
 
         $query1 = "SELECT * FROM unitua.get_matricola($1)";
 

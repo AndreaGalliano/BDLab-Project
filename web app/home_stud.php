@@ -41,7 +41,7 @@
             </div>
             <div class = "col-sm mt-3">
                 <div class = "card h-100" style="width: 18rem; margin: auto;">
-                    <img src="img/carriera.jpg" class="card-img-top" id = "minitatura">
+                    <img src="/img/carriera.jpg" class="card-img-top" id = "minitatura">
                     <div class="card-body">
                         <h5 class="card-title">Consulta la tua carriera</h5>
                         <p class="card-text">Consulta la tua carriera accademica prendendo visione di tutti gli esami finora effettuati e le relative valutazioni.</p>
@@ -54,7 +54,7 @@
         <div class = "row text-center">
             <div class = "col-sm mt-3">
                 <div class = "card h-100" style="width: 18rem; margin: auto;">
-                    <img src="img/elenco.jpg" class="card-img-top" id = "minitatura">
+                    <img src="/img/elenco.jpg" class="card-img-top" id = "minitatura">
                     <div class="card-body">
                         <h5 class="card-title">Iscrizioni confermate agli esami</h5>
                         <p class="card-text">Prendi visione di tutte le iscrizioni che hai effettutato agli esami del tuo CDL.</p>
@@ -65,7 +65,7 @@
             </div>
             <div class = "col-sm mt-3">
                 <div class = "card h-100" style="width: 18rem; margin: auto;">
-                    <img src="img/esami_passati.jpg" class="card-img-top" id = "minitatura">
+                    <img src="/img/esami_passati.jpg" class="card-img-top" id = "minitatura">
                     <div class="card-body">
                         <h5 class="card-title">Esami superati</h5>
                         <p class="card-text">Consulta l'elenco di tutti gli esami che hai svolto prendendo una valutazione sufficiente.</p>
@@ -76,7 +76,7 @@
             </div>
             <div class = "col-sm mt-3">
                 <div class = "card h-100" style="width: 18rem; margin: auto;">
-                    <img src="img/other.jpg" class="card-img-top" id = "minitatura">
+                    <img src="/img/other.jpg" class="card-img-top" id = "minitatura">
                     <div class="card-body">
                         <h5 class="card-title">Insegnamenti di altri CDL</h5>
                         <p class="card-text">Prendi visione di tutti i vari insegnamenti degli altri CDL attivati dal tuo ateneo.</p>

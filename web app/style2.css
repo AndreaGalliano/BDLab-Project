@@ -52,6 +52,10 @@ h2 {
     padding-left: 10px;
 }
 
+#ultima {
+    margin-top: 30px;
+}
+
 .list-group {
     padding-left: 10px;
     padding-top: 20px;
@@ -100,6 +104,27 @@ p {
 
 input {
     border: none;
+}
+
+textarea {
+    border: none;
+    width: 100%;
+}
+
+input[type=date] {
+    width: 100%;
+}
+
+input#ora {
+    width: 100%;
+}
+
+input#aula {
+    width: 100%;
+}
+
+input#anno {
+    width: 100%;
 }
 
 .form {

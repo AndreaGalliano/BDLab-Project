@@ -14,7 +14,7 @@
         include_once('navbar.php');
         include_once("check_login.php");
 
-        $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=123"); 
+        include_once('connection.php'); 
 
         $query1 = "SELECT * FROM unitua.get_cdl($1)";
 
@@ -60,6 +60,51 @@
             } else {
                 $flag = false;
             }
+        }
+
+        echo "</ul>";
+
+        echo "<h5 id='scritta_is'>Tabella delle propedeuticità:</h5>";
+
+        $query3 = "SELECT * FROM unitua.get_cdl($1)";
+
+        $res3 = pg_prepare($connection, "esito", $query3);
+        $res3 = pg_execute($connection, "esito", array($_SESSION['email']));
+        $row3 = pg_fetch_assoc($res3);
+
+        $query4 = "SELECT * FROM unitua.get_prop($1)";
+
+        $res4 = pg_prepare($connection, "esito_q", $query4);
+        $res4 = pg_execute($connection, "esito_q", array($row3['get_cdl']));
+
+        echo "<ul class='list-group' id='centrato'>";
+
+        while ($row4 = pg_fetch_assoc($res4)) {
+            foreach ($row4 as $key => $value) {
+                if (!str_contains($key, "rn")) {
+                    if (str_contains($key, '_')) {
+                    $campi_chiave = explode("_", $key);
+                    echo "<li class='list-group-item'>";
+                    echo strtoupper($campi_chiave[0])." ".strtoupper($campi_chiave[1]).": ".$value;
+                    echo "</li>";
+                } else {
+                    if ($value == 't') {
+                        echo "<li class='list-group-item'>";
+                        echo strtoupper($key).": Sì";
+                    } else {
+                        if ($value == 'f') {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": No";
+                        } else {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": ".$value;
+                        }
+                    }
+                    echo "</li>";
+                    }
+                }
+            }
+            echo "<br><br>";
         }
 
         echo "</ul>";

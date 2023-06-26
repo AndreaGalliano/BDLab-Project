@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (isset($_POST['codice_appello']) && isset($_POST['codice_docente']) && isset($_POST['codice_esame']) && isset($_POST['studente'])) {
-        $connection = pg_connect("host=postgres.favo02.dev port=5432 dbname=unitua user=server password=123"); 
+        include_once('connection.php'); 
 
         $query = "CALL unitua.delete_iscritto($1, $2, $3, $4)";
 
