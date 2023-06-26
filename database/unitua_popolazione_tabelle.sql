@@ -57,7 +57,8 @@ CALL unitua.insert_utente('mario.rossi@segreteria.unitua.it', 'Password#16');
 CALL unitua.insert_utente('michele.bolis@studenti.unitua.it', 'Password#17');
 CALL unitua.insert_utente('elena.casiraghi@docenti.unitua.it', 'Password#20');
 CALL unitua.insert_utente('rebecca.turconi@studenti.unitua.it', 'Password#21');
-CALL unitua.insert_utente('giovanni.bianchi@docente.unitua.it', 'Password#22');
+CALL unitua.insert_utente('giovanni.bianchi@docenti.unitua.it', 'Password#22');
+CALL unitua.insert_utente('giovanni.pighizzini@docenti.unitua.it', 'Password#23');
 
 SELECT * FROM unitua.utente;
 
@@ -128,7 +129,8 @@ CALL unitua.insert_docente('Vincenzo', 'Piuri', '05ZZXQFRMB01VUCG', 'M', '927432
 CALL unitua.insert_docente('Valerio', 'Bellandi', 'PF1ZMRQ7U2YCHKLS', 'M', '5176815545', 'Ordinario', 'valerio.bellandi@docenti.unitua.it', 1);
 CALL unitua.insert_docente('Stefano', 'Montanelli', 'P43P58V6JBJBSOB2', 'M', '2685716768', 'Ordinario', 'stefano.montanelli@docenti.unitua.it', 1);
 CALL unitua.insert_docente('Elena', 'Casiraghi', 'GZTC2T05N8Y1BB4I', 'M', '8666676946', 'Associato', 'elena.casiraghi@docenti.unitua.it', 1);
-CALL unitua.insert_docente('Giovanni', 'Bianchi', 'GZTC2PP5N8Y1BB4I', 'M', '5176815523', 'Associato', 'giovanni.bianchi@docente.unitua.it', 7);
+CALL unitua.insert_docente('Giovanni', 'Bianchi', 'GZTC2PP5N8Y1BB4I', 'M', '5176815523', 'Associato', 'giovanni.bianchi@docenti.unitua.it', 7);
+CALL unitua.insert_docente('Givanni', 'Pighizzini', 'FSKJK3FKSE35HW67', 'M', '1029448856', 'Ordinario', 'giovanni.pighizzini@docenti.unitua.it', 1);
 
 SELECT * FROM unitua.docente;
 
@@ -183,6 +185,7 @@ CALL unitua.insert_insegnamento('Tecnologie Web e Mobile', '2', 'Esame di TWM de
 CALL unitua.insert_insegnamento('Basi di dati', '2', 'Esame di basi di dati del secondo anno di informatica (triennale)', 103, 1);
 CALL unitua.insert_insegnamento('Visualizzazione Scientifica', '3', 'Esame di visualizzazione scientifica del terzo anno di informatica (triennale)', 104, 1);
 CALL unitua.insert_insegnamento('Anatomia 1', '1', 'Esame di Anatomia 1 del primo anno di medicina e chirurgia', 105, 7);
+CALL unitua.insert_insegnamento('Algoritmi e strutture dati', '1', 'Esame di algoritmi del secondo anno di informatica (triennale)', 106, 1);
 
 SELECT * FROM unitua.insegnamento;
 
@@ -209,6 +212,7 @@ CALL unitua.insert_esame(302, 'Presenza', 'Scritto');
 CALL unitua.insert_esame(303, 'Distanza', 'Scritto');
 CALL unitua.insert_esame(304, 'Presenza', 'Scritto');
 CALL unitua.insert_esame(305, 'Presenza', 'Orale');
+CALL unitua.insert_esame(306, 'Presenza', 'Orale');
 
 SELECT * FROM unitua.esame;
 
@@ -224,7 +228,10 @@ AS $$
     END;
 $$ LANGUAGE plpgsql;
 
-CALL unitua.insert_propedeuticita(300, 301); --
+CALL unitua.insert_propedeuticita(300, 301); --Programmazione - S.O.
+CALL unitua.insert_propedeuticita(300, 302); --Tecnologie web
+CALL unitua.insert_propedeuticita(300, 303); --Basi di dati
+CALL unitua.insert_propedeuticita(300, 306); --Algoritmi
 
 SELECT * FROM unitua.propedeuticita;
 
@@ -253,6 +260,7 @@ CALL unitua.insert_calendario('2017-02-24', '8:30', 'P202', 500, '2017', 100, 1)
 CALL unitua.insert_calendario('2023-01-27', '9:00', 'P202', 500, '2023', 100, 1); --1101
 CALL unitua.insert_calendario('2023-01-27', '14:30', 'S500', 501, '2023', 101, 1); --1102
 CALL unitua.insert_calendario('2023-01-27', '8:45', 'OMEGA', 502, '2023', 102, 1); --1103
+CALL unitua.insert_calendario('2023-06-13', '9:00', 'DELTA', 506, '2023', 106, 1);
 
 SELECT * FROM unitua.calendario;
 
@@ -300,6 +308,7 @@ AS $$
 $$ LANGUAGE plpgsql;
 
 CALL unitua.insert_valutazione('05460A', 1101, 500, 100, 23, false, false, '2022-02-02', true);
+CALL unitua.insert_valutazione('05460A', 1102, 501, 101, 26, false, false, '2023-02-16', true);
 CALL unitua.insert_valutazione('98007A', 1101, 500, 100, 20, false, false, '2022-02-02', true);
 CALL unitua.insert_valutazione('98007A', 1102, 501, 101, 30, true, false, '2022-02-20', true);
 CALL unitua.insert_valutazione('98007A', 1103, 502, 102, 25, false, false, '2022-01-07', true);
@@ -725,7 +734,7 @@ BEGIN
     IF EXISTS (
         SELECT 1
         FROM unitua.valutazione
-        WHERE NEW.voto IS NULL AND respinto = true
+        WHERE NEW.voto IS NULL AND NEW.respinto = false
     ) THEN
         RAISE EXCEPTION 'Lo studente deve necessariamente essere respinto poiché il voto è = null.';
     END IF;
@@ -869,6 +878,7 @@ SELECT * FROM unitua.calendario;
 */
 
 --Trigger di controllo sugli esami propedeutici:
+/*
 CREATE OR REPLACE FUNCTION unitua.controllo_propedeuticita()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -888,17 +898,41 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+
+CREATE OR REPLACE FUNCTION unitua.controllo_propedeuticita()
+RETURNS TRIGGER AS $$
+BEGIN 
+    IF EXISTS (
+        SELECT 1
+        FROM 
+    ) THEN 
+        RAISE EXCEPTION 'Non puoi iscriverti a questo esame poiché non rispetteresti le propedeuticità del tuo CdL.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
 CREATE TRIGGER controllo_propedeuticita
 BEFORE INSERT OR UPDATE ON unitua.iscritti
 FOR EACH ROW
 EXECUTE FUNCTION unitua.controllo_propedeuticita();
 
-/*
+
 --Insert di prova:
 CALL unitua.insert_utente('roberto.bolle@studenti.unitua.it', 'Prova');
 CALL unitua.insert_studente('05578A', 'Roberto', 'Bolle', 'APLW30PLQ208AWU8', 'M', '9283746510', '2021-09-10', 'In corso', 'roberto.bolle@studenti.unitua.it', 1);
-CALL unitua.insert_valutazione('05578A', 1101, 500, 100, 25, false, false, '2022-02-02', true);
+CALL unitua.insert_valutazione('05578A', 1101, 500, 100, null, false, true, '2022-02-02', false);
 CALL unitua.insert_iscritto(101, '05578A', 502, 1102);
+
+SELECT *
+FROM unitua.valutazione AS v
+JOIN unitua.esame AS e
+ON v.esame = e.codice
+JOIN unitua.insegnamento AS i
+ON e.insegnamento = i.codice
+JOIN unitua.propedeuticita AS pr
+ON i.codice = pr.insegnamento_con_propedeuticita;
 */
 
 --Trigger di controllo inserimento esami per i docenti 2:
@@ -1067,27 +1101,6 @@ $$ LANGUAGE plpgsql;
 SELECT * FROM unitua.change_pw('giacomo.comitani@studenti.unitua.it', 'Password#2', 'PassCambiata');
 */
 
---Funzione che restituisce tutte le valutazioni data la matricola:
-CREATE OR REPLACE FUNCTION unitua.get_carriera(
-    matricola text
-)
-RETURNS SETOF unitua.valutazione AS $$
-DECLARE
-    all_carriera unitua.valutazione%ROWTYPE;
-BEGIN
-    SELECT v.*
-    INTO all_carriera
-    FROM unitua.valutazione AS v
-    WHERE v.studente = matricola;
-
-    RETURN NEXT all_carriera;
-END;
-$$ LANGUAGE plpgsql;
-
-
---Query di prova:
-SELECT * FROM unitua.get_carriera('05460A');
-
 
 --Vista per produrre il calendario completo degli esami:
 CREATE OR REPLACE VIEW unitua.vista_calendario AS
@@ -1230,3 +1243,251 @@ AS $$
         WHERE i.docente = docente_in AND i.studente = matricola_in AND i.esame = esame_in AND i.calendario = calendario_in;
     END;
 $$ LANGUAGE plpgsql;
+
+--Vista per valutazione:
+CREATE OR REPLACE VIEW unitua.valutazione_completa AS
+    SELECT v.studente, s.nome AS nome_studente, s.cognome AS cognome_studente, v.codice AS codice_valutazione, 
+    c.data_esame AS codice_appello, e.codice AS codice_esame,
+    i.nome_insegnamento, d.cognome AS presidente,
+    v.voto, v.lode, v.data_verbalizzazione, v.accettato
+    FROM unitua.valutazione AS v 
+    JOIN unitua.calendario AS c
+    ON v.calendario = c.codice_appello
+    JOIN unitua.studente AS s 
+    ON v.studente = s.matricola
+    JOIN unitua.esame AS e 
+    ON v.esame = e.codice 
+    JOIN unitua.insegnamento AS i 
+    ON e.insegnamento = i.codice
+    JOIN unitua.docente AS d 
+    ON v.docente = d.id;
+
+--Funzione che restituisce tutte le valutazioni di uno studente data la sua matricola:
+CREATE OR REPLACE FUNCTION unitua.get_carriera (
+    matricola_in text
+)
+RETURNS SETOF unitua.valutazione_completa AS $$
+DECLARE
+    all_valutazione unitua.valutazione_completa%ROWTYPE;
+BEGIN
+    FOR all_valutazione IN 
+        SELECT *
+        FROM unitua.valutazione_completa AS v 
+        WHERE v.studente = matricola_in
+    LOOP
+        RETURN NEXT all_valutazione;
+    END LOOP;
+
+    RETURN;
+
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Chiamata di verifica:
+SELECT * FROM unitua.get_carriera('05460A');
+*/
+
+--Funzione che restituisce solo i voti sufficienti di uno studente:
+CREATE OR REPLACE FUNCTION unitua.get_carriera_suff (
+    matricola_in text 
+)
+RETURNS SETOF unitua.valutazione_completa AS $$
+DECLARE
+    all_valutazione_suff unitua.valutazione_completa%ROWTYPE;
+BEGIN
+    FOR all_valutazione_suff IN
+        SELECT * 
+        FROM unitua.valutazione_completa AS vc  
+        WHERE vc.studente = matricola_in AND vc.voto >= 18
+    LOOP
+        RETURN NEXT all_valutazione_suff;
+    END LOOP;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+--Vista per insegnamenti di un cdl diverso da quello in cui si risulta iscritti:
+CREATE OR REPLACE VIEW unitua.insegnamenti_diversi AS
+    SELECT i.codice AS codice_insegnamento, i.nome_insegnamento, i.descrizione,
+    d.cognome AS presidente, cd.codice AS codice_cdl, cd.descrizione AS nome_cdl
+    FROM unitua.insegnamento AS i 
+    JOIN unitua.docente AS d 
+    ON i.docente = d.id
+    JOIN unitua.corso_di_laurea AS cd 
+    ON i.cdl = cd.codice;
+
+--Funzione che restituisce tutti gli insegnamenti dei corsi di laurea diversi da quello a cui si è iscritto:
+CREATE OR REPLACE FUNCTION unitua.get_other_ins(
+    corso_iscritto integer 
+)
+RETURNS SETOF unitua.insegnamenti_diversi AS $$
+DECLARE
+    all_other_ins unitua.insegnamenti_diversi%ROWTYPE;
+BEGIN
+    FOR all_other_ins IN
+        SELECT *
+        FROM unitua.insegnamenti_diversi AS ins
+        WHERE ins.codice_cdl <> corso_iscritto
+    LOOP
+        RETURN NEXT all_other_ins;
+    END LOOP;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+--Vista per esami propedeutici 1:
+CREATE OR REPLACE VIEW unitua.esami_con_propedeuticita AS
+    SELECT cd.codice AS codice_cdl, i.nome_insegnamento AS insegnamento_dipendente
+    FROM unitua.insegnamento AS i
+	JOIN unitua.propedeuticita AS p
+	ON i.codice = p.insegnamento_con_propedeuticita
+    JOIN unitua.corso_di_laurea AS cd
+    ON i.cdl = cd.codice;
+	
+SELECT * FROM unitua.esami_con_propedeuticita;
+
+--Vista per esami propedeutici 2:
+CREATE OR REPLACE VIEW unitua.esami_propedeutici AS 
+    SELECT i.nome_insegnamento AS insegnamento_propedeutico
+    FROM unitua.insegnamento AS i 
+    JOIN unitua.propedeuticita AS p 
+    ON i.codice = p.insegnamento_propedeutico;
+
+SELECT * FROM unitua.esami_propedeutici;
+
+--Unione delle 2 viste:
+CREATE OR REPLACE VIEW unitua.vista_prop_completa AS 
+    SELECT v1.*, v2.*
+    FROM (
+        SELECT *, ROW_NUMBER() OVER (
+            ORDER BY insegnamento_dipendente
+        )
+        AS rn1 
+        FROM unitua.esami_con_propedeuticita
+    ) v1
+    FULL JOIN (
+        SELECT *, ROW_NUMBER() OVER (
+            ORDER BY insegnamento_propedeutico
+        ) 
+        AS rn2
+        FROM unitua.esami_propedeutici
+    ) v2 
+    ON v1.rn1 = v2.rn2;
+
+SELECT * FROM unitua.vista_prop_completa;
+
+--Funzione che restituisce le propedeuticità di un cdl avuto per argomento:
+CREATE OR REPLACE FUNCTION unitua.get_prop (
+    cdl_in integer 
+)
+RETURNS SETOF unitua.vista_prop_completa AS $$
+DECLARE 
+    all_prop unitua.vista_prop_completa%ROWTYPE;
+BEGIN
+    FOR all_prop IN 
+        SELECT *
+        FROM unitua.vista_prop_completa AS vpc 
+        WHERE codice_cdl = cdl_in
+    LOOP
+        RETURN NEXT all_prop;
+    END LOOP;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Chiamata di verifica:
+SELECT * FROM unitua.get_prop(1);
+*/
+
+--Funzione booleana che dato il codice di un esame stabilisce se ha propedeuticità:
+CREATE OR REPLACE FUNCTION unitua.check_esame (
+    esame_in integer 
+)
+RETURNS BOOLEAN AS $$
+DECLARE 
+    esame_presente boolean := false;
+BEGIN
+    esame_presente := EXISTS (
+        SELECT 1
+        FROM unitua.propedeuticita AS p
+        WHERE p.insegnamento_con_propedeuticita = esame_in
+    );
+
+    RETURN esame_presente;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Chiamata di verifica:
+SELECT * FROM unitua.check_esame(301);
+*/
+
+--Vista per controllo dell'esame propedeutico superato:
+CREATE OR REPLACE VIEW unitua.vista_prop_studente AS 
+    SELECT DISTINCT v.studente, v.voto, v.accettato,
+	e.codice AS codice_esame, i.nome_insegnamento
+    FROM unitua.valutazione AS v
+    JOIN unitua.esame AS e 
+    ON v.esame = e.codice 
+    JOIN unitua.insegnamento AS i 
+    ON e.insegnamento = i.codice
+    JOIN unitua.propedeuticita AS p 
+    ON i.codice = p.insegnamento_propedeutico;
+
+/*
+--Query di prova:
+SELECT * FROM unitua.vista_prop_studente;
+*/
+
+--Funzione booleana che dato un esame che si assuma sia in propedeuticità, restituisca se uno studente ha superato il relativo esame propedeutico:
+CREATE OR REPLACE FUNCTION unitua.passato (
+    matricola_in text,
+    esame_in integer
+)
+RETURNS BOOLEAN AS $$
+DECLARE 
+    esame_passato boolean := false;
+BEGIN
+    esame_passato := EXISTS (
+        SELECT *
+        FROM unitua.vista_prop_studente AS vps
+        WHERE vps.studente = matricola_in AND vps.accettato = true AND vps.voto >= 18
+    );
+
+    RETURN esame_passato;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.passato('05460A', 501);
+*/
+
+--Funzione che restituisce l'insegnamento a partire dall'esame avuto per argomento:
+CREATE OR REPLACE FUNCTION unitua.get_ins (
+    esame_in integer 
+)
+RETURNS INTEGER AS $$
+DECLARE 
+    insegnamento_trovato integer;
+BEGIN 
+    SELECT i.codice
+    INTO insegnamento_trovato
+    FROM unitua.insegnamento AS i 
+    INNER JOIN unitua.esame AS e 
+    ON i.codice = e.insegnamento
+    WHERE e.codice = esame_in;
+
+    RETURN insegnamento_trovato; 
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_ins(501);
+*/
