@@ -131,6 +131,10 @@ input#anno {
     margin-top: 10px;
 }
 
+#paragrafo {
+    font-size: 15px;
+}
+
 .form-control {
     width: 50%;
 }

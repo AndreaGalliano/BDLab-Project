@@ -20,7 +20,7 @@
         $res_ins = pg_execute($connection, "rep", array($_SESSION['email']));
 
         while ($row_ins = pg_fetch_assoc($res_ins)) {
-            echo "<h2>Iscritti di: ".$row_ins['nome_insegnamento']."<h2>";
+            echo "<h2 id='scritta_is'>Iscritti di: ".$row_ins['nome_insegnamento']."<h2>";
 
             $query_es = "SELECT * FROM unitua.get_es($1)";
             $res_es = pg_prepare($connection, "", $query_es);
@@ -30,20 +30,20 @@
 
             while ($row_es = pg_fetch_assoc($res_es)) {
                 $current_year = date('Y');
-                $query_app = "SELECT * FROM unitua.get_appello($1, $2)";
+                $query_app = "SELECT * FROM unitua.get_appello($1, $2, $3)";
                 $res_app = pg_prepare($connection, "", $query_app);
-                $res_app = pg_execute($connection, "", array($row_ins['id'], $current_year));
-                
+                $res_app = pg_execute($connection, "", array($row_ins['id'], $current_year, $row_es['get_es']));
+        
                 while ($row_app = pg_fetch_assoc($res_app)) {
-                    //echo "<h1>Appello di:".$row_app['get_appello']."</h1>";
                     $query = "SELECT * FROM unitua.get_iscritti($1, $2)";
                     $res = pg_prepare($connection, "", $query);
-                    $res = pg_execute($connection, "", array($row_es['get_es'], $row_app['get_appello']));
-                    
+                    $res = pg_execute($connection, "", array($row_es['get_es'], $row_app['codice_appello']));
+                    echo "<h5>Appello del: ".$row_app['data_esame']."</h5>";
                     while ($row = pg_fetch_assoc($res)) {
                         // print_r($row);
                         echo "<li class='list-group-item'>";
                         foreach ($row as $key => $value) {
+                            echo "<p id='paragrafo'>";
                             switch ($key) {
                                 case 'cognome':
                                     echo $value." ";
@@ -56,11 +56,12 @@
                                     echo $value." ";
                                     break;
                             }
+                            echo "</p>";
                         }
                                 
                     echo "</li>";
-                    }    
-                }    
+                    }
+                }   
             }
             echo "</ul>";
             echo "<br><br>";
