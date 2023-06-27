@@ -43,24 +43,23 @@
 
                     echo "<br><h5>Appello del: ".$row_app['data_esame']."</h5>";
                     
-                    echo "<form method='POST' action='index_voti.php'>";
                     while ($row = pg_fetch_assoc($res)) {
+                        echo "<form method='POST' action='index_voti.php'>";
                         // $_SESSION['esame'] = $row['codice_esame'];
                         echo "<li class='list-group-item'>";
                         foreach ($row as $key => $value) {
                             switch ($key) {
                                 case 'cognome':
-                                    echo "<input type='text' id='".$key."' value='".$value."' readonly />";
+                                    echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";
                                     break;
                                 case 'nome':
-                                    echo "<input type='text' id='".$key."' value='".$value."' readonly />";                                    
+                                    echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";                                    
                                     break;
                                 case 'matricola':
-                                    echo "<input type='text' id='".$key."' value='".$value."' readonly />";                                    
+                                    echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";                                    
                                     break;
                                 case 'codice_esame':
-                                    // echo "<label for='codice_esame>Codice esame:</label>'";
-                                    echo "<input type='number' id='".$key."' value='".$value,"' readonly />";
+                                    echo "<input type='number' id='".$key."' name='".$key."' value='".$value."' readonly />";
                             }
                         } 
                         echo "</li>";

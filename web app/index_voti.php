@@ -13,39 +13,39 @@
         include_once('navbar2.php');
         include_once('check_login.php');
 
-        if (!isset($_POST['matricola']) && !isset($_SESSION['codice_appello'])) {
+        // print_r($_POST);
+        // print_r($_SESSION['email']);
+        // print_r($_SESSION['appello']);
+
+        if (!isset($_POST['matricola']) && !isset($_SESSION['appello'])) {
             echo "<h2>Errore nel caricamento dei dati per l'inserimento dei voti.</h2>";
-        }  
+        } else {
+            include_once('connection.php');
+
+            $query = "SELECT * FROM unitua.get_info_doc($1)";
+            $res = pg_prepare($connection, "rep_ok", $query);
+            $res = pg_execute($connection, "rep_ok", array($_SESSION['email']));
+                
+            $row = pg_fetch_assoc($res);
+        }
     ?>
 
     <form method="POST" action="conf_voto.php">
     <div class="form-group" id="divform">
             <label for="studente">Matricola studente:</label>
-            <input type="text" class="form-control" id="studente" aria-describedby="studente" name="studente" value="<?php echo $_POST['studente']; ?>" readonly>
+            <input type="text" class="form-control" id="studente" aria-describedby="studente" name="studente" value='<?php echo $_POST['matricola']; ?>' readonly>
         </div>
         <div class="form-group" id="divform">
             <label for="codice_appello">Codice appello:</label>
-            <input type="number" class="form-control" id="codice_appello" name="codice_appello" value="<?php echo $_SESSION['codice_appello'] ?>" readonly>
+            <input type="number" class="form-control" id="codice_appello" name="codice_appello" value='<?php echo $_SESSION['appello'] ?>' readonly>
         </div>
         <div class="form-group" id="divform">
             <label for="codice_esame">Codice esame:</label>
-            <input type="number" class="form-control" id="codice_esame" name="codice_esame" value="<?php echo $_POST['codice_esame'] ?>" readonly>
+            <input type="number" class="form-control" id="codice_esame" name="codice_esame" value='<?php echo $_POST['codice_esame'] ?>' readonly>
         </div>
         <div class="form-group" id="divform">
             <label for="id_docente">ID docente:</label>
-            <input type="number" class="form-control" id="id_docente" name="id_docente" value="
-            <?php
-                include_once('connection.php');
-
-                $query = "SELECT * FROM unitua.get_info_doc($1)";
-                $res = pg_prepare($connection, "rep_ok", $query);
-                $res = pg_execute($connection, "rep_ok", array($_SESSION['email']));
-
-                $row = pg_fetch_assoc($res);
-
-                echo $row['id']
-            ?>
-            " readonly>
+            <input type="number" class="form-control" id="id_docente" name="id_docente" value=<?php echo $row['id'] ?> readonly>
         </div>
         <div class="form-group" id="divform">
             <label for="codice_esame">Voto in trentesimi:</label>
