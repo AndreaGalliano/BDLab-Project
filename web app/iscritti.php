@@ -38,7 +38,7 @@
                     $query = "SELECT * FROM unitua.get_iscritti($1, $2)";
                     $res = pg_prepare($connection, "", $query);
                     $res = pg_execute($connection, "", array($row_es['get_es'], $row_app['codice_appello']));
-                    echo "<h5>Appello del: ".$row_app['data_esame']."</h5>";
+                    echo "<br><h5>Appello del: ".$row_app['data_esame']."</h5>";
                     while ($row = pg_fetch_assoc($res)) {
                         // print_r($row);
                         echo "<li class='list-group-item'>";
@@ -61,7 +61,7 @@
                                 
                     echo "</li>";
                     }
-                }   
+                }
             }
             echo "</ul>";
             echo "<br><br>";
