@@ -38,7 +38,9 @@
                     $query = "SELECT * FROM unitua.get_iscritti($1, $2)";
                     $res = pg_prepare($connection, "", $query);
                     $res = pg_execute($connection, "", array($row_es['get_es'], $row_app['codice_appello']));
+                    
                     echo "<br><h5>Appello del: ".$row_app['data_esame']."</h5>";
+                    
                     while ($row = pg_fetch_assoc($res)) {
                         // print_r($row);
                         echo "<li class='list-group-item'>";
@@ -49,7 +51,6 @@
                                     echo $value." ";
                                     break;
                                 case 'nome':
-                                    $campi_chiave = explode("_", $key);
                                     echo $value." ";
                                     break;
                                 case 'matricola':
@@ -57,9 +58,8 @@
                                     break;
                             }
                             echo "</p>";
-                        }
-                                
-                    echo "</li>";
+                        }     
+                        echo "</li>";
                     }
                 }
             }

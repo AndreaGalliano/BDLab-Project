@@ -81,6 +81,13 @@ h2 {
     border: 1px solid black;
 }
 
+#bottone_voti {
+    margin-top: 1px;
+    width: 50%;
+    background-color: #6495ed;
+    border: 1px solid black;
+}
+
 p {
     margin-top: 10px;
     margin-left: 20px;
