@@ -13,10 +13,70 @@
         include_once('navbar2.php');
         include_once('check_login.php');
 
-        if (isset($_POST['matricola']) && isset($_SESSION['codice_appello'] && isset($_SESSION['codice_esame']))) {
-            
+        if (!isset($_POST['matricola']) && !isset($_SESSION['codice_appello'])) {
+            echo "<h2>Errore nel caricamento dei dati per l'inserimento dei voti.</h2>";
         }  
     ?>
+
+    <form method="POST" action="conf_voto.php">
+    <div class="form-group" id="divform">
+            <label for="studente">Matricola studente:</label>
+            <input type="text" class="form-control" id="studente" aria-describedby="studente" name="studente" value="<?php echo $_POST['studente']; ?>" readonly>
+        </div>
+        <div class="form-group" id="divform">
+            <label for="codice_appello">Codice appello:</label>
+            <input type="number" class="form-control" id="codice_appello" name="codice_appello" value="<?php echo $_SESSION['codice_appello'] ?>" readonly>
+        </div>
+        <div class="form-group" id="divform">
+            <label for="codice_esame">Codice esame:</label>
+            <input type="number" class="form-control" id="codice_esame" name="codice_esame" value="<?php echo $_POST['codice_esame'] ?>" readonly>
+        </div>
+        <div class="form-group" id="divform">
+            <label for="id_docente">ID docente:</label>
+            <input type="number" class="form-control" id="id_docente" name="id_docente" value="
+            <?php
+                include_once('connection.php');
+
+                $query = "SELECT * FROM unitua.get_info_doc($1)";
+                $res = pg_prepare($connection, "rep_ok", $query);
+                $res = pg_execute($connection, "rep_ok", array($_SESSION['email']));
+
+                $row = pg_fetch_assoc($res);
+
+                echo $row['id']
+            ?>
+            " readonly>
+        </div>
+        <div class="form-group" id="divform">
+            <label for="codice_esame">Voto in trentesimi:</label>
+            <input type="number" class="form-control" id="voto_esame" name="voto_esame" placeholder="Inserisci voto" required>
+        </div>
+        <div class="form-group" id="divform">
+            <label for="lode">Lode:</label>
+            <select class="form-control" id="lode" name="lode" required>
+                <option value="si_lode">Sì</option>
+                <option value="no_lode">No</option>
+            </select>
+        </div>
+        <div class="form-group" id="divform">
+            <label for="respinto">Respinto:</label>
+            <select class="form-control" id="respinto" name="respinto" required>
+                <option value="si_resp">Sì</option>
+                <option value="no_resp">No</option>
+            </select>
+        </div>
+        <div class="form-group" id="divform">
+            <label for="data_verb">Data di verbalizzazione:</label>
+            <input type="date" class="form-control" id="data_verb" name="data_verb" value="
+            <?php
+                echo date("Y/m/d")
+            ?>
+            " readonly>
+        </div>
+        <div class="form-group" id="divform">
+            <button type="submit" class="btn btn-primary">Conferma</button>   
+        </div>
+    </form>
     
 </body>
 </html>

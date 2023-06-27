@@ -40,12 +40,12 @@
                     $res = pg_execute($connection, "", array($row_es['get_es'], $row_app['codice_appello']));
 
                     $_SESSION['appello'] = $row_app['codice_appello'];
-                    $_SESSION['esame'] = $row_app['codice_esame'];
 
                     echo "<br><h5>Appello del: ".$row_app['data_esame']."</h5>";
                     
                     echo "<form method='POST' action='index_voti.php'>";
                     while ($row = pg_fetch_assoc($res)) {
+                        // $_SESSION['esame'] = $row['codice_esame'];
                         echo "<li class='list-group-item'>";
                         foreach ($row as $key => $value) {
                             switch ($key) {
@@ -58,6 +58,9 @@
                                 case 'matricola':
                                     echo "<input type='text' id='".$key."' value='".$value."' readonly />";                                    
                                     break;
+                                case 'codice_esame':
+                                    // echo "<label for='codice_esame>Codice esame:</label>'";
+                                    echo "<input type='number' id='".$key."' value='".$value,"' readonly />";
                             }
                         } 
                         echo "</li>";
