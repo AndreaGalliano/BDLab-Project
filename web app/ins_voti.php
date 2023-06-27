@@ -39,6 +39,9 @@
                     $res = pg_prepare($connection, "", $query);
                     $res = pg_execute($connection, "", array($row_es['get_es'], $row_app['codice_appello']));
 
+                    $_SESSION['appello'] = $row_app['codice_appello'];
+                    $_SESSION['esame'] = $row_app['codice_esame'];
+
                     echo "<br><h5>Appello del: ".$row_app['data_esame']."</h5>";
                     
                     echo "<form method='POST' action='index_voti.php'>";

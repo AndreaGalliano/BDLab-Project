@@ -13,7 +13,10 @@
         include_once('navbar2.php');
         include_once('check_login.php');
 
-        
+        if (isset($_POST['matricola']) && isset($_SESSION['codice_appello'] && isset($_SESSION['codice_esame']))) {
+            
+        }  
     ?>
+    
 </body>
 </html>
