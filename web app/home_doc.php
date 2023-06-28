@@ -68,11 +68,10 @@
                 <div class = "card h-100" style="width: 18rem; margin: auto;">
                     <img src="/img/agg_voti.jpg" class="card-img-top" id = "minitatura">
                     <div class="card-body">
-                        <h5 class="card-title">Aggiorna o rimuovi voti</h5>
+                        <h5 class="card-title">Aggiorna i voti</h5>
+                        <p class="card-text">Modifica i voti in caso di segnalazioni da parte degli studenti o in caso di compilazione errata della valutazione.</p>
                         <br>
-                        <p class="card-text">Modifica o rimuovi i voti in caso di segnalazioni da parte degli studenti.</p>
-                        <br><br>
-                        <a href="#" class="btn btn-primary">Modifica</a>
+                        <a href="update_voti.php" class="btn btn-primary">Modifica</a>
                     </div>
                 </div>
             </div>

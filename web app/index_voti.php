@@ -13,10 +13,6 @@
         include_once('navbar2.php');
         include_once('check_login.php');
 
-        // print_r($_POST);
-        // print_r($_SESSION['email']);
-        // print_r($_SESSION['appello']);
-
         if (!isset($_POST['matricola']) && !isset($_POST['codice_appello'])) {
             echo "<h2>Errore nel caricamento dei dati per l'inserimento dei voti.</h2>";
         } else {

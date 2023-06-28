@@ -55,7 +55,7 @@
             <input type="password" class="form-control" id="conf_new_pw" name="conf_new_pw" placeholder="Conferma nuova password" required>
         </div>
         <div class="form-group" id="divform">
-            <button type="submit" class="btn btn-primary">Submit</button>   
+            <button type="submit" class="btn btn-primary">Modifica</button>   
         </div>
     </form>
 </body>

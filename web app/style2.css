@@ -165,3 +165,27 @@ input#codice_esame {
 input#data_verb {
     width: 50%;
 }
+
+#divform1 {
+    margin-left: 40%;
+}
+
+#divform2 {
+    margin-left: 43.3%;
+}
+
+#bottone_update {
+    width: 50%;
+}
+
+input#voto {
+    width: 100%;
+}
+
+#lode {
+    width: 100%;
+}
+
+#respinto {
+    width: 100%;
+}

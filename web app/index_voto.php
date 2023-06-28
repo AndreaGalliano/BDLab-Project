@@ -1,6 +1,6 @@
 <?php
     session_start();
-    if (isset($_POST['studente']) && isset($_POST['lode']) && isset($_POST['data_verb']) && (isset($_POST['respinto']) || isset($_POST['codice_appello'])) && isset($_POST['codice_esame']) && isset($_POST['id_docente']) && isset($_POST['voto_esame'])) {
+    if (isset($_POST['studente']) && isset($_POST['lode']) && isset($_POST['data_verb']) && isset($_POST['respinto']) && isset($_POST['codice_appello']) && isset($_POST['codice_esame']) && isset($_POST['id_docente']) && isset($_POST['voto_esame'])) {
         include_once('connection.php');
 
         $query = "CALL unitua.insert_valutazione($1, $2, $3, $4, $5, $6, $7, $8)";
