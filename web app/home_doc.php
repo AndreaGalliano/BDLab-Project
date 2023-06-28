@@ -83,7 +83,7 @@
                         <h5 class="card-title">Sessioni di laurea</h5>
                         <p class="card-text" id="ultima">Visiona i dati degli studenti di cui sei stato/a relatore durante le passate sessioni di laurea.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Visiona</a>
+                        <a href="lauree.php" class="btn btn-primary">Visiona</a>
                     </div>
                 </div>
             </div>
