@@ -51,6 +51,44 @@
             </div>
         </div>
 
+        <div class = "row text-center">
+            <div class = "col-sm mt-3">
+                <div class = "card h-100" style="width: 18rem; margin: auto;">
+                    <img src="/img/remove_appello.jpg" class="card-img-top" id = "minitatura">
+                    <div class="card-body">
+                        <h5 class="card-title">Chiudi gli appelli d'esame</h5>
+                        <br>
+                        <p class="card-text">Chiudi gli appelli dei tuoi esami dopo aver inserito tutti i voti degli studenti iscritti.</p>
+                        <br><br>
+                        <a href="remove_appello.php" class="btn btn-primary">Chiudi</a>
+                    </div>
+                </div>
+            </div>
+            <div class = "col-sm mt-3">
+                <div class = "card h-100" style="width: 18rem; margin: auto;">
+                    <img src="/img/agg_voti.jpg" class="card-img-top" id = "minitatura">
+                    <div class="card-body">
+                        <h5 class="card-title">Aggiorna o rimuovi voti</h5>
+                        <br>
+                        <p class="card-text">Modifica o rimuovi i voti in caso di segnalazioni da parte degli studenti.</p>
+                        <br><br>
+                        <a href="#" class="btn btn-primary">Modifica</a>
+                    </div>
+                </div>
+            </div>
+            <div class = "col-sm mt-3">
+                <div class = "card h-100" style="width: 18rem; margin: auto;">
+                    <img src="/img/lauree.jpg" class="card-img-top" id = "minitatura">
+                    <div class="card-body">
+                        <h5 class="card-title">Sessioni di laurea</h5>
+                        <p class="card-text" id="ultima">Visiona i dati degli studenti di cui sei stato/a relatore durante le passate sessioni di laurea.</p>
+                        <br><br>
+                        <a href="#" class="btn btn-primary">Visiona</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </body>

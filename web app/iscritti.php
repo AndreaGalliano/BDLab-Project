@@ -13,6 +13,13 @@
         include_once('navbar2.php');
         include_once('check_login.php');
 
+        $mail_splittata = explode(".", $_SESSION['email']);
+        $nome = strtoupper($mail_splittata[0]);
+        $mail_splittata2 = explode("@", $mail_splittata[1]);
+        $cognome = strtoupper($mail_splittata2[0]);
+
+        echo "<h2 id='scritta_is'>Appelli aperti dal docente: ".$nome." ".$cognome."</h2>";
+
         include_once('connection.php');
 
         $query_ins = "SELECT * FROM unitua.get_insegnamenti($1)";
@@ -20,7 +27,7 @@
         $res_ins = pg_execute($connection, "rep", array($_SESSION['email']));
 
         while ($row_ins = pg_fetch_assoc($res_ins)) {
-            echo "<h2 id='scritta_is'>Iscritti di: ".$row_ins['nome_insegnamento']."<h2>";
+            echo "<br><h2 id='scritta_is'>Iscritti di: ".$row_ins['nome_insegnamento']."<h2>";
 
             $query_es = "SELECT * FROM unitua.get_es($1)";
             $res_es = pg_prepare($connection, "", $query_es);
