@@ -62,7 +62,7 @@
                     }
                 }
                 echo "<li class='list-group-item'>";
-                echo "<input type='number' id='voto' name='voto' placeholder='Inserisci nuovo voto' min=18 max=30 required>";
+                echo "<input type='number' id='voto' name='voto' placeholder='Inserisci nuovo voto' min=18 max=30>";
                 echo "</li>";
 
                 // lode:
