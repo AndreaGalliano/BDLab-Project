@@ -54,6 +54,8 @@ CREATE TABLE unitua.docente (
         REFERENCES unitua.corso_di_laurea(codice) ON DELETE CASCADE
 );
 
+CREATE TYPE unitua.ruolo_segreteria AS ENUM ('Primo livello', 'Secondo livello');
+
 CREATE TABLE unitua.segreteria (
     id serial PRIMARY KEY,
     nome varchar NOT NULL CHECK (nome <> ''),
@@ -61,6 +63,7 @@ CREATE TABLE unitua.segreteria (
     codFiscale varchar(16) NOT NULL UNIQUE CHECK (codFiscale <> ''),
     sesso unitua.sex NOT NULL,
     cellulare varchar(10),
+    ruolo unitua.ruolo_segreteria NOT NULL,
 	utente_email varchar NOT NULL,
     FOREIGN KEY(utente_email)
         REFERENCES unitua.utente(email) ON DELETE CASCADE
@@ -192,10 +195,9 @@ CREATE TABLE unitua.valutazione (
     FOREIGN KEY(docente)
         REFERENCES unitua.docente(id) ON DELETE CASCADE,
     voto unitua.voto_esame,
-    lode boolean NOT NULL,
+    lode boolean,
     respinto boolean NOT NULL,
     data_verbalizzazione date NOT NULL,
-    accettato boolean NOT NULL,
     PRIMARY KEY (codice, studente)
 );
 
@@ -216,6 +218,5 @@ CREATE TABLE unitua.storico_valutazione (
     voto unitua.voto_esame NOT NULL,
     lode boolean NOT NULL,
     respinto boolean NOT NULL,
-    data_verbalizzazione date NOT NULL,
-    accettato boolean NOT NULL
+    data_verbalizzazione date NOT NULL
 );
