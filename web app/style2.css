@@ -145,3 +145,23 @@ input#anno {
 .form-control {
     width: 50%;
 }
+
+input#cognome {
+    width: 200px;
+}
+
+input#nome {
+    width: 200px;
+}
+
+input#matricola {
+    width: 200px;
+}
+
+input#codice_esame {
+    width: 200px;
+}
+
+input#data_verb {
+    width: 50%;
+}

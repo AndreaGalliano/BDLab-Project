@@ -17,7 +17,7 @@
         // print_r($_SESSION['email']);
         // print_r($_SESSION['appello']);
 
-        if (!isset($_POST['matricola']) && !isset($_SESSION['appello'])) {
+        if (!isset($_POST['matricola']) && !isset($_POST['codice_appello'])) {
             echo "<h2>Errore nel caricamento dei dati per l'inserimento dei voti.</h2>";
         } else {
             include_once('connection.php');
@@ -30,14 +30,14 @@
         }
     ?>
 
-    <form method="POST" action="conf_voto.php">
+    <form method="POST" action="index_voto.php">
     <div class="form-group" id="divform">
             <label for="studente">Matricola studente:</label>
             <input type="text" class="form-control" id="studente" aria-describedby="studente" name="studente" value='<?php echo $_POST['matricola']; ?>' readonly>
         </div>
         <div class="form-group" id="divform">
             <label for="codice_appello">Codice appello:</label>
-            <input type="number" class="form-control" id="codice_appello" name="codice_appello" value='<?php echo $_SESSION['appello'] ?>' readonly>
+            <input type="number" class="form-control" id="codice_appello" name="codice_appello" value='<?php echo $_POST['codice_appello'] ?>' readonly>
         </div>
         <div class="form-group" id="divform">
             <label for="codice_esame">Codice esame:</label>
@@ -49,29 +49,25 @@
         </div>
         <div class="form-group" id="divform">
             <label for="codice_esame">Voto in trentesimi:</label>
-            <input type="number" class="form-control" id="voto_esame" name="voto_esame" placeholder="Inserisci voto" required>
+            <input type="number" class="form-control" id="voto_esame" name="voto_esame" placeholder="Inserisci voto" min="18" max="30">
         </div>
         <div class="form-group" id="divform">
             <label for="lode">Lode:</label>
             <select class="form-control" id="lode" name="lode" required>
-                <option value="si_lode">Sì</option>
-                <option value="no_lode">No</option>
+                <option value="True">Sì</option>
+                <option value="False">No</option>
             </select>
         </div>
         <div class="form-group" id="divform">
             <label for="respinto">Respinto:</label>
             <select class="form-control" id="respinto" name="respinto" required>
-                <option value="si_resp">Sì</option>
-                <option value="no_resp">No</option>
+                <option value="True">Sì</option>
+                <option value="False">No</option>
             </select>
         </div>
         <div class="form-group" id="divform">
             <label for="data_verb">Data di verbalizzazione:</label>
-            <input type="date" class="form-control" id="data_verb" name="data_verb" value="
-            <?php
-                echo date("Y/m/d")
-            ?>
-            " readonly>
+            <input type="date" class="form-control" id="data_verb" name="data_verb" value= <?php echo date('Y-m-d') ?>  readonly>
         </div>
         <div class="form-group" id="divform">
             <button type="submit" class="btn btn-primary">Conferma</button>   

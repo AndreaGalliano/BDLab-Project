@@ -39,30 +39,43 @@
                     $res = pg_prepare($connection, "", $query);
                     $res = pg_execute($connection, "", array($row_es['get_es'], $row_app['codice_appello']));
 
-                    $_SESSION['appello'] = $row_app['codice_appello'];
+                    // $_SESSION['appello'] = $row_app['codice_appello'];
 
                     echo "<br><h5>Appello del: ".$row_app['data_esame']."</h5>";
                     
                     while ($row = pg_fetch_assoc($res)) {
                         echo "<form method='POST' action='index_voti.php'>";
                         // $_SESSION['esame'] = $row['codice_esame'];
-                        echo "<li class='list-group-item'>";
+                        // echo "<li class='list-group-item'>";
                         foreach ($row as $key => $value) {
                             switch ($key) {
                                 case 'cognome':
+                                    echo "<li class='list-group-item'>";
                                     echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";
+                                    echo "</li>";
                                     break;
                                 case 'nome':
-                                    echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";                                    
+                                    echo "<li class='list-group-item'>";
+                                    echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";
+                                    echo "</li>";                             
                                     break;
                                 case 'matricola':
-                                    echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";                                    
+                                    echo "<li class='list-group-item'>";
+                                    echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";     
+                                    echo "</li>";         
                                     break;
                                 case 'codice_esame':
+                                    echo "<li class='list-group-item'>";
                                     echo "<input type='number' id='".$key."' name='".$key."' value='".$value."' readonly />";
+                                    echo "</li>";
+                                    break;
+                                case 'codice_appello':
+                                    // echo "<li class='list-group-item'>";
+                                    echo "<input type='hidden' id='".$key."' name='".$key."' value='".$value."' />";
+                                    // echo "</li>";
+                                    break;
                             }
                         } 
-                        echo "</li>";
                         echo "<input type='submit' class='btn btn-primary' id='bottone_voti' value='Inserisci voto'>";
                         echo "</form><br>";
                     }
