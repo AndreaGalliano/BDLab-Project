@@ -189,3 +189,11 @@ input#voto {
 #respinto {
     width: 100%;
 }
+
+#titolino {
+    text-align: center;
+}
+
+#form_add {
+    padding-left: 35%;
+}

@@ -25,7 +25,7 @@
                         <br>
                         <p class="card-text">Crea i vari profili dei nuovi utenti dell'università.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Crea</a>
+                        <a href="crea_profilo.php" class="btn btn-primary">Crea</a>
                     </div>
                 </div>
             </div>
