@@ -23,13 +23,19 @@
                     switch ($dominio) {
                         case "studenti.unitua.it":
                             $_SESSION['isStudente'] = true;
+                            $_SESSION['isDocente'] = false;
+                            $_SESSION['isSegreteria'] = false;
                             header('Location: home_stud.php');
                             break;
                         case "docenti.unitua.it":
+                            $_SESSION['isStudente'] = false;
                             $_SESSION['isDocente'] = true;
+                            $_SESSION['isSegreteria'] = false;
                             header('Location: home_doc.php');
                             break;
                         case "segreteria.unitua.it":
+                            $_SESSION['isStudente'] = false;
+                            $_SESSION['isDocente'] = false;
                             $_SESSION['isSegreteria'] = true;
                             header('Location: home_seg.php');
                             break;
@@ -44,7 +50,7 @@
 
     function logout() {
         session_start();
-        unset($_SESSION["isLogin"]);
+        session_unset();
         header('Location: index.php');
     }
 
