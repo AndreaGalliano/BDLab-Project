@@ -12,18 +12,18 @@
     <?php
         include_once('navbar3.php');
         include_once('check_login.php');
+
+        if (isset($_SESSION['modifica_stud'])) {
+            echo "<h2 id='scritta_is'>".$_SESSION['modifica_stud']."</h2>"; 
+        } else {
+            echo "<h2 id='scritta_is'>Errore nella modifica dei dati...</h2>";
+        }
+        unset($_SESSION['modifica_stud']);
     ?>
 
+    <h5 id="scritta_is">Torna alla schermata precedente:</h5>
     <br>
-    <form method="POST" action="index_change_dati.php">
-        <div class="form-group" id="divform1">
-            <label for="matricola">Matricola dello studente:</label>
-            <input type="text" class="form-control" id="matricola" aria-describedby="matricola" name="matricola" placeholder="Matricola" required>
-        </div>
-        <div class="form-group" id="divform2">
-            <button type="submit" class="btn btn-primary">Conferma</button>   
-        </div>
-    </form>
-
+    <div id="div_is">
+        <a class="btn btn-primary" href="update_dati_stud.php" role="button">Indietro</a>
+    </div>
 </body>
-</html>

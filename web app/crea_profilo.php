@@ -18,11 +18,11 @@
     <form method="POST" action="new_profilo.php" id="form_add">
         <div class="form-group" id="divform">
             <label for="nome">Nome:</label>
-            <input type="text" class="form-control" id="nome" aria-describedby="nome" name="nome" placeholder="Inserisci nome" required>
+            <input type="text" class="form-control" id="nome1" aria-describedby="nome" name="nome" placeholder="Inserisci nome" required>
         </div>
         <div class="form-group" id="divform">
             <label for="cognome">Cognome:</label>
-            <input type="text" class="form-control" id="cognome" aria-describedby="cognome" name="cognome" placeholder="Inserisci cognome" required>
+            <input type="text" class="form-control" id="cognome1" aria-describedby="cognome" name="cognome" placeholder="Inserisci cognome" required>
         </div>
         <div class="form-group" id="divform">
             <label for="password">Password:</label>
@@ -30,7 +30,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="codFiscale">Codice fiscale:</label>
-            <input type="text" class="form-control" id="codFiscale" aria-describedby="codFiscale" name="codFiscale" size="16" placeholder="Inserisci codice fiscale" required>
+            <input type="text" class="form-control" id="codFiscale1" aria-describedby="codFiscale" name="codFiscale" size="16" placeholder="Inserisci codice fiscale" required>
         </div>
         <div class="form-group" id="divform">
             <select class="form-control" id="sesso" name="sesso" required>
@@ -41,11 +41,11 @@
         </div>
         <div class="form-group" id="divform">
             <label for="cellulare">Numero di telefono:</label>
-            <input type="number" class="form-control" id="cellulare" aria-describedby="callulare" name="cellulare" size="10" placeholder="Inserisci numero di telefono" required>
+            <input type="number" class="form-control" id="cellulare1" aria-describedby="callulare" name="cellulare" size="10" placeholder="Inserisci numero di telefono" required>
         </div>
         <div class="form-group" id="divform">
             <label for="cdl">Corso di laurea:</label>
-            <input type="number" class="form-control" id="cdl" aria-describedby="cdl" name="cdl" min="1" placeholder="Inserisci corso di laurea" required>
+            <input type="number" class="form-control" id="cdl1" aria-describedby="cdl" name="cdl" min="1" placeholder="Inserisci corso di laurea" required>
         </div>
         <div class="form-group" id="divform">
             <button type="submit" class="btn btn-primary" id="crea">Crea</button>   
@@ -58,11 +58,11 @@
     <form method="POST" action="new_profilo.php" id="form_add">
         <div class="form-group" id="divform">
             <label for="nome">Nome:</label>
-            <input type="text" class="form-control" id="nome" aria-describedby="nome" name="nome" placeholder="Inserisci nome" required>
+            <input type="text" class="form-control" id="nome1" aria-describedby="nome" name="nome" placeholder="Inserisci nome" required>
         </div>
         <div class="form-group" id="divform">
             <label for="cognome">Cognome:</label>
-            <input type="text" class="form-control" id="cognome" aria-describedby="cognome" name="cognome" placeholder="Inserisci cognome" required>
+            <input type="text" class="form-control" id="cognome1" aria-describedby="cognome" name="cognome" placeholder="Inserisci cognome" required>
         </div>
         <div class="form-group" id="divform">
             <label for="password">Password:</label>
@@ -70,7 +70,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="codFiscale">Codice fiscale:</label>
-            <input type="text" class="form-control" id="codFiscale" aria-describedby="codFiscale" name="codFiscale" size="16" placeholder="Inserisci codice fiscale" required>
+            <input type="text" class="form-control" id="codFiscale1" aria-describedby="codFiscale" name="codFiscale" size="16" placeholder="Inserisci codice fiscale" required>
         </div>
         <div class="form-group" id="divform">
             <select class="form-control" id="sesso" name="sesso" required>
@@ -81,7 +81,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="cellulare">Numero di telefono:</label>
-            <input type="number" class="form-control" id="cellulare" aria-describedby="callulare" name="cellulare" size="10" placeholder="Inserisci numero di telefono" required>
+            <input type="number" class="form-control" id="cellulare1" aria-describedby="callulare" name="cellulare" size="10" placeholder="Inserisci numero di telefono" required>
         </div>
         <div class="form-group" id="divform">
             <select class="form-control" id="carica" name="carica" required>
@@ -92,7 +92,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="cdl">Corso di laurea:</label>
-            <input type="number" class="form-control" id="cdl" aria-describedby="cdl" name="cdl" min="1" placeholder="Inserisci corso di laurea" required>
+            <input type="number" class="form-control" id="cdl1" aria-describedby="cdl" name="cdl" min="1" placeholder="Inserisci corso di laurea" required>
         </div>
         <div class="form-group" id="divform">
             <button type="submit" class="btn btn-primary" id="crea">Crea</button>   

@@ -32,9 +32,9 @@
 
             echo "<li class='list-group-item'>";
             echo "<select class='form-control' id='sesso' name='sesso' required>";
-            echo "<option valute='M'>Maschio</option>";
-            echo "<option valute='F'>Femmina</option>";
-            echo "<option valute='Non specificato'>Non specificato</option>";
+            echo "<option value='M'>Maschio</option>";
+            echo "<option value='F'>Femmina</option>";
+            echo "<option value='Non specificato'>Non specificato</option>";
             echo "</select>";
             echo "</li>";
 
