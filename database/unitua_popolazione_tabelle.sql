@@ -1534,33 +1534,6 @@ SELECT * FROM unitua.get_iscritti(500, 1101);
 SELECT * FROM unitua.get_iscritti(507, 1105);
 */
 
-/*
---Funzione che dato l'id di un docente restituisce tutti i codici degli appelli aperti:
-CREATE OR REPLACE FUNCTION unitua.get_appello (
-    id_doc integer 
-)
-RETURNS SETOF INTEGER AS $$
-DECLARE 
-    codice_appello_out integer;
-BEGIN
-	FOR codice_appello_out IN
-    	SELECT cal.codice_appello
-    	FROM unitua.calendario AS cal 
-    	WHERE cal.docente = id_doc
-	LOOP
-		RETURN NEXT codice_appello_out;
-	END LOOP;
-
-    RETURN;
-END;
-$$ LANGUAGE plpgsql;
-
-SELECT * FROM unitua.calendario;
-
---Query di verifica:
-SELECT * FROM unitua.get_appello(100);
-*/
-
 --Vista per avere un preciso appello:
 CREATE OR REPLACE VIEW unitua.calendario_completo AS 
     SELECT c.codice_appello, c.anno_accademico, c.data_esame, c.esame,
@@ -1779,3 +1752,129 @@ CALL unitua.update_valutazione2(1500, 1101, 500, 100, '05460A', 27, false);
 */
 
 SELECT * FROM unitua.valutazione;
+
+--Funzione che restituisce tutte le informazioni riguardanti un membro della segreteria:
+CREATE OR REPLACE FUNCTION unitua.get_all_seg (
+    email_in text
+)
+RETURNS SETOF unitua.segreteria AS $$
+DECLARE
+    record_out unitua.segreteria%ROWTYPE;
+BEGIN
+    SELECT *
+    INTO record_out
+    FROM unitua.segreteria AS s 
+    WHERE s.utente_email = email_in;
+
+    RETURN NEXT record_out;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_all_seg('luigi.pepe@segreteria.unitua.it');
+*/
+
+--Funzione che aggiorna i record della tabella studente:
+CREATE OR REPLACE PROCEDURE unitua.update_stud (
+    matricola_in text,
+    nome_in text,
+    cognome_in text,
+    sesso_in unitua.sex,
+    codFiscale_in text,
+    numTelefono_in text,
+    cdl_in integer
+)
+AS $$
+BEGIN
+    UPDATE unitua.studente AS s 
+    SET nome = nome_in,
+        cognome = cognome_in,
+        sesso = sesso_in,
+        codFiscale = codFiscale_in,
+        cellulare = numTelefono_in,
+        CdL = cdl_in
+    WHERE s.matricola = matricola_in;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+CALL unitua.update_stud('05460A', 'Andrea', 'Galliano', 'GLLNDR02L26H860U', '3248662723', 1);
+SELECT * FROM unitua.studente;
+CALL unitua.update_stud('05460A', 'Andrea', 'Galliano', 'GLLNDR02L26H860U', '3248662724', 1);
+SELECT * FROM unitua.studente;
+*/
+
+--Funzione che aggiorna i record della tabella docenti:
+CREATE OR REPLACE PROCEDURE unitua.update_doc (
+    id_in integer,
+    nome_in text,
+    cognome_in text,
+    sesso_in unitua.sex,
+    codFiscale_in text,
+    numTelefono_in text,
+    carica_in unitua.carica_accademica,
+    cdl_in integer
+)
+AS $$
+BEGIN
+    UPDATE unitua.docente AS d 
+    SET nome = nome_in,
+        cognome = cognome_in,
+        sesso = sesso_in,
+        codFiscale = codFiscale_in,
+        cellulare = numTelefono_in,
+        carica = carica_in,
+        CdL = cdl_in
+    WHERE d.id = id_in;
+END;
+$$ LANGUAGE plpgsql;
+
+--Funzione che restituisce 1 o 0 se l'id per argomento corrisponde a quello di un docente:
+CREATE OR REPLACE FUNCTION unitua.is_doc(
+    id_in integer
+)
+RETURNS INTEGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.docente AS d
+        WHERE d.id = id_in
+    ) THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END;      
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.is_doc(100);
+SELECT * FROM unitua.is_doc(110);
+*/
+
+--Funzione che restituisce 1 o 0 se la matricola per argomento corrisponde a quella di uno studente:
+CREATE OR REPLACE FUNCTION unitua.is_stud(
+    matricola_in text
+)
+RETURNS INTEGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.studente AS s
+        WHERE s.matricola = matricola_in
+    ) THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END;      
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.is_stud('05460A');
+SELECT * FROM unitua.is_stud('192822');
+*/
