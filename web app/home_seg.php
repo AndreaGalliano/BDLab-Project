@@ -36,7 +36,7 @@
                         <h5 class="card-title">Gestione dei profili studenti</h5>
                         <p class="card-text">Gestisci i vari profili degli studenti dell'università per poterne modificare i dati.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Gestisci</a>
+                        <a href="update_dati_stud.php" class="btn btn-primary">Gestisci</a>
                     </div>
                 </div>
             </div>

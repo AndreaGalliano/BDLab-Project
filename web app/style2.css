@@ -197,3 +197,27 @@ input#voto {
 #form_add {
     padding-left: 35%;
 }
+
+input#nome {
+    width: 100%;
+}
+
+input#cognome {
+    width: 100%;
+}
+
+input#codFiscale {
+    width: 100%;
+}
+
+input#cellulare {
+    width: 100%;
+}
+
+input#cdl {
+    width: 100%;
+}
+
+#div_centro {
+    margin-left: 20%;
+}
