@@ -12,7 +12,7 @@
                 <a class="nav-link" href="info_personali3.php">Informazioni personali</a>
                 </li>
             <li class="nav-item">
-                <a class="nav-link" href="cambio_pw2.php">Cambio password</a>
+                <a class="nav-link" href="cambio_pw3.php">Cambio password</a>
             </li>
             <li>
                 <form action="logout.php" method="get" id="bottone_logout">
