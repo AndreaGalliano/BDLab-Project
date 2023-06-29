@@ -47,7 +47,7 @@
                         <h5 class="card-title">Gestione dei profili docenti</h5>
                         <p class="card-text" id="ultima">Gestisci i vari profili dei docenti dell'università modificandone dati e insegnamenti.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Gestisci</a>
+                        <a href="update_dati_doc.php" class="btn btn-primary">Gestisci</a>
                     </div>
                 </div>
             </div>

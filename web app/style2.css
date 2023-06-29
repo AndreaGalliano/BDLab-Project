@@ -214,6 +214,10 @@ input#cellulare {
     width: 100%;
 }
 
+input#carica {
+    width: 100%;
+}
+
 input#cdl {
     width: 100%;
 }
@@ -240,4 +244,8 @@ input#cdl {
 
 #cdl1 {
     width: 50%;
+}
+
+#id1 {
+    width: 35%;
 }
