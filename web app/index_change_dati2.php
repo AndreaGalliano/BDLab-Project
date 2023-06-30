@@ -49,11 +49,11 @@
             echo "</li>";
 
             echo "<li class='list-group-item'>";
-            echo "<input type='text' name='codFiscale' id='codFiscale' placeholder='Reinserisci il codice fiscale' size='16' required />";
+            echo "<input type='text' name='codFiscale' id='codFiscale' placeholder='Reinserisci il codice fiscale' maxlength='16' required />";
             echo "</li>";
 
             echo "<li class='list-group-item'>";
-            echo "<input type='text' name='cellulare' id='cellulare' placeholder='Reinserisci il numero di telefono' size='10' required />";
+            echo "<input type='text' name='cellulare' id='cellulare' placeholder='Reinserisci il numero di telefono' maxlength='10' required />";
             echo "</li>";
 
             echo "<li class='list-group-item'>";
@@ -65,7 +65,7 @@
             echo "</li>";
 
             echo "<li class='list-group-item'>";
-            echo "<input type='number' name='cdl' id='cdl' placeholder='Reinserisci il CdL' size='10' min='1' required />";
+            echo "<input type='number' name='cdl' id='cdl' placeholder='Reinserisci il CdL' maxlength='10' min='1' required />";
             echo "</li>";
 
             echo "<div id='div_centro'>";

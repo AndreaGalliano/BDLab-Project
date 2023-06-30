@@ -18,13 +18,13 @@
         echo "<h2 id='scritta_is'>Corsi di Laurea erogati</h2>";
 
         $query = "SELECT * FROM unitua.corso_di_laurea";
-        $res = pg_prepare($connection, "rep_ok", $query);
-        $res = pg_execute($connection, "rep_ok", array());
+        $res = pg_prepare($connection, "rep", $query);
+        $res = pg_execute($connection, "rep", array());
 
         echo "<ul class='list-group' id='centrato'>";
 
         while ($row = pg_fetch_assoc($res)) {
-            echo "Corso di Laurea: ".$row['descrizione']."<br>";
+            echo "<h5>Corso di Laurea: ".$row['descrizione']."</h5>";
             echo "<form method='POST' action='index_modifica_cdl.php'>";
             foreach ($row as $key => $value) {
                 switch ($key) {

@@ -30,7 +30,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="codFiscale">Codice fiscale:</label>
-            <input type="text" class="form-control" id="codFiscale1" aria-describedby="codFiscale" name="codFiscale" size="16" placeholder="Inserisci codice fiscale" required>
+            <input type="text" class="form-control" id="codFiscale1" aria-describedby="codFiscale" name="codFiscale" maxlength="16" placeholder="Inserisci codice fiscale" required>
         </div>
         <div class="form-group" id="divform">
             <select class="form-control" id="sesso" name="sesso" required>
@@ -41,7 +41,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="cellulare">Numero di telefono:</label>
-            <input type="number" class="form-control" id="cellulare1" aria-describedby="callulare" name="cellulare" size="10" placeholder="Inserisci numero di telefono" required>
+            <input type="number" class="form-control" id="cellulare1" aria-describedby="callulare" name="cellulare" maxlength="10" placeholder="Inserisci numero di telefono" required>
         </div>
         <div class="form-group" id="divform">
             <label for="cdl">Corso di laurea:</label>
@@ -70,7 +70,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="codFiscale">Codice fiscale:</label>
-            <input type="text" class="form-control" id="codFiscale1" aria-describedby="codFiscale" name="codFiscale" size="16" placeholder="Inserisci codice fiscale" required>
+            <input type="text" class="form-control" id="codFiscale1" aria-describedby="codFiscale" name="codFiscale" maxlength="16" placeholder="Inserisci codice fiscale" required>
         </div>
         <div class="form-group" id="divform">
             <select class="form-control" id="sesso" name="sesso" required>
@@ -81,7 +81,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="cellulare">Numero di telefono:</label>
-            <input type="number" class="form-control" id="cellulare1" aria-describedby="callulare" name="cellulare" size="10" placeholder="Inserisci numero di telefono" required>
+            <input type="number" class="form-control" id="cellulare1" aria-describedby="callulare" name="cellulare" maxlength="10" placeholder="Inserisci numero di telefono" required>
         </div>
         <div class="form-group" id="divform">
             <select class="form-control" id="carica" name="carica" required>

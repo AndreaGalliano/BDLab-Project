@@ -18,8 +18,8 @@
 
         $query = "SELECT * FROM unitua.get_all_seg($1)";
 
-        $res = pg_prepare($connection, "rep_ok", $query);
-        $res = pg_execute($connection, "rep_ok", array($_SESSION['email']));
+        $res = pg_prepare($connection, "", $query);
+        $res = pg_execute($connection, "", array($_SESSION['email']));
 
         $mail_splittata = explode(".", $_SESSION['email']);
         $nome = strtoupper($mail_splittata[0]);
