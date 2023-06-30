@@ -7,6 +7,8 @@
         $res = pg_prepare($connection, "rep_ok", $query);
         $res = pg_execute($connection, "rep_ok", array($_POST['codice_appello']));
 
+        print_r(pg_fetch_assoc($res));
+
         if ($res) {
             $affectedRows = pg_affected_rows($res);
             if ($affectedRows > 0) {

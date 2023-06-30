@@ -85,7 +85,7 @@
                         <h5 class="card-title">Creazione degli insegnamenti</h5>
                         <p class="card-text" id="ultima">Aggiungi nuovi insegnamenti per i corsi di laurea dell'ateneo.</p>
                         <br><br><br>
-                        <a href="#" class="btn btn-primary">Crea</a>
+                        <a href="crea_ins.php" class="btn btn-primary">Crea</a>
                     </div>
                 </div>
             </div>
