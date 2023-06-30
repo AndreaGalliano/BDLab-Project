@@ -60,9 +60,9 @@
                     <div class="card-body">
                         <h5 class="card-title">Creazione dei corsi di laurea</h5>
                         <br>
-                        <p class="card-text">Crea eventuali corso di laurea nuovi per l'ateneo.</p>
+                        <p class="card-text">Crea nuovissimi corsi di laurea nuovi per l'ateneo.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Crea</a>
+                        <a href="crea_cdl.php" class="btn btn-primary">Crea</a>
                     </div>
                 </div>
             </div>
@@ -74,7 +74,7 @@
                         <br>
                         <p class="card-text">Gestisci i vari corsi di laurea dell'ateneo per poterne modificare i dati.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Gestisci</a>
+                        <a href="modifica_cdl.php" class="btn btn-primary">Gestisci</a>
                     </div>
                 </div>
             </div>
