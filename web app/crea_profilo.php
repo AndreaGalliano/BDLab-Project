@@ -104,8 +104,8 @@
         include_once('connection.php');
 
         $query = "SELECT * FROM unitua.get_all_seg($1)";
-        $res = pg_prepare($connection, "rep_ok", $query);
-        $res = pg_execute($connection, "rep_ok", array($_SESSION['email']));
+        $res = pg_prepare($connection, "", $query);
+        $res = pg_execute($connection, "", array($_SESSION['email']));
 
         $row = pg_fetch_assoc($res);
         if ($row['ruolo'] == 'Primo livello') {

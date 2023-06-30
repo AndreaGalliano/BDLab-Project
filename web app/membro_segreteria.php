@@ -6,7 +6,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="cognome">Cognome:</label>
-            <input type="text" class="form-control" id="cognome" aria-describedby="cognome" name="cognome1" placeholder="Inserisci cognome" required>
+            <input type="text" class="form-control" id="cognome1" aria-describedby="cognome" name="cognome" placeholder="Inserisci cognome" required>
         </div>
         <div class="form-group" id="divform">
             <label for="password">Password:</label>
