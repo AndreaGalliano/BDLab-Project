@@ -18,11 +18,11 @@
 
             $query_verifica = "SELECT * FROM unitua.is_stud($1)";
             $res_verifica = pg_prepare($connection, "", $query_verifica);
-            $res_verifica = pg_execute($connection, "", array($_POST['id']));
+            $res_verifica = pg_execute($connection, "", array($_POST['matricola']));
             $row = pg_fetch_assoc($res_verifica);
 
             if ($row['is_stud'] == 0) {
-                $_SESSION['modifica_voto'] = "L'ID inserito non corrisponde a nessuno studente del sistema!";
+                $_SESSION['modifica_voto'] = "La matricola inserita non corrisponde a nessuno studente del sistema!";
                 header('Location: no_update.php');
             }
 

@@ -129,6 +129,44 @@
             </div>
         </div>
 
+        <div class = "row text-center">
+            <div class = "col-sm mt-3">
+                <div class = "card h-100" style="width: 18rem; margin: auto;">
+                    <img src="/img/all_studenti.jpg" class="card-img-top" id = "minitatura">
+                    <div class="card-body">
+                        <h5 class="card-title">Tutti gli studenti</h5>
+                        <br>
+                        <p class="card-text">Prendi visione di tutti gli studenti iscritti all'università facenti parte dell'ateneo.</p>
+                        <br><br><br>
+                        <a href="#" class="btn btn-primary">Visualizza</a>
+                    </div>
+                </div>
+            </div>
+            <div class = "col-sm mt-3">
+                <div class = "card h-100" style="width: 18rem; margin: auto;">
+                    <img src="/img/all_docenti.jpg" class="card-img-top" id = "minitatura">
+                    <div class="card-body">
+                        <h5 class="card-title">Tutti i docenti</h5>
+                        <br>
+                        <p class="card-text">Prendi visione di tutti gli studenti iscritti all'università facenti parte dell'ateneo.</p>
+                        <br><br><br>
+                        <a href="#" class="btn btn-primary">Visualizza</a>
+                    </div>
+                </div>
+            </div>
+            <div class = "col-sm mt-3">
+                <div class = "card h-100" style="width: 18rem; margin: auto;">
+                    <img src="/img/all_insegnamenti.jpg" class="card-img-top" id = "minitatura">
+                    <div class="card-body">
+                        <h5 class="card-title">Visualizza tutti gli insegnamenti</h5>
+                        <p class="card-text" id="ultima">Prendi visione di tutti gli insegnamenti di tutti i Corsi di Laurea facenti parte dell'ateneo.</p>
+                        <br><br><br>
+                        <a href="#" class="btn btn-primary">Visualizza</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </body>
 </html>
