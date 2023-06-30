@@ -35,19 +35,26 @@
 
         while ($row2 = pg_fetch_assoc($res2)) {
             foreach ($row2 as $key => $value) {
-                if ($key != 'lode') {
+                if (str_contains($key, '_')) {
+                    $campi_chiave = explode('_', $key);
+                    echo "<li class='list-group-item'>";
+                    echo strtoupper($campi_chiave[0])." ".strtoupper($campi_chiave[1]).": ".$value;
+                    echo "</li>";
+                } else {
+                    if ($key != 'lode') {
                     echo "<li class='list-group-item'>";
                     echo strtoupper($key).": ".$value;
                     echo "</li>";
-                } else {
-                    if ($value == 'f') {
-                        echo "<li class='list-group-item'>";
-                        echo strtoupper($key).": No";
-                        echo "</li>";
                     } else {
-                        echo "<li class='list-group-item'>";
-                        echo strtoupper($key).": Sì";
-                        echo "</li>";
+                        if ($value == 'f') {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": No";
+                            echo "</li>";
+                        } else {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": Sì";
+                            echo "</li>";
+                        }
                     }
                 }
             }

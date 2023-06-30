@@ -49,14 +49,14 @@
         </div>
         <div class="form-group" id="divform">
             <label for="lode">Lode:</label>
-            <select class="form-control" id="lode" name="lode" required>
+            <select class="form-control" id="lode1" name="lode" required>
                 <option value="True">Sì</option>
                 <option value="False">No</option>
             </select>
         </div>
         <div class="form-group" id="divform">
             <label for="respinto">Respinto:</label>
-            <select class="form-control" id="respinto" name="respinto" required>
+            <select class="form-control" id="respinto1" name="respinto" required>
                 <option value="True">Sì</option>
                 <option value="False">No</option>
             </select>

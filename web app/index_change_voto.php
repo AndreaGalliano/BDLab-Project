@@ -16,6 +16,16 @@
 
             include_once('connection.php');
 
+            $query_verifica = "SELECT * FROM unitua.is_stud($1)";
+            $res_verifica = pg_prepare($connection, "", $query_verifica);
+            $res_verifica = pg_execute($connection, "", array($_POST['id']));
+            $row = pg_fetch_assoc($res_verifica);
+
+            if ($row['is_stud'] == 0) {
+                $_SESSION['modifica_voto'] = "L'ID inserito non corrisponde a nessuno studente del sistema!";
+                header('Location: no_update.php');
+            }
+
             $query_doc = "SELECT * FROM unitua.get_info_doc($1)";
             $res_doc = pg_prepare($connection, "rep", $query_doc);
             $res_doc = pg_execute($connection, "rep", array($_SESSION['email']));

@@ -20,7 +20,7 @@
             $res_verifica = pg_execute($connection, "rep", array($_POST['id']));
             $row = pg_fetch_assoc($res_verifica);
 
-            if ($row['is_doc'] == 0) {
+            if ($row['is_stud'] == 0) {
                 $_SESSION['modifica_stud'] = "L'ID inserito non corrisponde a nessuno studente del sistema!";
                 header('Location: conf_update_stud2.php');
             }
