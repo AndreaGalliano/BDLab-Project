@@ -100,7 +100,7 @@
                         <br>
                         <p class="card-text">Gestisci i vari insegnamenti dei corsi di laurea dell'ateneo per poterne modificare i dati.</p>
                         <br><br>
-                        <a href="#" class="btn btn-primary">Gestisci</a>
+                        <a href="mod_ins.php" class="btn btn-primary">Gestisci</a>
                     </div>
                 </div>
             </div>
