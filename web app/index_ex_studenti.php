@@ -46,7 +46,20 @@
                             $row_laureato = pg_fetch_assoc($res_laureato);
 
                             if ($row_laureato['is_laureato'] == 1) {
-                                echo "<br><br><a class='btn btn-primary' id='bottone_laurea' href='view_laurea.php' role='button'>Laurea</a>";
+                                echo "<form method='POST' action='view_laurea.php'>";
+                                echo "<input type='hidden' id='matricola' name='matricola' value='".$value."' />";
+                                echo "<button type='submit' class='btn btn-primary' id='bottone_update'>Laurea</button>";
+                                echo "</form><br>";
+
+                                echo "<form method='POST' action='view_val.php'>";
+                                echo "<input type='hidden' id='matricola' name='matricola' value='".$value."' />";
+                                echo "<button type='submit' class='btn btn-primary' id='bottone_update'>Valutazioni</button>";
+                                echo "</form>";
+                            } else {
+                                echo "<form method='POST' action='view_val.php'>";
+                                echo "<input type='hidden' id='matricola' name='matricola' value='".$value."' />";
+                                echo "<button type='submit' class='btn btn-primary' id='bottone_update'>Valutazioni</button>";
+                                echo "</form>";
                             }
 
                             echo "</li>";
