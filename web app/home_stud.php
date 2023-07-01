@@ -11,6 +11,18 @@
 <body>
 
     <?php
+        session_start();
+        include_once('connection.php');
+
+        $query = "SELECT * FROM unitua.is_ex_stud($1)";
+        $res = pg_prepare($connection, "", $query);
+        $res = pg_execute($connection, "", array($_SESSION['email']));
+        $row = pg_fetch_assoc($res);
+
+        if ($row['is_ex_stud'] == 1) {
+            header('Location: home_ex_stud.php');
+        }
+
         include_once('navbar.php');
         include_once("check_login.php");
     ?>

@@ -109,6 +109,14 @@ p {
     text-align: center;
 }
 
+#titoletto {
+    text-align: center;
+}
+
+#al_centro {
+    padding-left: 37%;
+}
+
 input {
     border: none;
 }
