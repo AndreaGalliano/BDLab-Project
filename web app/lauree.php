@@ -58,8 +58,8 @@
                     }
                 }
             }
+            echo "<br><br>";
         }
-
         echo "</ul>";
     ?>
 </body>

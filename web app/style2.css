@@ -273,3 +273,7 @@ input#cdl {
 #bottone_val {
     width: 45%;
 }
+
+#data1, #bonus1, #studente1, #relatore1 {
+    width: 50%;
+}

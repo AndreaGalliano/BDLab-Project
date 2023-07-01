@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-    <title>Unitua: Gestisci esami</title>
+    <title>Unitua: Inserisci laurea</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -10,21 +10,20 @@
 </head>
 <body>
     <?php
-        include_once('navbar2.php');
+        include_once('navbar3.php');
         include_once('check_login.php');
 
-        if (isset($_SESSION['insert_appello'])) {
-            echo "<h2 id='scritta_is'>".$_SESSION['insert_appello']."</h2>";
-        } else {
-            echo "<h2 id='scritta_is'>Errore nell'aggiunta dell'appello...</h2>";
+        if (isset($_SESSION['errore_cdl'])) {
+            echo "<h2 id='scritta_is'>".$_SESSION['errore_cdl']."</h2>";
         }
-        unset($_SESSION['insert_appello']);
+
+        unset($_SESSION['errore_cdl']);
     ?>
 
     <h5 id="scritta_is">Torna alla schermata precedente:</h5>
     <br>
     <div id="div_is">
-        <a class="btn btn-primary" href="gest_calendario.php" role="button">Indietro</a>
+        <a class="btn btn-primary" href="laurea.php" role="button">Indietro</a>
     </div>
 </body>
 </html>
