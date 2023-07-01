@@ -108,7 +108,7 @@
                 <div class = "card h-100" style="width: 18rem; margin: auto;">
                     <img src="/img/ex_stud.jpg" class="card-img-top" id = "minitatura">
                     <div class="card-body">
-                        <h5 class="card-title">Gestione degli ex studenti</h5>
+                        <h5 class="card-title">Ex studenti dell'ateneo</h5>
                         <br>
                         <p class="card-text">Gestisci e modifica i profili riguardanti gli ex studenti dell'ateneo.</p>
                         <br><br><br>
@@ -120,10 +120,10 @@
                 <div class = "card h-100" style="width: 18rem; margin: auto;">
                     <img src="/img/gest_lauree.jpg" class="card-img-top" id = "minitatura">
                     <div class="card-body">
-                        <h5 class="card-title">Gestione delle lauree</h5>
+                        <h5 class="card-title">Inserimento delle lauree</h5>
                         <p class="card-text" id="ultima">Gestisci le lauree dell'ateneo inserendo gli studenti che hanno terminato il loro percorso di studi.</p>
                         <br><br><br>
-                        <a href="#" class="btn btn-primary">Gestisci</a>
+                        <a href="laurea.php" class="btn btn-primary">Gestisci</a>
                     </div>
                 </div>
             </div>
