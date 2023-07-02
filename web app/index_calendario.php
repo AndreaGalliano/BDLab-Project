@@ -14,9 +14,9 @@
         $row_esame = pg_fetch_assoc($res_esame);
 
         //Inserisco l'appello adesso che ho tutti i dati necessari:
-        $query2 = "CALL unitua.insert_calendario($1, $2, $3, $4, $5, $6, $7)";
+        $query2 = "CALL unitua.insert_calendario($1, $2, $3, $4, $5, $6, $7, $8)";
         $res2 = pg_prepare($connection, "rep_ok", $query2);
-        $res2 = pg_execute($connection, "rep_ok", array($_POST['data_esame'], $_POST['ora'], $_POST['aula'], $row_esame['get_es'], $_POST['anno'], $row1['id'], $row1['cdl']));
+        $res2 = pg_execute($connection, "rep_ok", array($_POST['data_esame'], $_POST['ora'], $_POST['aula'], true, $row_esame['get_es'], $_POST['anno'], $row1['id'], $row1['cdl']));
 
         if ($res2) {
             $affectedRows = pg_affected_rows($res2);

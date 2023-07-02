@@ -45,10 +45,14 @@
                         echo "<input type='text' id='".$campi_chiave[0]." ".$campi_chiave[1]."' name='".$campi_chiave[0]." ".$campi_chiave[1]."' value='".$value."' readonly />";
                         echo "</li>";
                     } else {
-                        echo "<li class='list-group-item'>";
-                        echo strtoupper($key).": ";
-                        echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";
-                        echo "</li>";
+                        if ($key == 'aperto') {
+                            continue;
+                        } else {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": ";
+                            echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";
+                            echo "</li>";
+                        }
                     }
                 } else {
                     $flag = true;
