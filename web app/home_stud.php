@@ -11,7 +11,9 @@
 <body>
 
     <?php
-        session_start();
+        include_once('navbar.php');
+        include_once("check_login.php");
+        
         include_once('connection.php');
 
         $query = "SELECT * FROM unitua.is_ex_stud($1)";
@@ -22,9 +24,6 @@
         if ($row['is_ex_stud'] == 1) {
             header('Location: home_ex_stud.php');
         }
-
-        include_once('navbar.php');
-        include_once("check_login.php");
     ?>
 
     <div class = "container text-center">

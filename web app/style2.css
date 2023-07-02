@@ -285,3 +285,7 @@ input#cdl {
 #data1, #bonus1, #studente1, #relatore1 {
     width: 50%;
 }
+
+#rinuncia {
+    background-color: brown;
+}
