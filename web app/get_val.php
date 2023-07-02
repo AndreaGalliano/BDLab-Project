@@ -73,7 +73,6 @@
                 }
             }
             echo "</ul>";
-            echo $flag;
         }
         echo "<br><br>";
     ?>
