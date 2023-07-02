@@ -59,16 +59,17 @@
                         }
                         break;
                     case 'respinto':
-                        if ($value == false) {
+                        if ($value == 't') {
                             echo "<li class='list-group-item'>";
-                            echo strtoupper($key).": Sì";
+                            echo "RESPINTO: Sì";
                             echo "</li>";
                         } else {
                             echo "<li class='list-group-item'>";
-                            echo strtoupper($key).": No";
+                            echo "RESPINTO: No";
                             echo "</li>";
                         }
                         break;
+                        
                 }
             }
             echo "</ul>";
