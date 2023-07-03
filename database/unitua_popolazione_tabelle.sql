@@ -248,6 +248,7 @@ CREATE OR REPLACE PROCEDURE unitua.insert_calendario(
     data_esame date,
     ora time,
     aula varchar,
+    aperto boolean,
     esame int,
     anno_accademico int,
     docente int,
@@ -255,17 +256,17 @@ CREATE OR REPLACE PROCEDURE unitua.insert_calendario(
 )
 AS $$
     BEGIN
-        INSERT INTO unitua.calendario (data_esame, ora, aula, esame, anno_accademico, docente, CdL)
-        VALUES (data_esame, ora, aula, esame, anno_accademico, docente, CdL);
+        INSERT INTO unitua.calendario (data_esame, ora, aula, aperto, esame, anno_accademico, docente, CdL)
+        VALUES (data_esame, ora, aula, aperto, esame, anno_accademico, docente, CdL);
     END;
 $$ LANGUAGE plpgsql;
 
-CALL unitua.insert_calendario('2017-02-24', '8:30', 'P202', 500, '2017', 100, 1); --1100
-CALL unitua.insert_calendario('2023-01-27', '9:00', 'P202', 500, '2023', 100, 1); --1101
-CALL unitua.insert_calendario('2023-01-27', '14:30', 'S500', 501, '2023', 101, 1); --1102
-CALL unitua.insert_calendario('2023-01-27', '8:45', 'OMEGA', 502, '2023', 102, 1); --1103
-CALL unitua.insert_calendario('2023-06-13', '9:00', 'DELTA', 506, '2023', 106, 1);
-CALL unitua.insert_calendario('2023-07-25', '14:30', 'BERTONI', 507, '2023', 100, 1);
+CALL unitua.insert_calendario('2017-02-24', '8:30', 'P202', true, 500, '2017', 100, 1); --1100
+CALL unitua.insert_calendario('2023-01-27', '9:00', 'P202', true, 500, '2023', 100, 1); --1101
+CALL unitua.insert_calendario('2023-01-27', '14:30', 'S500', true, 501, '2023', 101, 1); --1102
+CALL unitua.insert_calendario('2023-01-27', '8:45', 'OMEGA', true, 502, '2023', 102, 1); --1103
+CALL unitua.insert_calendario('2023-06-13', '9:00', 'DELTA', true, 506, '2023', 106, 1);
+CALL unitua.insert_calendario('2023-07-25', '14:30', 'BERTONI', true, 507, '2023', 100, 1);
 
 SELECT * FROM unitua.calendario;
 
@@ -316,6 +317,9 @@ CALL unitua.insert_valutazione('05460A', 1102, 501, 101, 26, false, false, '2023
 CALL unitua.insert_valutazione('98007A', 1101, 500, 100, 20, false, false, '2022-02-02');
 CALL unitua.insert_valutazione('98007A', 1102, 501, 101, 30, true, false, '2022-02-20');
 CALL unitua.insert_valutazione('98007A', 1103, 502, 102, 25, false, false, '2022-01-07');
+
+--CALL unitua.insert_valutazione('05460A', 1105, 507, 100, 27, false, false, '2023-07-02');
+--SELECT * FROM unitua.iscritti;
 
 SELECT * FROM unitua.valutazione;
 
@@ -739,19 +743,19 @@ BEGIN
     SELECT COUNT(*)
 	INTO n_insegnamenti
     FROM unitua.insegnamento
-    WHERE docente = NEW.docente;
+    WHERE docente = OLD.docente;
 		
 	IF n_insegnamenti > 3
     THEN
         RAISE EXCEPTION 'Un docente può avere al massimo 3 insegnamenti di cui è responsabile.';
     END IF;
 
-    RETURN NEW;
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
 CREATE TRIGGER conta_insegnamenti_max
-AFTER INSERT ON unitua.insegnamento
+AFTER INSERT OR UPDATE ON unitua.insegnamento
 FOR EACH ROW
 EXECUTE FUNCTION unitua.conta_insegnamenti_max();
 
@@ -760,11 +764,12 @@ EXECUTE FUNCTION unitua.conta_insegnamenti_max();
 CALL unitua.insert_insegnamento('Progettazione Motori di ricerca', '1', 'Descrizione', 100, 1);
 CALL unitua.insert_insegnamento('Programmazione 2', '2', 'Esame di programmazione 2 del secondo anno di informatica (triennale)', 100, 1);
 CALL unitua.insert_insegnamento('Reti', '3', 'Esame di reti del terzo anno di informatica (triennale)', 100, 1);
-
+DELETE FROM unitua.insegnamento where nome_insegnamento='Reti di Calcolatori'
 SELECT * FROM unitua.insegnamento;
+DROP TRIGGER conta_insegnamenti_max ON unitua.insegnamento;
 */
 
---Trigger su insegnamenti di responsabilità di un docente 1:
+--Trigger su insegnamenti di responsabilità di un docente 2:
 CREATE OR REPLACE FUNCTION unitua.conta_insegnamenti_min()
 RETURNS TRIGGER AS $$
 DECLARE n_insegnamenti INT;
@@ -772,14 +777,14 @@ BEGIN
     SELECT COUNT(*)
     INTO n_insegnamenti
     FROM unitua.insegnamento
-    WHERE docente = NEW.docente;
+    WHERE docente = OLD.docente;
 
     IF n_insegnamenti = 0
     THEN
-        RAISE EXCEPTION 'Un docente deve essere responsabile di almeno 1 insegnamento.';
+        RAISE EXCEPTION 'Un docente deve essere responsabile di almeno 1 insegnamento %.', n_insegnamenti;
     END IF;
 
-    RETURN NEW;
+    RETURN OLD;
 END;
 $$ LANGUAGE plpgsql;
 
@@ -790,7 +795,8 @@ EXECUTE FUNCTION unitua.conta_insegnamenti_min();
 
 /*
 --Delete di prova:
-DELETE * FROM unitua.insegnamento
+DROP TRIGGER conta_insegnamenti_min ON unitua.insegnamento;
+DELETE FROM unitua.insegnamento
 WHERE docente = 100;
 */
 
@@ -817,7 +823,7 @@ EXECUTE FUNCTION unitua.controllo_ora_aula();
 
 /*
 --Insert di prova:
-CALL unitua.insert_calendario('2017-02-24', '8:30', 'P202', 503, '2017', 103, 1);
+CALL unitua.insert_calendario('2017-02-24', '8:30', 'P202', true, 503, '2017', 103, 1);
 
 SELECT * FROM unitua.calendario;
 */
@@ -849,7 +855,7 @@ EXECUTE FUNCTION unitua.controllo_esame_al_giorno();
 
 /*
 --Insert di prova:
-CALL unitua.insert_calendario('2023-01-27', '10:30', 'S406', 506, '2022', 100, 1);
+CALL unitua.insert_calendario('2023-01-27', '10:30', 'S406', true, 506, '2022', 100, 1);
 
 SELECT * FROM unitua.calendario;
 */
@@ -879,7 +885,7 @@ EXECUTE FUNCTION unitua.controllo_esami_docenti1();
 
 /*
 --Insert di prova:
-CALL unitua.insert_calendario('2022-02-22', '8:00', 'P204', 501, '2017', 100, 2);
+CALL unitua.insert_calendario('2022-02-22', '8:00', 'P204', true, 501, '2017', 100, 2);
 */
 
 --Trigger di controllo su calendario (anno della data = A.A.):
@@ -905,7 +911,7 @@ EXECUTE FUNCTION unitua.controllo_anno_acc();
 
 /*
 --Insert di prova:
-CALL unitua.insert_calendario('2023-01-10', '8:30', 'ALFA', 502, 2023, 101, 1)
+CALL unitua.insert_calendario('2023-01-10', '8:30', 'ALFA', true, 502, 2023, 101, 1)
 */
 
 --Trigger controllo insegnamenti docente:
@@ -935,7 +941,7 @@ EXECUTE FUNCTION unitua.controllo_esami_docenti2();
 
 /*
 --Insert di prova:
-CALL unitua.insert_calendario('2023-01-29', '8:45', 'LAMBDA', 500, '2023', 102, 1);
+CALL unitua.insert_calendario('2023-01-29', '8:45', 'LAMBDA', true, 500, '2023', 102, 1);
 */
 
 --Funzione per autenticazione utente:
@@ -1023,7 +1029,7 @@ SELECT * FROM unitua.change_pw('giacomo.comitani@studenti.unitua.it', 'Password#
 
 --Vista per produrre il calendario completo degli esami:
 CREATE OR REPLACE VIEW unitua.vista_calendario AS
-    SELECT c.codice_appello, c.data_esame, c.ora, c.aula, 
+    SELECT c.codice_appello, c.data_esame, c.ora, c.aula, c.aperto,
     e.codice AS codice_esame, i.nome_insegnamento,
 	d.id AS codice_docente, d.nome, d.cognome,  d.cdl, 
 	cd.tipologia, cd.descrizione
@@ -1048,7 +1054,7 @@ BEGIN
     FOR all_info_cal IN
         SELECT *
         FROM unitua.vista_calendario AS vc 
-        WHERE vc.cdl = corso_di_laurea
+        WHERE vc.cdl = corso_di_laurea AND vc.aperto = true
     LOOP
         RETURN NEXT all_info_cal;
     END LOOP;
@@ -1110,7 +1116,7 @@ SELECT * FROM unitua.iscritti;
 
 --Creazione della vista per disiscrizione/visione iscrizioni confermate:
 CREATE OR REPLACE VIEW unitua.vista_iscrizione AS
-    SELECT isc.studente, c.codice_appello, c.data_esame, c.ora, c.aula, 
+    SELECT isc.studente, c.codice_appello, c.aperto, c.data_esame, c.ora, c.aula, 
     e.codice AS codice_esame, i.nome_insegnamento,
     d.id AS codice_docente, d.nome, d.cognome, d.cdl,
     cd.tipologia, cd.descrizione
@@ -1139,7 +1145,7 @@ BEGIN
     FOR all_info_iscrizione IN 
         SELECT *
         FROM unitua.vista_iscrizione AS vi 
-        WHERE vi.studente = matricola_in
+        WHERE vi.studente = matricola_in AND vi.aperto = true
     LOOP
         RETURN NEXT all_info_iscrizione;
     END LOOP;
@@ -1536,7 +1542,7 @@ SELECT * FROM unitua.get_iscritti(507, 1105);
 
 --Vista per avere un preciso appello:
 CREATE OR REPLACE VIEW unitua.calendario_completo AS 
-    SELECT c.codice_appello, c.anno_accademico, c.data_esame, c.esame,
+    SELECT c.codice_appello, c.anno_accademico, c.aperto, c.data_esame, c.esame,
     d.id, d.nome, d.cognome
     FROM unitua.calendario AS c
     JOIN unitua.docente AS d 
@@ -1557,7 +1563,7 @@ BEGIN
     FOR cal_out IN 
         SELECT *
         FROM unitua.calendario_completo AS cc
-        WHERE cc.anno_accademico = anno AND cc.id = id_doc AND cc.esame = esame_in
+        WHERE cc.anno_accademico = anno AND cc.id = id_doc AND cc.esame = esame_in AND cc.aperto = true
     LOOP
         RETURN NEXT cal_out;
     END LOOP;
@@ -1570,6 +1576,7 @@ $$ LANGUAGE plpgsql;
 SELECT * FROM unitua.get_appello(100, 2023, 500);
 */
 
+/*
 --Trigger che rimuove un iscritto dopo aver inserito il voto:
 CREATE OR REPLACE FUNCTION unitua.remove_iscritto()
 RETURNS TRIGGER AS $$
@@ -1585,6 +1592,7 @@ CREATE TRIGGER remove_iscritto
 AFTER INSERT ON unitua.valutazione
 FOR EACH ROW
 EXECUTE FUNCTION unitua.remove_iscritto();
+*/
 
 /*
 --Insert di prova (da eseguire una alla volta):
@@ -1596,21 +1604,23 @@ CALL unitua.insert_valutazione('34560A', 1101, 500, 100, 21, false, false, '2023
 */
 
 --Funzione che rimuove un appello d'esame a partire dal codice dell'appello avuto per argomento:
-CREATE OR REPLACE PROCEDURE unitua.remove_appello(
+CREATE OR REPLACE PROCEDURE unitua.remove_appello (
     codice_in integer 
 )
 AS $$
 BEGIN 
-    DELETE FROM unitua.calendario AS c 
+    UPDATE unitua.calendario AS c 
+    SET aperto = false
     WHERE c.codice_appello = codice_in;
 END;
 $$ LANGUAGE plpgsql;
 
 /*
 --Query di verifica (da eseguire una alla volta):
-CALL unitua.insert_calendario('2023-07-12', '9:00', 'SIGMA', 500, '2023', 100, 1);
+CALL unitua.insert_calendario('2023-07-12', '9:00', 'SIGMA', true, 500, '2023', 100, 1);
 SELECT * FROM unitua.calendario;
-CALL unitua.remove_appello(1107);
+CALL unitua.remove_appello(1105);
+SELECT * FROM unitua.calendario;
 */
 
 --Funzione che restituisce il nome di un insegnamento a partire dal codice dell'esame corrispondente:
@@ -1639,7 +1649,7 @@ SELECT * FROM unitua.get_name_ins(500);
 
 --Vista su laurea e docente:
 CREATE OR REPLACE VIEW unitua.vista_laurea AS 
-    SELECT l.docente, l.codice AS codice_laurea, l.voto, l.lode, l.data_laurea,
+    SELECT l.relatore, l.codice AS codice_laurea, l.voto, l.lode, l.data_laurea,
     l.studente, ex.nome, ex.cognome
     FROM unitua.laurea AS l 
     JOIN unitua.ex_studente AS ex 
@@ -1738,17 +1748,20 @@ CREATE OR REPLACE PROCEDURE unitua.update_valutazione2 (
 AS $$
 BEGIN
     UPDATE unitua.valutazione AS v
-    SET voto = voto_in,
+    SET calendario = cod_appello,
+		voto = voto_in,
         lode = lode_in,
 		respinto = false
-    WHERE v.codice = cod_valutazione AND v.studente = matricola AND v.calendario = cod_appello 
+    WHERE v.codice = cod_valutazione AND v.studente = matricola
 	AND v.docente = id_doc AND v.esame = cod_esame;
 END;
 $$ LANGUAGE plpgsql;
 
 /*
 --Chiamata di verifica:
-CALL unitua.update_valutazione2(1500, 1101, 500, 100, '05460A', 27, false);
+SELECT * FROM unitua.valutazione;
+SELECT * FROM unitua.calendario;
+CALL unitua.update_valutazione2(1500, 1106, 500, 100, '05460A', 27, false);
 */
 
 SELECT * FROM unitua.valutazione;
@@ -1877,4 +1890,419 @@ $$ LANGUAGE plpgsql;
 --Query di verifica:
 SELECT * FROM unitua.is_stud('05460A');
 SELECT * FROM unitua.is_stud('192822');
+*/
+
+--Procedura che aggiorna i dati di un corso di laurea:
+CREATE OR REPLACE PROCEDURE unitua.update_cdl(
+    codice_in integer,
+    tipologia_in unitua.tipo_laurea,
+    descrizione_in text
+)
+AS $$
+BEGIN
+    UPDATE unitua.corso_di_laurea AS cdl 
+    SET tipologia = tipologia_in,
+        descrizione = descrizione_in
+    WHERE cdl.codice = codice_in;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Chiamata di verifica:
+CALL unitua.update_cdl(15, 'Magistrale', 'Sociologia');
+SELECT *
+FROM unitua.corso_di_laurea AS cdl
+WHERE cdl.codice = 15;
+*/
+
+--Funzione che restituisce tutti i dati di un corso di laurea a partire dal codice avuto per argomento:
+CREATE OR REPLACE FUNCTION unitua.get_all_cdl (
+    codice_in integer
+)
+RETURNS SETOF unitua.corso_di_laurea AS $$
+DECLARE 
+    record_out unitua.corso_di_laurea%ROWTYPE;
+BEGIN 
+    SELECT *
+    INTO record_out
+    FROM unitua.corso_di_laurea AS cdl 
+    WHERE cdl.codice = codice_in;
+
+    RETURN NEXT record_out;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_all_cdl(1);
+*/
+
+--Funzione che dato un ID per argomento restituisce 0 o 1 se appartiene al reparto segreteria:
+CREATE OR REPLACE FUNCTION unitua.is_seg (
+    id_in integer
+)
+RETURNS INTEGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.segreteria AS s 
+        WHERE s.id = id_in
+    ) THEN 
+        RETURN 1;
+    ELSE 
+        RETURN 0;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.is_seg(200);
+SELECT * FROM unitua.is_seg(210);
+*/
+
+--Procedura che aggiorna i dati di un membro della segreteria:
+CREATE OR REPLACE PROCEDURE unitua.update_seg(
+    id_in integer,
+    nome_in text,
+    cognome_in text,
+    codFiscale_in text,
+    sesso_in unitua.sex,
+    cellulare_in text,
+    ruolo_in unitua.ruolo_segreteria
+)
+AS $$
+BEGIN 
+    UPDATE unitua.segreteria AS s 
+    SET nome = nome_in,
+        cognome = cognome_in,
+        codFiscale = codFiscale_in,
+        sesso = sesso_in,
+        cellulare = cellulare_in,
+        ruolo = ruolo_in
+
+    WHERE s.id = id_in;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+CALL unitua.update_seg(200, 'Luigi', 'Pepe', 'JYQV24A9R6V7JXJJ', 'M', '5809946869', 'Primo livello');
+SELECT * FROM unitua.segreteria;
+*/
+
+--Funzione che dati il nome dell'insegnamento ed il docente responsabile ne restituisce il codice:
+CREATE OR REPLACE FUNCTION unitua.get_ins_code (
+    nome_in text,
+    doc_in integer
+)
+RETURNS INTEGER AS $$
+DECLARE
+    cod_out INTEGER;
+BEGIN
+    SELECT i.codice 
+    INTO cod_out 
+    FROM unitua.insegnamento AS i 
+    WHERE i.nome_insegnamento = nome_in AND i.docente = doc_in;
+
+    RETURN cod_out;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_ins_code('Programmazione 1', 100);
+*/
+
+--Funzione che dato il codice di un esame e una matricola di uno studente stabilisce se lo studente ha già effettuato l'esame in passato:
+CREATE OR REPLACE FUNCTION unitua.esame_fatto (
+    matricola_in text,
+    esame_in integer 
+)
+RETURNS INTEGER AS $$
+BEGIN 
+    IF EXISTS (
+        SELECT 1 
+        FROM unitua.valutazione AS v 
+        WHERE v.studente = matricola_in AND v.esame = esame_in
+    ) THEN 
+        RETURN 1;
+    ELSE
+        RETURN 0;
+
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.esame_fatto('05460A', 500);
+*/
+
+--Funzione che data una matricola e un codice esame restituisce il codice della valutazione già avvenuta:
+CREATE OR REPLACE FUNCTION unitua.get_codice_val (
+    matricola_in text,
+    esame_in integer
+)
+RETURNS INTEGER AS $$
+DECLARE 
+    codice_out integer;
+BEGIN
+    SELECT v.codice
+    INTO codice_out
+    FROM unitua.valutazione AS v 
+    WHERE v.studente = matricola_in AND v.esame = esame_in;
+	
+	RETURN codice_out;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_codice_val('05460A', 500);
+*/
+
+--Funzione che restituisce 0 o 1 in base all'appartenenza o meno del codice avuto per argomento all'interno della tabella corso di laurea:
+CREATE OR REPLACE FUNCTION unitua.is_cdl (
+    codice_in integer
+)
+RETURNS INTEGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.corso_di_laurea AS cdl
+        WHERE cdl.codice = codice_in
+    ) THEN
+        RETURN 1;
+    ELSE 
+        RETURN 0;
+    
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.is_cdl(1);
+SELECT * FROM unitua.is_cdl(25);
+*/
+
+--Funzione che restituisce tutti gli insegnamenti di un cdl avuto per argomento:
+CREATE OR REPLACE FUNCTION unitua.get_all_insegnamenti (
+    cdl_in integer
+)
+RETURNS SETOF unitua.insegnamento AS $$
+DECLARE
+    record_out unitua.insegnamento%ROWTYPE;
+BEGIN
+    FOR record_out IN
+        SELECT *
+        FROM unitua.insegnamento AS i 
+        WHERE i.cdl = cdl_in
+    LOOP
+        RETURN NEXT record_out;
+    END LOOP;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+
+--Query di verifica:
+SELECT * FROM unitua.get_all_insegnamenti(1);
+
+
+--Vista insegnamenti-esami:
+CREATE OR REPLACE VIEW unitua.esami_insegnamenti AS 
+    SELECT i.codice AS codice_insegnamento, i.nome_insegnamento, i.anno_insegnamento,
+	i.docente, i.cdl, e.codice AS codice_esame, e.tipologia, e.modalita
+    FROM unitua.insegnamento AS i 
+    JOIN unitua.esame AS e 
+    ON i.codice = e.insegnamento;
+
+
+--Query di verifica:
+SELECT * FROM unitua.esami_insegnamenti;
+
+
+--Funzione che dato per argomento il codice di un CdL restituisce gli elementi corrispondenti della vista esami_insegnamenti:
+CREATE OR REPLACE FUNCTION unitua.get_all_es_ins (
+    cdl_in integer
+)
+RETURNS SETOF unitua.esami_insegnamenti AS $$
+DECLARE
+    record_out unitua.esami_insegnamenti%ROWTYPE;
+BEGIN 
+    FOR record_out IN
+        SELECT *
+        FROM unitua.esami_insegnamenti AS ei 
+        WHERE ei.cdl = cdl_in
+    LOOP
+        RETURN NEXT record_out;
+    END LOOP;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_all_es_ins(1);
+*/
+
+--Procedura che aggiorna gli elementi della tabella insegnamento:
+CREATE OR REPLACE PROCEDURE unitua.update_ins (
+    codice_in integer,
+    nome_in text,
+    anno_in unitua.anno,
+    descrizione_in text
+)
+AS $$
+BEGIN
+    UPDATE unitua.insegnamento AS i 
+    SET nome_insegnamento = nome_in,
+        anno_insegnamento = anno_in,
+        descrizione = descrizione_in
+    WHERE i.codice = codice_in;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+CALL unitua.update_ins(300, 'Programmazione 1', '1', 'Esame di Programmazione 1 del primo anno di informatica (triennale)');
+SELECT * FROM unitua.insegnamento;
+*/
+
+--Procedura che aggiorna gli elementi della tabella esame:
+CREATE OR REPLACE PROCEDURE unitua.update_es (
+    codice_in integer,
+    tipologia_in unitua.tipo_esame,
+    modalita_in unitua.modalita_verifica
+)
+AS $$
+BEGIN
+    UPDATE unitua.esame AS e
+    SET tipologia = tipologia_in,
+        modalita = modalita_in
+    WHERE e.codice = codice_in;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+CALL unitua.update_es(501, 'Distanza', 'Scritto + Orale');
+SELECT * FROM unitua.esame;
+*/
+
+--Vista ex studente e laurea:
+CREATE OR REPLACE VIEW unitua.ex_stud_laureato AS 
+    SELECT ex.*, l.codice, l.voto, l.bonus, l.relatore
+    FROM unitua.ex_studente AS ex
+    JOIN unitua.laurea AS l 
+    ON ex.matricola = l.studente;
+
+
+--Query di verifica:
+CALL unitua.insert_utente('francesco.colombo@studenti.unitua.it', 'Pass');
+CALL unitua.insert_studente('08899A', 'Francesco', 'Colombo', 'PALSKE3456OP00P0', 'M', '1232323455', '2021-09-23', 'In corso', 'francesco.colombo@studenti.unitua.it', 1);
+--DELETE FROM unitua.studente AS s WHERE s.matricola = '08899A';
+--SELECT * FROM unitua.ex_studente;
+--SELECT * FROM unitua.ex_stud_laureato;
+
+
+--Funzione che data la matricola di un'ex studente restituisce 0 o 1 in base al conseguimento o meno della laurea:
+CREATE OR REPLACE FUNCTION unitua.is_laureato (
+    matricola_in text
+)
+RETURNS INTEGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.laurea AS l 
+        WHERE l.studente = matricola_in
+    )
+    THEN
+        RETURN 1;
+    ELSE 
+        RETURN 0;
+    
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+
+--Query di verifica:
+SELECT * FROM unitua.is_laureato('98007A');
+SELECT * FROM unitua.is_laureato('08899A');
+
+
+--Funzione che restituisce 0 o 1 se uno studente è nella tabella ex studente:
+CREATE OR REPLACE FUNCTION unitua.is_ex_stud(
+    email_in text
+)
+RETURNS INTEGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.ex_studente AS s
+        WHERE s.utente_email = email_in
+    ) THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END;      
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.is_ex_stud('aldo.baglio@studenti.unitua.it');
+*/
+
+--Funzione che restituisce la matricola di un ex studente data la mail per argomento:
+CREATE OR REPLACE FUNCTION unitua.get_ex_matricola (
+    email_in text
+)
+RETURNS VARCHAR AS $$
+DECLARE
+    matricola_out text;
+BEGIN
+    SELECT s.matricola
+    INTO matricola_out
+    FROM unitua.ex_studente AS s
+    WHERE s.utente_email = email_in;
+
+    RETURN matricola_out;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_ex_matricola('aldo.baglio@studenti.unitua.it');
+*/
+
+--Funzione che ritorna 0 o 1 se la matricola e la mail avute per argomento coincidono con lo stesso studente oppure no:
+CREATE OR REPLACE FUNCTION unitua.verifica_mat (
+    matricola_in text,
+    email_in text
+)
+RETURNS INTEGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.studente AS s 
+        WHERE s.utente_email = email_in AND s.matricola = matricola_in
+    )
+    THEN
+        RETURN 1;
+    ELSE
+        RETURN 0;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.verifica_mat('05460A', 'andrea.galliano@studenti.unitua.it');
+SELECT * FROM unitua.verifica_mat('05460A', 'luca.corradini@studenti.unitua.it');
 */

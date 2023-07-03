@@ -148,6 +148,7 @@ CREATE TABLE unitua.calendario (
 	data_esame date NOT NULL,
     ora time NOT NULL,
     aula varchar NOT NULL CHECK (aula <> ''),
+    aperto boolean NOT NULL,
     esame int NOT NULL,
     FOREIGN KEY(esame)
         REFERENCES unitua.esame(codice) ON DELETE CASCADE,
@@ -215,7 +216,7 @@ CREATE TABLE unitua.storico_valutazione (
     docente int NOT NULL,
     FOREIGN KEY(docente)
         REFERENCES unitua.docente(id) ON DELETE CASCADE,
-    voto unitua.voto_esame NOT NULL,
+    voto unitua.voto_esame,
     lode boolean NOT NULL,
     respinto boolean NOT NULL,
     data_verbalizzazione date NOT NULL
