@@ -1,4 +1,4 @@
 <?php
-    include_once("script/script.php");
+    include_once('script.php');
     logout();
 ?>
