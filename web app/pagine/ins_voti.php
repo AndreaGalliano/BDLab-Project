@@ -44,7 +44,7 @@
                     echo "<br><h5>Appello del: ".$row_app['data_esame']."</h5>";
                     
                     while ($row = pg_fetch_assoc($res)) {
-                        echo "<form method='POST' action='../script/index_voti.php'>";
+                        echo "<form method='POST' action='../pagine/index_voti.php'>";
                         // $_SESSION['esame'] = $row['codice_esame'];
                         // echo "<li class='list-group-item'>";
                         foreach ($row as $key => $value) {
