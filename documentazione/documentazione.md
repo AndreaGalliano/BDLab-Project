@@ -91,6 +91,7 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 |---------   |--------|--------|---------|----|
 |**UTENTE**  |**email**|varchar|PRIMARY KEY|
 |            |pw|varchar|NOT NULL|
+|
 |**SEGRETERIA**|**ID**|serial|PRIMARY KEY|
 |            |Nome|varchar|NOT NULL|
 |            |Cognome|varchar|NOT NULL|
@@ -99,6 +100,7 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Ruolo|ENUM|NOT NULL|Ruolo = {'Primo livello', 'Secondo livello'}|
 |            |Utente email|varchar|FOREIGN KEY|
+|
 |**DOCENTE** |**ID**|serial|PRIMARY KEY|
 |            |Nome|varchar|NOT NULL|
 |            |Cognome|varchar|NOT NULL|
@@ -107,6 +109,7 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Carica accademica|ENUM|NOT NULL|Carica accademica = {'Ordinario', 'Associato', 'Ricercatore'}|
 |            |Utente email|varchar|FOREIGN KEY|
+|
 |**STUDENTE**|**Matricola**|varchar|PK - NOT NULL|
 |            |Nome|varchar|NOT NULL|
 |            |Cognome|varchar|NOT NULL|
@@ -116,6 +119,7 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 |            |Data immatricolazione|date|NOT NULL|
 |            |Stato|ENUM|NOT NULL|Stato = {'In corso', 'Fuoricorso'}|
 |            |Utente email|varchar|FOREIGN KEY|
+|
 |**EX STUDENTE**|**Matricola**|varchar|PK - NOT NULL|
 |               |Nome|varchar|NOT NULL|
 |               |Cognome|varchar|NOT NULL|
