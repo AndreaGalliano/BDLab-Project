@@ -2,7 +2,7 @@
     session_start();
 
     if (isset($_POST['codice']) && isset($_POST['nome_insegnamento']) && isset($_POST['anno_insegnamento']) && isset($_POST['descrizione'])) {
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query = "CALL unitua.update_ins($1, $2, $3, $4)";
         $res = pg_prepare($connection, "", $query);
@@ -15,14 +15,14 @@
 
             if ($afftectedRows == 0) {
                 $_SESSION['modifica_ins'] = "Modifica dell'insegnamento avvenuta con successo!";
-                header('Location: conf_mod_ins.php');
+                header('Location: ../pagine/conf_mod_ins.php');
             } else {
                 $_SESSION['modifica_ins'] = preg_last_error($connection);
-                header('Location: conf_mod_ins.php');
+                header('Location: ../pagine/conf_mod_ins.php');
             }
         } else {
             $_SESSION['modifica_ins'] = preg_last_error($connection);
-            header('Location: conf_mod_ins.php');
+            header('Location: ../pagine/conf_mod_ins.php');
         }
     }
 ?>

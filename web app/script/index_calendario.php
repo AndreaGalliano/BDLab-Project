@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (isset($_POST['data_esame']) && isset($_POST['ora']) && isset($_POST['aula']) && isset($_POST['codice_esame']) && isset($_POST['anno'])) {
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query1 = "SELECT * FROM unitua.get_info_doc($1)";
         $res1 = pg_prepare($connection, "rep", $query1);
@@ -23,14 +23,14 @@
 
             if ($affectedRows > 0) {
                 $_SESSION['insert_appello'] = pg_last_error($connection);
-                header('Location: conf_cal.php');
+                header('Location: ../pagine/conf_cal.php');
             } else {
                 $_SESSION['insert_appello'] = "Inserimento dell'appello avvenuto con successo!";
-                header('Location: conf_cal.php');
+                header('Location: ../pagine/conf_cal.php');
             }
         } else {
             $_SESSION['insert_appello'] = "Errore nell'inserimento dell'appello...";
-            header('Location: conf_cal.php');
+            header('Location: ../pagine/conf_cal.php');
         }
     }
 ?>

@@ -11,7 +11,7 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         if (isset($_SESSION['errore_cdl'])) {
             echo "<h2 id='scritta_is'>".$_SESSION['errore_cdl']."</h2>";

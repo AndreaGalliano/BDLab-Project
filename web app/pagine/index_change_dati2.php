@@ -11,9 +11,9 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
         if (isset($_POST['id'])) {
-            include_once('connection.php');
+            include_once('../script/connection.php');
 
             $query_verifica = "SELECT * FROM unitua.is_doc($1)";
             $res_verifica = pg_prepare($connection, "rep", $query_verifica);
@@ -22,12 +22,12 @@
 
             if ($row['is_doc'] == 0) {
                 $_SESSION['modifica_doc'] = "L'ID inserito non corrisponde a nessun docente del sistema!";
-                header('Location: conf_update_doc2.php');
+                header('Location: ../pagine/conf_update_doc2.php');
             }
 
             echo "<ul class='list-group' id='centrato'>";
             
-            echo "<form method='POST' action='conf_update_doc1.php'>";
+            echo "<form method='POST' action='../script/conf_update_doc1.php'>";
             echo "<li class='list-group-item'>";
             echo "<input type='text' name='id' id='id' value='".$_POST['id']."' readonly />";
             echo "</li>";

@@ -1,7 +1,7 @@
 <?php
     session_start();
     if(isset($_POST['bonus']) && isset($_POST['data']) && isset($_POST['lode']) && isset($_POST['studente']) && isset($_POST['relatore']) && isset($_POST['cdl'])) {
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query1 = "SELECT * FROM unitua.is_stud($1)";
         $res1 = pg_prepare($connection, "", $query1);
@@ -10,7 +10,7 @@
 
         if ($row1['is_stud'] == 0) {
             $_SESSION['errore_cdl'] = "Lo matricola inserita non corrisponde a nessuno studente all'interno del sistema!";
-            header('Location: errore_cdl.php');
+            header('Location: ../pagine/errore_cdl.php');
         }
 
         $query2 = "SELECT * FROM unitua.is_doc($1)";
@@ -20,7 +20,7 @@
 
         if ($row2['is_doc'] == 0) {
             $_SESSION['errore_cdl'] = "L'ID inserito non corrisponde a nessun docente all'interno del sistema!";
-            header('Location: errore_cdl.php');
+            header('Location: ../pagine/errore_cdl.php');
         }
 
         $query3 = "SELECT * FROM unitua.calcolo_media($1)";
@@ -42,14 +42,14 @@
 
             if ($affectedRows == 0) {
                 $_SESSION['inserimento_laurea'] = "Inserimento della laurea avvenuto con successo!";
-                header('Location: conf_ins_laurea.php');
+                header('Location: ../pagine/conf_ins_laurea.php');
             } else {
                 $_SESSION['inserimento_laurea'] = pg_last_error($connection);
-                header('Location: conf_ins_laurea.php');
+                header('Location: ../pagine/conf_ins_laurea.php');
             }
         } else {
             $_SESSION['inserimento_laurea'] = pg_last_error($connection);
-            header('Location: conf_ins_laurea.php');
+            header('Location: ../pagine/conf_ins_laurea.php');
         }
     }
 ?>

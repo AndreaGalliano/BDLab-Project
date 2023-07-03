@@ -11,9 +11,9 @@
 <body>
     <?php
         include_once('navbar4.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query1 = "SELECT * FROM unitua.get_ex_matricola($1)";
         $res1 = pg_prepare($connection, "", $query1);

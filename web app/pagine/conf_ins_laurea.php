@@ -12,7 +12,7 @@
     <?php
         // session_start();
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         // print_r($_SESSION['inserimento_laurea']);
 

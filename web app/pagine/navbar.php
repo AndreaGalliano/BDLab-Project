@@ -18,7 +18,7 @@
                     <a class="nav-link" href="rinuncia.php">Rinuncia agli studi</a>
                 </li>
                 <li>
-                <form action="script/logout.php" method="get" id="bottone_logout">
+                <form action="../script/logout.php" method="get" id="bottone_logout">
                     <button class="nav-link" type="submit">Logout</button>
                 </form>
                 </li>

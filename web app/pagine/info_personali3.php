@@ -12,9 +12,9 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
-        include_once('connection.php'); 
+        include_once('../script/connection.php'); 
 
         $query = "SELECT * FROM unitua.get_all_seg($1)";
 

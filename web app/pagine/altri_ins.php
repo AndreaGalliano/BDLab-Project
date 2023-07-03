@@ -12,11 +12,11 @@
 
     <?php
         include_once('navbar.php');
-        include_once("check_login.php");
+        include_once("../script/check_login.php");
 
         echo "<h2>Insegnamenti di altri Corsi di Laurea</h2>";
     
-        include_once('connection.php'); 
+        include_once('../script/connection.php'); 
 
         $query1 = "SELECT * FROM unitua.get_cdl($1)";
 

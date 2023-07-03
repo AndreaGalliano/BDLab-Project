@@ -2,6 +2,6 @@
     session_start();
 
     if (!isset($_SESSION['isLogin'])) {
-        header('Location: index.php');
+        header('Location: ../pagine/index.php');
     }
 ?>

@@ -16,8 +16,8 @@
             </li>
 
             <?php
-                include_once('check_login.php');
-                include_once('connection.php');
+                include_once('../script/check_login.php');
+                include_once('../script/connection.php');
 
                 $query = "SELECT * FROM unitua.get_all_seg($1)";
                 $res = pg_prepare($connection, "rep_ok", $query);
@@ -32,7 +32,7 @@
             ?>
 
             <li>
-                <form action="script/logout.php" method="get" id="bottone_logout">
+                <form action="../script/logout.php" method="get" id="bottone_logout">
                     <button class="nav-link" type="submit">Logout</button>
                 </form>
             </li>

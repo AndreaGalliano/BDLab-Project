@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (isset($_POST['email']) && isset($_POST['matricola'])) {
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $queryVerifica = "SELECT * FROM unitua.verifica_mat($1, $2)";
         $resVerifica = pg_prepare($connection, "", $queryVerifica);
@@ -11,8 +11,8 @@
         
         if ($rowV['verifica_mat'] == 0) {
             $_SESSION['rinuncia'] = "Hai inserito un numero di matricola che non coincide con il tuo indirizzo mail!";
-            echo $_SESSION['rinuncia'];
-            //header('Location: conf_rinuncia.php');
+            // echo $_SESSION['rinuncia'];
+            header('Location: ../pagine/conf_rinuncia.php');
         }
 
         $queryRinuncia = "DELETE FROM unitua.studente WHERE matricola=$1";
@@ -24,14 +24,14 @@
 
             if ($affectedRows == 0) {
                 $_SESSION['rinuncia'] = "Errore: impossibile effettuare la rinuncia agli Studi...";
-                header('Location: conf_rinuncia.php');
+                header('Location: ../pagine/conf_rinuncia.php');
             } else {
                 $_SESSION['rinuncia'] = "Rinuncia agli studi avvenuta con successo!";
-                header('Location: conf_rinuncia.php');
+                header('Location: ../pagine/conf_rinuncia.php');
             }
         } else {
             $_SESSION['rinuncia'] = pg_last_error($connection);
-            header('Location: conf_rinuncia.php');
+            header('Location: ../pagine/conf_rinuncia.php');
         }
     }
 ?>

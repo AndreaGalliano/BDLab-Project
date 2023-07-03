@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include_once('connection.php');
+    include_once('../script/connection.php');
     
     // print_r($_POST);
 
@@ -14,14 +14,14 @@
             
             if ($affectedRows == 0) {
                 $_SESSION['nuovo_cdl'] = "Inserimento del Corso di Laurea avvenuto con successo!";
-                header('Location: conf_new_cdl.php');
+                header('Location: ../pagine/conf_new_cdl.php');
             } else {
                 $_SESSION['nuovo_cdl'] = "Errore nell'inserimento del nuovo Corso di Laurea...";
-                header('Location: conf_new_cdl.php');
+                header('Location: ../pagine/conf_new_cdl.php');
             }
         } else {
             $_SESSION['nuovo_cdl'] = pg_last_error($connection);
-            header('Location: conf_new_cdl.php');
+            header('Location: ../pagine/conf_new_cdl.php');
         }
     }
 ?>

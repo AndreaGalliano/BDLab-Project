@@ -11,11 +11,11 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
     ?>
 
     <br>
-    <form method="POST" action="index_change_ins.php">
+    <form method="POST" action="../script/index_change_ins.php">
         <div class="form-group" id="divform1">
             <label for="codice">Codice del Corso di Laurea:</label>
             <input type="text" class="form-control" id="codice1" aria-describedby="codice" name="codice" placeholder="Codice CdL" required>

@@ -14,7 +14,7 @@
         include_once('navbar.php');
         include_once("check_login.php");
 
-        include_once('connection.php'); 
+        include_once('../script/connection.php'); 
 
         $query1 = "SELECT * FROM unitua.get_cdl($1)";
 
@@ -34,7 +34,7 @@
         $flag = false;
 
         while ($row2 = pg_fetch_assoc($res2)) {
-            echo "<form method='POST' action='index_iscrizione.php'>";
+            echo "<form method='POST' action='../script/index_iscrizione.php'>";
             foreach ($row2 as $key => $value) {
                 $annoData = date('Y', strtotime($row2['data_esame']));
                 if ($anno_corrente == $annoData) {

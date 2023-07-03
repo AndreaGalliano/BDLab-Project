@@ -11,11 +11,11 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         echo "<h2 id='scritta_is'>Studenti dell'ateneo</h2>";
 
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query = "SELECT * FROM unitua.studente";
         $res = pg_prepare($connection, "", $query);

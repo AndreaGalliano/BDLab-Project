@@ -11,10 +11,10 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         if (isset($_POST['codice'])) {
-            include_once('connection.php');
+            include_once('../script/connection.php');
 
             $query_verificata = "SELECT * FROM unitua.is_cdl($1)";
             $res_verificata = pg_prepare($connection, "", $query_verificata);
@@ -23,7 +23,7 @@
 
             if ($rowV['is_cdl'] == 0) {
                 $_SESSION['modifica_ins'] = "L'ID inserito non corrisponde a nessun Corso di Laurea del sistema!";
-                header('Location: conf_update_ins.php'); 
+                header('Location: ../pagine/conf_update_ins.php'); 
             }
 
             echo "<h2 id='scritta_is'>Insegnamenti del CdL selezionato:</h2>";
@@ -36,7 +36,7 @@
 
             while ($row = pg_fetch_assoc($res)) {
                 echo "<h5>Nome insegnamento: ".$row['nome_insegnamento']."</h5>";
-                echo "<form method='POST' action='index_modifica_ins.php'>";
+                echo "<form method='POST' action='../script/index_modifica_ins.php'>";
                 foreach ($row as $key => $value) {
                     switch ($key) {
                         case 'codice':
@@ -87,7 +87,7 @@
 
             while ($row_es = pg_fetch_assoc($res_es)) {
                 echo "<h5>Esame di: ".$row_es['nome_insegnamento']."</h5>";
-                echo "<form method='POST' action='index_modifica_es.php'>";
+                echo "<form method='POST' action='../script/index_modifica_es.php'>";
                 foreach ($row_es as $key => $value) {
                     switch ($key) {
                         case 'codice_esame':

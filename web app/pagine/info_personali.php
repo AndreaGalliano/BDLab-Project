@@ -14,7 +14,7 @@
         include_once('navbar.php');
         include_once("check_login.php");
         
-        include_once('connection.php'); 
+        include_once('../script/connection.php'); 
 
         $query = "SELECT * FROM unitua.get_info($1)";
 

@@ -21,7 +21,7 @@
 
         echo "<h2>Iscrizioni confermate dell'utente: ".$nome." ".$cognome."</h2>";
     
-        include_once('connection.php'); 
+        include_once('../script/connection.php'); 
 
         $query1 = "SELECT * FROM unitua.get_matricola($1)";
 

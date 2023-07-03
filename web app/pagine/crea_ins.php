@@ -11,12 +11,12 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
     ?>
 
     <br>
     <h4 id="titolino">Creazione di un nuovo insegnamento:</h4>
-    <form method='POST' action='new_ins.php' id='form_add'>
+    <form method='POST' action='../script/new_ins.php' id='form_add'>
         <div class="form-group" id="divform">
             <label for="nome_insegnamento">Nome insegnamento:</label>
             <input type="text" class="form-control" id="nome_insegnamento" aria-describedby="nome_insegnamento" name="nome_insegnamento" placeholder="Inserisci il nome dell'insegnamento" required>

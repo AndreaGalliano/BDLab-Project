@@ -11,14 +11,14 @@
 <body>
     <?php
         include_once('navbar2.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         $mail_splittata = explode(".", $_SESSION['email']);
         $nome = strtoupper($mail_splittata[0]);
         $mail_splittata2 = explode("@", $mail_splittata[1]);
         $cognome = strtoupper($mail_splittata2[0]);
 
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         echo "<h2 id='scritta_is'>Appelli aperti dal docente: ".$nome." ".$cognome."</h2><br>";
 
@@ -40,7 +40,7 @@
                 $res_app = pg_execute($connection, "", array($row_ins['id'], $current_year, $row_es['get_es'])); 
 
                 while ($row_app = pg_fetch_assoc($res_app)) {
-                    echo "<form method='POST' action='index_remove_app.php'>";
+                    echo "<form method='POST' action='../script/index_remove_app.php'>";
                     foreach ($row_app as $key => $value) {
                         switch($key) {
                             case 'codice_appello':

@@ -2,7 +2,7 @@
     session_start();
 
     if (isset($_POST['codice_esame']) && isset($_POST['tipologia']) && isset($_POST['modalita'])) {
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query = "CALL unitua.update_es($1, $2, $3)";
         $res = pg_prepare($connection, "", $query);
@@ -15,14 +15,14 @@
 
             if ($afftectedRows == 0) {
                 $_SESSION['modifica_es'] = "Modifica dell'esame avvenuta con successo!";
-                header('Location: conf_modifica_es.php');
+                header('Location: ../pagine/conf_modifica_es.php');
             } else {
                 $_SESSION['modifica_es'] = preg_last_error($connection);
-                header('Location: conf_modifica_es.php');
+                header('Location: ../pagine/conf_modifica_es.php');
             }
         } else {
             $_SESSION['modifica_es'] = preg_last_error($connection);
-            header('Location: conf_modifica_es.php');
+            header('Location: ../pagine/conf_modifica_es.php');
         }
     }
 ?>

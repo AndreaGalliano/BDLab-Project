@@ -11,7 +11,7 @@
 <body>
     <?php
         include_once('navbar2.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         $mail_splittata = explode(".", $_SESSION['email']);
         $nome = strtoupper($mail_splittata[0]);
@@ -20,7 +20,7 @@
 
         echo "<h2>Insegnamenti di cui è responsabile il docente: ".$nome." ".$cognome."</h2>";
 
-        include_once('connection.php'); 
+        include_once('../script/connection.php'); 
 
         $query = "SELECT * FROM unitua.get_insegnamenti($1)";
         $res = pg_prepare($connection, "rep_ok", $query);
@@ -29,7 +29,7 @@
         echo "<ul class='list-group' id='centrato'>";
 
         while ($row = pg_fetch_assoc($res)) {
-            echo "<form method='POST' action='index_calendario.php'>";
+            echo "<form method='POST' action='../script/index_calendario.php'>";
             echo "<li class='list-group-item'>";
             echo "<input type='date' id='data_esame' name='data_esame' />";
             echo "</li>";

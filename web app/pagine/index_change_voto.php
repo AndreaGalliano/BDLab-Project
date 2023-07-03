@@ -12,9 +12,9 @@
     <?php
         if (isset($_POST['matricola'])) {
             include_once('navbar2.php');
-            include_once('check_login.php');
+            include_once('../script/check_login.php');
 
-            include_once('connection.php');
+            include_once('../script/connection.php');
 
             $query_verifica = "SELECT * FROM unitua.is_stud($1)";
             $res_verifica = pg_prepare($connection, "", $query_verifica);
@@ -23,7 +23,7 @@
 
             if ($row['is_stud'] == 0) {
                 $_SESSION['modifica_voto'] = "La matricola inserita non corrisponde a nessuno studente del sistema!";
-                header('Location: no_update.php');
+                header('Location: ../pagine/no_update.php');
             }
 
             $query_doc = "SELECT * FROM unitua.get_info_doc($1)";
@@ -38,7 +38,7 @@
             echo "<ul class='list-group' id='centrato'>";
 
             while ($row = pg_fetch_assoc($res)) {
-                echo "<form method='POST' action='conf_update1.php'>";
+                echo "<form method='POST' action='../script/conf_update1.php'>";
                 foreach ($row as $key => $value) {
                     switch ($key) {
                         case 'codice':

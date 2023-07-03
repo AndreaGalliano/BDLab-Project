@@ -3,13 +3,13 @@
 
     if (isset($_SESSION['isLogin'])) {
         if ($_SESSION['isStudente']) {
-            header('Location: home_stud.php');
+            header('Location: ../pagine/home_stud.php');
         }
         if ($_SESSION['isDocente']) {
-            header('Location: home_doc.php');
+            header('Location: ../pagine/home_doc.php');
         }
         if ($_SESSION['isSegreteria']) {
-            header('Location: home_seg.php');
+            header('Location: ../pagine/home_seg.php');
         }
     }
 ?>

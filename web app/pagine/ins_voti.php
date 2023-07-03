@@ -11,9 +11,9 @@
 <body>
     <?php
         include_once('navbar2.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query_ins = "SELECT * FROM unitua.get_insegnamenti($1)";
         $res_ins = pg_prepare($connection, "rep", $query_ins);
@@ -44,7 +44,7 @@
                     echo "<br><h5>Appello del: ".$row_app['data_esame']."</h5>";
                     
                     while ($row = pg_fetch_assoc($res)) {
-                        echo "<form method='POST' action='index_voti.php'>";
+                        echo "<form method='POST' action='../script/index_voti.php'>";
                         // $_SESSION['esame'] = $row['codice_esame'];
                         // echo "<li class='list-group-item'>";
                         foreach ($row as $key => $value) {

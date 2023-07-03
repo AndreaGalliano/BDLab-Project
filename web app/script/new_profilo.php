@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include_once('connection.php');
+    include_once('../script/connection.php');
     if (isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['password']) && isset($_POST['codFiscale']) && isset($_POST['sesso']) && isset($_POST['cellulare']) && isset($_POST['cdl']) && !isset($_POST['carica'])) {
         // Studente:
         $nome = strtolower($_POST['nome']);
@@ -18,7 +18,7 @@
 
             if ($affectedRows > 0) {
                 $_SESSION['insert'] = pg_last_error($connection);
-                header('Location: conf_insert_utente.php');
+                header('Location: ../pagine/conf_insert_utente.php');
             } else {
                 $matricola = "";
 
@@ -38,10 +38,10 @@
                     $affectedRows2 = pg_affected_rows($res2);
                     if ($affectedRows2 == 0) {
                         $_SESSION['insert'] = "Inserimento dello studente avvenuto con successo!";
-                        header('Location: conf_insert_utente.php');
+                        header('Location: ../pagine/conf_insert_utente.php');
                     } else {
                         $_SESSION['insert'] = pg_last_error($connection);
-                        header('Location: conf_insert_utente.php');
+                        header('Location: ../pagine/conf_insert_utente.php');
                     }
                 }
             }
@@ -63,7 +63,7 @@
 
                 if ($affectedRows > 0) {
                     $_SESSION['insert'] = pg_last_error($connection);
-                    header('Location: conf_insert_utente.php');
+                    header('Location: ../pagine/conf_insert_utente.php');
                 } else {
                     $query2 = "CALL unitua.insert_docente($1, $2, $3, $4, $5, $6, $7, $8)";
                     $res2 = pg_prepare($connection, "rep_ok", $query2);
@@ -74,10 +74,10 @@
 
                         if ($affectedRows2 > 0) {
                             $_SESSION['insert'] = pg_last_error($connection);
-                            header('Location: conf_insert_utente.php');
+                            header('Location: ../pagine/conf_insert_utente.php');
                         } else {
                             $_SESSION['insert'] = "Inserimento del docente avvenuto con successo!";
-                            header('Location: conf_insert_utente.php');
+                            header('Location: ../pagine/conf_insert_utente.php');
                         }
                     }
                 }
@@ -98,7 +98,7 @@
 
                     if ($affectedRows > 0) {
                         $_SESSION['insert'] = pg_last_error($connection);
-                        header('Location: conf_insert_utente.php');
+                        header('Location: ../pagine/conf_insert_utente.php');
                     } else {
                         $query2 = "CALL unitua.insert_membro_segreteria($1, $2, $3, $4, $5, $6, $7)";
                         $res2 = pg_prepare($connection, "rep_ok", $query2);
@@ -109,10 +109,10 @@
 
                             if ($affectedRows2 > 0) {
                                 $_SESSION['insert'] = pg_last_error($connection);
-                                header('Location: conf_insert_utente.php');
+                                header('Location: ../pagine/conf_insert_utente.php');
                             } else {
                                 $_SESSION['insert'] = "Inserimento del membro della segreteria avvenuto con successo!";
-                                header('Location: conf_insert_utente.php');
+                                header('Location: ../pagine/conf_insert_utente.php');
                             }
                         }
                     }

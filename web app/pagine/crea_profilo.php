@@ -11,11 +11,11 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
     ?>
     <br>
     <h4 id="titolino">Creazione di un nuovo profilo studente:</h4>
-    <form method="POST" action="new_profilo.php" id="form_add">
+    <form method="POST" action="../script/new_profilo.php" id="form_add">
         <div class="form-group" id="divform">
             <label for="nome">Nome:</label>
             <input type="text" class="form-control" id="nome1" aria-describedby="nome" name="nome" placeholder="Inserisci nome" required>
@@ -55,7 +55,7 @@
     <hr>
 
     <h4 id="titolino">Creazione di un nuovo profilo docente:</h4>
-    <form method="POST" action="new_profilo.php" id="form_add">
+    <form method="POST" action="../script/new_profilo.php" id="form_add">
         <div class="form-group" id="divform">
             <label for="nome">Nome:</label>
             <input type="text" class="form-control" id="nome1" aria-describedby="nome" name="nome" placeholder="Inserisci nome" required>
@@ -101,7 +101,7 @@
     <hr>
 
     <?php
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query = "SELECT * FROM unitua.get_all_seg($1)";
         $res = pg_prepare($connection, "", $query);

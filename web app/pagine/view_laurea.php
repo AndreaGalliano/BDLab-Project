@@ -11,10 +11,10 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         if (isset($_POST['matricola'])) {
-            include_once('connection.php');
+            include_once('../script/connection.php');
 
             $query = "SELECT * FROM unitua.laurea WHERE studente=$1";
             $res = pg_prepare($connection, "", $query);

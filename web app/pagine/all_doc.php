@@ -15,7 +15,7 @@
 
         echo "<h2 id='scritta_is'>Docenti dell'ateneo</h2>";
 
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query = "SELECT * FROM unitua.docente";
         $res = pg_prepare($connection, "", $query);

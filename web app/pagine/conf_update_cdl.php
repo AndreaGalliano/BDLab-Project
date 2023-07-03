@@ -12,9 +12,9 @@
 
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         print_r($_SESSION);
 

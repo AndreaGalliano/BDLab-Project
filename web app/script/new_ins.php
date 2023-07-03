@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include_once('connection.php');
+    include_once('../script/connection.php');
 
     if (isset($_POST['nome_insegnamento']) && isset($_POST['anno_insegnamento']) && isset($_POST['descrizione']) && isset($_POST['docente']) && isset($_POST['cdl']) && isset($_POST['tipologia']) && isset($_POST['modalita'])) {
         // echo "entrato";
@@ -23,16 +23,16 @@
                 $res3 = pg_execute($connection, "", array($row['get_ins_code'], $_POST['tipologia'], $_POST['modalita']));
 
                 $_SESSION['nuovo_ins'] = "Inserimento dell'insegnamento e dell'esame avvenuto con successo!";
-                header('Location: conf_new_ins.php');
+                header('Location: ../pagine/conf_new_ins.php');
             } else {
                 $msg_error = explode(".", pg_last_error($connection));
                 $_SESSION['nuovo_ins'] = $msg_error[0];
-                header('Location: conf_new_ins.php');
+                header('Location: ../pagine/conf_new_ins.php');
             }
         } else {
             $msg_error = explode(".", pg_last_error($connection));
             $_SESSION['nuovo_ins'] = $msg_error[0];
-            header('Location: conf_new_ins.php');
+            header('Location: ../pagine/conf_new_ins.php');
         }
     }
 ?>

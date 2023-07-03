@@ -11,7 +11,7 @@
 <body>
     <?php
         include_once('navbar2.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         $mail_splittata = explode(".", $_SESSION['email']);
         $nome = strtoupper($mail_splittata[0]);
@@ -20,7 +20,7 @@
 
         echo "<h2 id='scritta_is'>Appelli aperti dal docente: ".$nome." ".$cognome."</h2>";
 
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query_ins = "SELECT * FROM unitua.get_insegnamenti($1)";
         $res_ins = pg_prepare($connection, "rep", $query_ins);

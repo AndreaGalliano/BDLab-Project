@@ -12,11 +12,11 @@
     <?php
         if (isset($_POST['codice'])) {
             include_once('navbar3.php');
-            include_once('check_login.php');
+            include_once('../script/check_login.php');
 
             echo "<h2 id='scritta_is'>Ex studenti dell'ateneo</h2>";
 
-            include_once('connection.php');
+            include_once('../script/connection.php');
 
             $query_verificata = "SELECT * FROM unitua.is_cdl($1)";
             $res_verificata = pg_prepare($connection, "", $query_verificata);
@@ -25,7 +25,7 @@
 
             if ($rowV['is_cdl'] == 0) {
                 $_SESSION['ex'] = "L'ID inserito non corrisponde a nessun Corso di Laurea del sistema!";
-                header('Location: err_ex_stud.php'); 
+                header('Location: ../pagine/err_ex_stud.php'); 
             }
 
             $query = "SELECT * FROM unitua.ex_studente WHERE cdl=$1";
@@ -46,17 +46,17 @@
                             $row_laureato = pg_fetch_assoc($res_laureato);
 
                             if ($row_laureato['is_laureato'] == 1) {
-                                echo "<form method='POST' action='view_laurea.php'>";
+                                echo "<form method='POST' action='../script/view_laurea.php'>";
                                 echo "<input type='hidden' id='matricola' name='matricola' value='".$value."' />";
                                 echo "<button type='submit' class='btn btn-primary' id='bottone_update'>Laurea</button>";
                                 echo "</form><br>";
 
-                                echo "<form method='POST' action='view_val.php'>";
+                                echo "<form method='POST' action='../script/view_val.php'>";
                                 echo "<input type='hidden' id='matricola' name='matricola' value='".$value."' />";
                                 echo "<button type='submit' class='btn btn-primary' id='bottone_update'>Valutazioni</button>";
                                 echo "</form>";
                             } else {
-                                echo "<form method='POST' action='view_val.php'>";
+                                echo "<form method='POST' action='../script/view_val.php'>";
                                 echo "<input type='hidden' id='matricola' name='matricola' value='".$value."' />";
                                 echo "<button type='submit' class='btn btn-primary' id='bottone_update'>Valutazioni</button>";
                                 echo "</form>";

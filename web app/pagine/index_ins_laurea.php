@@ -12,10 +12,10 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
         if (isset($_POST['codice'])) {
-            include_once('connection.php');
+            include_once('../script/connection.php');
 
             $query_verificata = "SELECT * FROM unitua.is_cdl($1)";
             $res_verificata = pg_prepare($connection, "", $query_verificata);
@@ -24,7 +24,7 @@
 
             if ($rowV['is_cdl'] == 0) {
                 $_SESSION['errore_cdl'] = "L'ID inserito non corrisponde a nessun Corso di Laurea del sistema!";
-                header('Location: errore_cdl.php'); 
+                header('Location: ../pagine/errore_cdl.php'); 
             }
         }
 
@@ -32,7 +32,7 @@
     ?>
 
     <br>
-    <form method="POST" action="index_ins_laurea2.php">
+    <form method="POST" action="../script/index_ins_laurea2.php">
         <div class="form-group" id="divform">
             <label for="bonus">Bonus:</label><br>
             <input type="number" id="bonus1" name="bonus" required />

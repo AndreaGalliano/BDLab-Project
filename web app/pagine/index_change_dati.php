@@ -11,9 +11,9 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
         if (isset($_POST['matricola'])) {
-            include_once('connection.php');
+            include_once('../script/connection.php');
 
             $query_verifica = "SELECT * FROM unitua.is_stud($1)";
             $res_verifica = pg_prepare($connection, "rep", $query_verifica);
@@ -22,12 +22,12 @@
 
             if ($row['is_stud'] == 0) {
                 $_SESSION['modifica_stud'] = "L'ID inserito non corrisponde a nessuno studente del sistema!";
-                header('Location: conf_update_stud2.php');
+                header('Location: ../pagine/conf_update_stud2.php');
             }
 
             echo "<ul class='list-group' id='centrato'>";
             
-            echo "<form method='POST' action='conf_update_stud1.php'>";
+            echo "<form method='POST' action='../script/conf_update_stud1.php'>";
             echo "<li class='list-group-item'>";
             echo "<input type='text' name='matricola' id='matricola' value='".$_POST['matricola']."' readonly />";
             echo "</li>";

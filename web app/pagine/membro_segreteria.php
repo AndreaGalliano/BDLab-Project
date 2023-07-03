@@ -1,5 +1,5 @@
 <h4 id="titolino">Creazione di un nuovo profilo segreteria:</h4>
-    <form method="POST" action="new_profilo.php" id="form_add">
+    <form method="POST" action="../script/new_profilo.php" id="form_add">
         <div class="form-group" id="divform">
             <label for="nome">Nome:</label>
             <input type="text" class="form-control" id="nome1" aria-describedby="nome" name="nome" placeholder="Inserisci nome" required>

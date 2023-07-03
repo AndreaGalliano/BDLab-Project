@@ -11,10 +11,10 @@
 <body>
     <?php
         include_once('navbar2.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
     ?>
 
-    <form method="POST" action="index_change_voto.php">
+    <form method="POST" action="../script/index_change_voto.php">
         <div class="form-group" id="divform1">
             <label for="matricola">Matricola dello studente:</label>
             <input type="text" class="form-control" id="matricola" aria-describedby="matricola" name="matricola" placeholder="Matricola" required>

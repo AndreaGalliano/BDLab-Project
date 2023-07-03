@@ -20,7 +20,7 @@
         <div class="shape"></div>
         <div class="shape"></div>
     </div>
-    <form method="POST" action="index_login.php">
+    <form method="POST" action="../script/index_login.php">
         <h3>Login Unitua</h3>
 
         <label for="username">Indirizzo Email</label>

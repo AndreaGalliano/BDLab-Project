@@ -13,7 +13,7 @@
     <?php
         // session_start();
         include_once('navbar.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
     ?>
 
     <br>
@@ -22,7 +22,7 @@
     <h4 id="titoletto">Se sei sicuro di voler effettuare la rinuncia agli studi compila il modulo:</h4>
     <br>
     <div id="centrato">
-        <form method="POST" action="index_rinuncia.php">
+        <form method="POST" action="../script/index_rinuncia.php">
             <div class="form-group" id="divform">
                 <label for="email">Indirizzo e-mail:</label>
                 <input type="email" class="form-control" id="email" aria-describedby="email" name="email" value="<?php echo $_SESSION['email']; ?>" readonly>

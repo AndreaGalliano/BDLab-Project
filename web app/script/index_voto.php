@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (isset($_POST['studente']) && isset($_POST['lode']) && isset($_POST['data_verb']) && isset($_POST['respinto']) && isset($_POST['codice_appello']) && isset($_POST['codice_esame']) && isset($_POST['id_docente']) && isset($_POST['voto_esame'])) {
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         $query_preliminare = "SELECT * FROM unitua.esame_fatto($1, $2)";
         $res_preliminare = pg_prepare($connection, "", $query_preliminare);
@@ -28,16 +28,16 @@
                 if ($affectedRowsAgg == 0) {
                     // echo "entrato 3";
                     $_SESSION['rep_voto'] = "Inserimento del voto avvenuto con successo!";
-                    header('Location: conf_voto.php');
+                    header('Location: ../pagine/conf_voto.php');
                 } else {
                     $msg = explode(".", pg_last_error($connection));
                     $_SESSION['rep_voto'] = $msg[0];
-                    header('Location: conf_voto.php');
+                    header('Location: ../pagine/conf_voto.php');
                 }
             } else {
                 $msg = explode(".", pg_last_error($connection));
                 $_SESSION['rep_voto'] = $msg[0];
-                header('Location: conf_voto.php');
+                header('Location: ../pagine/conf_voto.php');
             }
         } else {
             $query = "CALL unitua.insert_valutazione($1, $2, $3, $4, $5, $6, $7, $8)";
@@ -54,15 +54,15 @@
 
                 if ($affectedRows > 0) {
                     $_SESSION['rep_voto'] = pg_last_error($connection);
-                    header('Location: conf_voto.php');
+                    header('Location: ../pagine/conf_voto.php');
                 } else {
                     $_SESSION['rep_voto'] = "Inserimento del voto avvenuto con successo!";
-                    header('Location: conf_voto.php');
+                    header('Location: ../pagine/conf_voto.php');
                 }
             } else {
                 $str_completa = explode("CONTEXT", pg_last_error($connection));
                 $_SESSION['rep_voto'] = $str_completa[0];
-                header('Location: conf_voto.php');
+                header('Location: ../pagine/conf_voto.php');
             }
         }
     }

@@ -12,7 +12,7 @@
 
     <?php
         include_once('navbar.php');
-        include_once("check_login.php");
+        include_once("../script/check_login.php");
 
         $mail_splittata = explode(".", $_SESSION['email']);
         $nome = strtoupper($mail_splittata[0]);
@@ -21,7 +21,7 @@
 
         echo "<h2>Esami superati dell'utente: ".$nome." ".$cognome."</h2>";
     
-        include_once('connection.php'); 
+        include_once('../script/connection.php'); 
 
         $query1 = "SELECT * FROM unitua.get_matricola($1)";
 

@@ -11,11 +11,11 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
     ?>
 
     <br>
-    <form method="POST" action="index_change_dati2.php">
+    <form method="POST" action="../script/index_change_dati2.php">
         <div class="form-group" id="divform1">
             <label for="id">ID del docente:</label>
             <input type="number" class="form-control" id="id1" aria-describedby="id" name="id" placeholder="ID docente" min="100" required>

@@ -13,7 +13,7 @@
     <?php
         session_start();
         include_once('navbar4.php');
-        include_once('script/script.php');
+        include_once('../script/script.php');
         effettua_cambiamento();
 
         if (isset($_SESSION['autenticazione_fallita'])) {
@@ -37,7 +37,7 @@
         }
     ?>
     
-    <form method="POST" action="index_change.php">
+    <form method="POST" action="../script/index_change.php">
         <div class="form-group" id="divform">
             <label for="email">Indirizzo e-mail</label>
             <input type="email" class="form-control" id="email" aria-describedby="email" name="email" value="<?php echo $_SESSION['email']; ?>" readonly>

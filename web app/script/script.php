@@ -1,7 +1,7 @@
 <?php
     function login() {
         if (isset($_POST["username"]) && isset($_POST["password"])) {
-                include_once('connection.php'); 
+                include_once('../script/connection.php'); 
                 $sql = "SELECT * FROM unitua.verifica($1, $2)";
                 $res = pg_prepare($connection, "get_all_esito_attesa_acc", $sql);
 
@@ -12,7 +12,7 @@
                 
                 if ($row["email"] === null) {
                     $_SESSION['autenticazione_fallita'] = "Credenziali non corrette, riprova";
-                    header('Location: index.php');
+                    header('Location: ../pagine/index.php');
                 } else {
                     $_SESSION['isLogin'] = true;
 
@@ -25,23 +25,23 @@
                             $_SESSION['isStudente'] = true;
                             $_SESSION['isDocente'] = false;
                             $_SESSION['isSegreteria'] = false;
-                            header('Location: home_stud.php');
+                            header('Location: ../pagine/home_stud.php');
                             break;
                         case "docenti.unitua.it":
                             $_SESSION['isStudente'] = false;
                             $_SESSION['isDocente'] = true;
                             $_SESSION['isSegreteria'] = false;
-                            header('Location: home_doc.php');
+                            header('Location: ../pagine/home_doc.php');
                             break;
                         case "segreteria.unitua.it":
                             $_SESSION['isStudente'] = false;
                             $_SESSION['isDocente'] = false;
                             $_SESSION['isSegreteria'] = true;
-                            header('Location: home_seg.php');
+                            header('Location: ../pagine/home_seg.php');
                             break;
                         default:
                             $_SESSION['autenticazione_fallita'] = "Dominio non riconosciuto, riprova";
-                            header('Location: index.php');
+                            header('Location: ../pagine/index.php');
                             break;
                     }
                 }
@@ -51,18 +51,18 @@
     function logout() {
         session_start();
         session_unset();
-        header('Location: index.php');
+        header('Location: ../pagine/index.php');
     }
 
     function effettua_cambiamento() {
         if (isset($_POST['email']) && isset($_POST['old_pw']) && isset($_POST['new_pw']) && isset($_POST['conf_new_pw'])) {
             if ($_POST['new_pw'] != $_POST['conf_new_pw']) {
                 $_SESSION['errore_ins_pw'] = "Le 2 password nuove per effettuare il cambiamento non coincidono"; 
-                header('Location: pagine/cambio_pw.php');
+                ('Location: pagine/cambio_pw.php');
                 return;
             }
 
-            include_once('connection.php'); 
+            include_once('../script/connection.php'); 
 
             $primo_test = "SELECT * FROM unitua.verifica($1, $2)";
 
@@ -72,7 +72,7 @@
 
             if ($row1["email"] === null) {
                 $_SESSION['autenticazione_fallita'] = "La password attuale inserita non è corretta, riprova";
-                header('Location: pagine/cambio_pw.php');
+                header('Location: ../pagine/pagine/cambio_pw.php');
                 return;
             }
 
@@ -87,10 +87,10 @@
             if ($row['change_pw'] == '0') {
                 $_SESSION['cambiamento_fallito'] = "Il cambiamento della tua password non è andato a buon fine";
                 $_SESSION['row'] = $row['change_pw'];
-                header('Location: pagine/cambio_pw.php');
+                header('Location: ../pagine/cambio_pw.php');
             } else {
                 $_SESSION['cambiamento_fatto'] = "Cambiamento password avvenuto con successo!";
-                header('Location: pagine/cambio_pw.php');
+                header('Location: ../pagine/cambio_pw.php');
             }
         }
     }

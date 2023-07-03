@@ -11,9 +11,9 @@
 <body>
     <?php
         include_once('navbar3.php');
-        include_once('check_login.php');
+        include_once('../script/check_login.php');
 
-        include_once('connection.php');
+        include_once('../script/connection.php');
 
         echo "<h2 id='scritta_is'>Corsi di Laurea erogati</h2>";
 
@@ -25,7 +25,7 @@
 
         while ($row = pg_fetch_assoc($res)) {
             echo "<h5>Corso di Laurea: ".$row['descrizione']."</h5>";
-            echo "<form method='POST' action='index_modifica_cdl.php'>";
+            echo "<form method='POST' action='../script/index_modifica_cdl.php'>";
             foreach ($row as $key => $value) {
                 switch ($key) {
                     case 'codice':
