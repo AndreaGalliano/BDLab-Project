@@ -12,7 +12,7 @@
 
     <?php
         include_once('navbar.php');
-        include_once("check_login.php");
+        include_once('../script/check_login.php');
 
         $mail_splittata = explode(".", $_SESSION['email']);
         $nome = strtoupper($mail_splittata[0]);
@@ -51,10 +51,14 @@
                         echo "<input type='text' id='".$campi_chiave[0]." ".$campi_chiave[1]."' name='".$campi_chiave[0]." ".$campi_chiave[1]."' value='".$value."' readonly />";
                         echo "</li>";
                     } else {
-                        echo "<li class='list-group-item'>";
-                        echo strtoupper($key).": ";
-                        echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";
-                        echo "</li>";
+                        if ($key == 'aperto') {
+                            echo "<input type='hidden' id='".$key."' name='".$key."' value='".$value."' />";
+                        } else {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": ";
+                            echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";
+                            echo "</li>";
+                        }
                     }
                 } else {
                     $flag = true;

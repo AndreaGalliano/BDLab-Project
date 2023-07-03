@@ -12,7 +12,7 @@
 
     <?php
         include_once('navbar.php');
-        include_once("check_login.php");
+        include_once("../script/check_login.php");
         
         include_once('../script/connection.php');
 
@@ -92,7 +92,7 @@
                         <h5 class="card-title">Insegnamenti di altri CDL</h5>
                         <p class="card-text">Prendi visione di tutti i vari insegnamenti degli altri CDL attivati dal tuo ateneo.</p>
                         <br><br>
-                        <a href="pagine/altri_ins.php" class="btn btn-primary">Consulta</a>
+                        <a href="altri_ins.php" class="btn btn-primary">Consulta</a>
                     </div>
                 </div>
             </div>

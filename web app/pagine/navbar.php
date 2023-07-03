@@ -12,7 +12,7 @@
                     <a class="nav-link" href="info_personali.php">Informazioni personali</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="pagine/cambio_pw.php">Cambio password</a>
+                    <a class="nav-link" href="cambio_pw.php">Cambio password</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="rinuncia.php">Rinuncia agli studi</a>
