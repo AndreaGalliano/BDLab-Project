@@ -2,7 +2,7 @@
     session_start();
     if (isset($_POST['codice_appello']) && isset($_POST['codice_docente']) && isset($_POST['codice_esame'])) {
         
-        include_once('../script/connection.php'); 
+        include_once("../../script/connection.php");
 
         $query1 = "SELECT * FROM unitua.get_matricola($1)";
 
@@ -31,7 +31,7 @@
             $row_check2 = pg_fetch_assoc($res_check2);
 
             if ($row_check2['passato'] == 't') {
-                header('Location: ../pagine/conf_iscrizione.php');
+                header('Location: ../../pagine/conf_iscrizione.php');
                 $query2 = "CALL unitua.insert_iscritto($1, $2, $3, $4)";
 
                 $res2 = pg_prepare($connection, "get_all_res", $query2);
@@ -44,14 +44,14 @@
                     } else {
                         $_SESSION['iscrizione'] = "Errore durante l'iscrizione all'esame!";
                 }
-                header('Location: ../pagine/conf_iscrizione.php');
+                header('Location: ../../pagine/studente/conf_iscrizione.php');
                 } else {
                     $_SESSION['iscrizione'] = 'Iscrizione avvenuta con successo! ';
-                    header('Location: ../pagine/conf_iscrizione.php');
+                    header('Location: ../../pagine/studente/conf_iscrizione.php');
                 }
             } else {
                 $_SESSION['iscrizione'] = "Non puoi iscriverti ad un esame se non hai prima superato quello propedeutico";
-                header('Location: ../pagine/conf_iscrizione.php');
+                header('Location: ../../pagine/studente/conf_iscrizione.php');
             }
 
         } else {
@@ -68,10 +68,10 @@
                     } else {
                         $_SESSION['iscrizione'] = "Errore durante l'iscrizione all'esame! ".pg_fetch_assoc($res2); //Qui
                     }
-                header('Location: ../pagine/conf_iscrizione.php');
+                header('Location: ../../pagine/studente/conf_iscrizione.php');
                 } else {
                     $_SESSION['iscrizione'] = 'Iscrizione avvenuta con successo! ';
-                    header('Location: ../pagine/conf_iscrizione.php');
+                    header('Location: ../../pagine/studente/conf_iscrizione.php');
                 }
             } catch (Exception $e) {
                 echo "Eccezione: ".$e->getMessage();

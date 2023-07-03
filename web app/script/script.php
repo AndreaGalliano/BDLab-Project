@@ -25,7 +25,7 @@
                             $_SESSION['isStudente'] = true;
                             $_SESSION['isDocente'] = false;
                             $_SESSION['isSegreteria'] = false;
-                            header('Location: ../pagine/home_stud.php');
+                            header('Location: ../pagine/studente/home_stud.php');
                             break;
                         case "docenti.unitua.it":
                             $_SESSION['isStudente'] = false;
@@ -87,7 +87,17 @@
             if ($row['change_pw'] == '0') {
                 $_SESSION['cambiamento_fallito'] = "Il cambiamento della tua password non è andato a buon fine";
                 $_SESSION['row'] = $row['change_pw'];
-                header('Location: ../pagine/cambio_pw.php');
+                if (isset($_SESSION['isStudente'])) {
+                    header('Location: ../pagine/cambio_pw.php');
+                } else {
+                    if (isset($_SESSION['isDocente'])) {
+                        header('Location: ../pagine/cambio_pw2.php');
+                    } else {
+                        if (isset($_SESSION['isSegreteria'])) {
+                            header('Location: ../pagine/cambio_pw3.php');
+                        }
+                    }
+                }
             } else {
                 $_SESSION['cambiamento_fatto'] = "Cambiamento password avvenuto con successo!";
                 header('Location: ../pagine/cambio_pw.php');
