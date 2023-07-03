@@ -6,7 +6,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="css/style2.css">
 </head>
 <body>
     <?php
@@ -138,7 +138,7 @@
                         <br>
                         <p class="card-text">Prendi visione di tutti gli studenti iscritti all'università facenti parte dell'ateneo.</p>
                         <br><br><br>
-                        <a href="all_stud.php" class="btn btn-primary">Visualizza</a>
+                        <a href="pagine/all_stud.php" class="btn btn-primary">Visualizza</a>
                     </div>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                         <br>
                         <p class="card-text">Prendi visione di tutti gli studenti iscritti all'università facenti parte dell'ateneo.</p>
                         <br><br><br>
-                        <a href="all_doc.php" class="btn btn-primary">Visualizza</a>
+                        <a href="pagine/all_doc.php" class="btn btn-primary">Visualizza</a>
                     </div>
                 </div>
             </div>
@@ -161,7 +161,7 @@
                         <h5 class="card-title">Visualizza tutti gli insegnamenti</h5>
                         <p class="card-text" id="ultima">Prendi visione di tutti gli insegnamenti di tutti i Corsi di Laurea facenti parte dell'ateneo.</p>
                         <br><br><br>
-                        <a href="all_ins.php" class="btn btn-primary">Visualizza</a>
+                        <a href="pagine/all_ins.php" class="btn btn-primary">Visualizza</a>
                     </div>
                 </div>
             </div>

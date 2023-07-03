@@ -5,6 +5,8 @@
 - [Introduzione](#introduzione)
 - [Analisi dei requisiti](#studio-della-realtà-dinteresse-e-analisi-dei-requisiti)
 - [Progettazione concettuale](#progettazione-concettuale)
+- [Progettazione logica](#progettazione-logica)
+- [Vincoli intrarelazionali](#vincoli-intrarelazionali)
 
 
 ## INTRODUZIONE:
@@ -55,4 +57,12 @@ Come ci suggeriscono le regole di composizione di un qualsiasi DB, le generalizz
 
 __Ecco lo schema concettuale aggiornato:__
 
-![Schema E.R. ristrutturato](ER_ristrutturato.png)
+![Schema E.R. ristrutturato](ER_ristrutturato.png)  
+<br>
+
+## PROGETTAZIONE LOGICA:
+Una volta conclusa la fase di progettazione concettuale, è tempo di concentrarsi sulla progettazione logica, andando a creare le relazioni e andando ad applicare, ove necessaario, le opportune regole di normalizzazione.  
+Coerentemente con le regole di composizione dello schema logico, andranno sottolineate eventuali chiavi primarie e/o esterne.  
+
+
+## VINCOLI INTRARELAZIONALI:
