@@ -138,7 +138,7 @@
                         <br>
                         <p class="card-text">Prendi visione di tutti gli studenti iscritti all'università facenti parte dell'ateneo.</p>
                         <br><br><br>
-                        <a href="pagine/all_stud.php" class="btn btn-primary">Visualizza</a>
+                        <a href="../pagine/all_stud.php" class="btn btn-primary">Visualizza</a>
                     </div>
                 </div>
             </div>
@@ -150,7 +150,7 @@
                         <br>
                         <p class="card-text">Prendi visione di tutti gli studenti iscritti all'università facenti parte dell'ateneo.</p>
                         <br><br><br>
-                        <a href="pagine/all_doc.php" class="btn btn-primary">Visualizza</a>
+                        <a href="../pagine/all_doc.php" class="btn btn-primary">Visualizza</a>
                     </div>
                 </div>
             </div>
@@ -161,7 +161,7 @@
                         <h5 class="card-title">Visualizza tutti gli insegnamenti</h5>
                         <p class="card-text" id="ultima">Prendi visione di tutti gli insegnamenti di tutti i Corsi di Laurea facenti parte dell'ateneo.</p>
                         <br><br><br>
-                        <a href="pagine/all_ins.php" class="btn btn-primary">Visualizza</a>
+                        <a href="../pagine/all_ins.php" class="btn btn-primary">Visualizza</a>
                     </div>
                 </div>
             </div>

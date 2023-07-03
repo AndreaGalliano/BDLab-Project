@@ -15,7 +15,7 @@
     ?>
 
     <br>
-    <form method="POST" action="../script/index_ins_laurea.php">
+    <form method="POST" action="../pagine/index_ins_laurea.php">
         <div class="form-group" id="divform1">
             <label for="codice">Codice del Corso di Laurea:</label>
             <input type="text" class="form-control" id="codice1" aria-describedby="codice" name="codice" placeholder="Codice CdL" required>

@@ -10,7 +10,7 @@
 </head>
 <body>
     <?php
-        include_once('../script/navbar3.php');
+        include_once('../pagine/navbar3.php');
         include_once('../script/check_login.php');
 
         echo "<h2 id='scritta_is'>Docenti dell'ateneo</h2>";

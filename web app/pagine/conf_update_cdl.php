@@ -16,7 +16,7 @@
 
         include_once('../script/connection.php');
 
-        print_r($_SESSION);
+        // print_r($_SESSION);
 
         if (isset($_SESSION['modifica_cdl'])) {
             echo "<h2 id='scritta_is'>".$_SESSION['modifica_cdl']."</h2>";

@@ -15,7 +15,7 @@
     ?>
 
     <br>
-    <form method="POST" action="../script/index_change_dati.php">
+    <form method="POST" action="../pagine/index_change_dati.php">
         <div class="form-group" id="divform1">
             <label for="matricola">Matricola dello studente:</label>
             <input type="text" class="form-control" id="matricola" aria-describedby="matricola" name="matricola" placeholder="Matricola" required>

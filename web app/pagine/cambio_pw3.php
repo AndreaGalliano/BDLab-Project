@@ -11,7 +11,7 @@
 </head>
 <body>
     <?php
-        session_start();
+        // session_start();
         include_once('navbar3.php');
         include_once('../script/script.php');
         effettua_cambiamento();
