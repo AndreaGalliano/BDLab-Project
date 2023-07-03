@@ -15,10 +15,10 @@
                     <a class="nav-link" href="cambio_pw2.php">Cambio password</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="../pagine/all_val.php">Registro voti</a>
+                    <a class="nav-link" href="all_val.php">Registro voti</a>
                 </li>
                 <li>
-                <form action="../script/logout.php" method="get" id="bottone_logout">
+                <form action="../../script/logout.php" method="get" id="bottone_logout">
                     <button class="nav-link" type="submit">Logout</button>
                 </form>
                 </li>

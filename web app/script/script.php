@@ -31,7 +31,7 @@
                             $_SESSION['isStudente'] = false;
                             $_SESSION['isDocente'] = true;
                             $_SESSION['isSegreteria'] = false;
-                            header('Location: ../pagine/home_doc.php');
+                            header('Location: ../pagine/docente/home_doc.php');
                             break;
                         case "segreteria.unitua.it":
                             $_SESSION['isStudente'] = false;

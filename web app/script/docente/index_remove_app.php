@@ -1,7 +1,7 @@
 <?php
     session_start();
     if (isset($_POST['codice_appello']) && isset($_POST['data_esame']) && isset($_POST['codice_esame'])) {
-        include_once('../script/connection.php');
+        include_once('../../script/connection.php');
 
         $query = "CALL unitua.remove_appello($1)";
         $res = pg_prepare($connection, "rep_ok", $query);
@@ -13,14 +13,14 @@
             $affectedRows = pg_affected_rows($res);
             if ($affectedRows > 0) {
                 $_SESSION['rimozione_appello'] = preg_last_error($connection);
-                header('Location: ../pagine/conf_chiusura.php'); 
+                header('Location: ../../pagine/docente/conf_chiusura.php'); 
             } else {
                 $_SESSION['rimozione_appello'] = "Chiusura dell'appello avvenuta con successo!";
-                header('Location: ../pagine/conf_chiusura.php');
+                header('Location: ../../pagine/docente/conf_chiusura.php');
             }
         } else {
             $_SESSION['rimozione_appello'] = "Errore nella chiusura dell'appello...";
-            header('Location: ../pagine/conf_chiusura.php');
+            header('Location: ../../pagine/docente/conf_chiusura.php');
         }
     }
 ?>
