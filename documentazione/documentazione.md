@@ -6,6 +6,7 @@
 - [Analisi dei requisiti](#studio-della-realtà-dinteresse-e-analisi-dei-requisiti)
 - [Progettazione concettuale](#progettazione-concettuale)
 - [Progettazione logica](#progettazione-logica)
+- [Normalizzazione](#normalizzazione)
 - [Vincoli intrarelazionali](#vincoli-intrarelazionali)
 
 
@@ -67,7 +68,7 @@ Coerentemente con le regole di composizione dello schema logico, andranno sottol
 <br>
 *Lo schema logico si presenta al momento così:*  
 - **Corsi di laurea** (<u>Codice</u>, tipologia, descrizione)
-**Utenti** (<u>E-mail</u>, password)  
+- **Utenti** (<u>E-mail</u>, password)  
 - **Studenti** (<u>Matricola</u>, nome, cognome, codice fiscale, sesso, cellulare, data immatricolazione, stato, *utente email*)  
 - **Docenti** (<u>ID docente</u>, nome, cognome, codice fiscale, sesso, cellulare, carica accademica, *utente email*)  
 - **Segreteria** (<u>ID</u>, nome, cognome, codice fiscale, sesso, cellulare, ruolo, *utente email*)  
@@ -83,6 +84,43 @@ Coerentemente con le regole di composizione dello schema logico, andranno sottol
 
 ### NORMALIZZAZIONE:
 Lo schema logico non presenta relazioni ed attributi che risultano predisposti all'inconsistenza dei dati e ad evenutali violazioni delle 4 regole di normalizzazione.  
-In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*valutazioni*__ e __*storico valutazioni*__, che dopo un'analisi iniziale potrebbe potrebbe pensare possa assumere, oltre alla classica forma del voto in trentesimi compreso fra 18 e 30, anche quella testuale di "*respinto*"; questo non risulta però corretto nel momento in cui si va ad applicare la **prima regola di normalizzazione**, che esprime il concetto di __*atomicità*__ degli attributi. Esattamente per questo motivo, è ragionevole avvalersi sia di un attributo *__voto__* numerico (che non presenti clausole di nullità, ma che sia compreso all'interno del dominio fra 18 e 30), sia di un attributo *__respinto__* boolean, che certifichi se il superamento o il mancato superamento di un certo esame da parte dello studente. Per le funzionalità necessarie al completo funzionamento del progetto, inoltre, l'attributo *__respinto__*, al contrario di *__voto__*, non deve essere nullo ([domini](#vincoli-intrarelazionali)).
+In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*valutazioni*__ e __*storico valutazioni*__, che dopo un'analisi iniziale potrebbe potrebbe pensare possa assumere, oltre alla classica forma del voto in trentesimi compreso fra 18 e 30, anche quella testuale di "*respinto*"; questo non risulta però corretto nel momento in cui si va ad applicare la **prima regola di normalizzazione**, che esprime il concetto di __*atomicità*__ degli attributi. Esattamente per questo motivo, è ragionevole avvalersi sia di un attributo *__voto__* numerico (che non presenti clausole di nullità, ma che sia compreso all'interno del dominio fra 18 e 30), sia di un attributo *__respinto__* boolean, che certifichi se il superamento o il mancato superamento di un certo esame da parte dello studente. Per le funzionalità necessarie al completo funzionamento del progetto, inoltre, l'attributo *__respinto__*, al contrario di *__voto__*, non deve essere nullo ([qui tutti i vincoli](#vincoli-intrarelazionali)).
 
 ## VINCOLI INTRARELAZIONALI:
+|RELAZIONE   |ATTRIBUTO   |TIPO|VINCOLO   |DOMINIO|
+|---------   |--------|--------|---------|----|
+|**UTENTE**  |**email**|varchar|PRIMARY KEY|
+|            |pw|varchar|NOT NULL|
+|**SEGRETERIA**|**ID**|serial|PRIMARY KEY|
+|            |Nome|varchar|NOT NULL|
+|            |Cognome|varchar|NOT NULL|
+|            |CodFiscale|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 16|
+|            |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
+|            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
+|            |Ruolo|ENUM|NOT NULL|Ruolo = {'Primo livello', 'Secondo livello'}|
+|            |Utente email|varchar|FOREIGN KEY|
+|**DOCENTE** |**ID**|serial|PRIMARY KEY|
+|            |Nome|varchar|NOT NULL|
+|            |Cognome|varchar|NOT NULL|
+|            |CodFiscale|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 16|
+|            |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
+|            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
+|            |Carica accademica|ENUM|NOT NULL|Carica accademica = {'Ordinario', 'Associato', 'Ricercatore'}|
+|            |Utente email|varchar|FOREIGN KEY|
+|**STUDENTE**|**Matricola**|varchar|PK - NOT NULL|
+|            |Nome|varchar|NOT NULL|
+|            |Cognome|varchar|NOT NULL|
+|            |CodFiscale|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 16|
+|            |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
+|            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
+|            |Data immatricolazione|date|NOT NULL|
+|            |Stato|ENUM|NOT NULL|Stato = {'In corso', 'Fuoricorso'}|
+|            |Utente email|varchar|FOREIGN KEY|
+|**EX STUDENTE**|**Matricola**|varchar|PK - NOT NULL|
+|               |Nome|varchar|NOT NULL|
+|               |Cognome|varchar|NOT NULL|
+|               |CodFiscale|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 16|
+|               |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
+|               |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
+|               |Stato|ENUM|NOT NULL|Stato = {'In corso', 'Fuoricorso'}|
+|               |Utente email|varchar|FOREIGN KEY|
