@@ -200,10 +200,12 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 
 ## SCRITTURA DEL DATABASE:
 Dopo aver capito quali sono i tipi di attributi, i loro vincoli intrarelazionali e i domini, si può a tutti gli effetti cominciare a scrivere il database.  
-Tutte le tabelle rispettano le clausole riportate sopra ed il codice completo del dump vuoto della base di dati è consultabile [qui](../database/unitua.sql).  
+Tutte le tabelle chiaramente dovranno rispettare tutte le clausole riportate sopra senza presentare alcun tipo di anomalie e/o duplicati.  
+Il codice completo del dump vuoto della base di dati è consultabile [qui](../database/unitua.sql).  
 <br>
+
 #### PROCEDURE:
-A questo punto sono state aggiunte le normali procedure di popolamento del DB, in modo tale da avere i primi record di prova per testarne il corretto funzionamento. Tutte le procedure sono scritte nel seguente formato:  
+A questo punto sono state aggiunte le normali procedure di popolamento del DB, in modo tale da avere i primi record di prova per testarne il corretto funzionamento. Tutte queste procedure sono scritte nel seguente formato:  
 ```SQL
 --Esempio di inserimento record della tabella studente:
 
@@ -227,8 +229,20 @@ AS $$
 $$ LANGUAGE plpgsql;
 ```
 
+Una tabella che prevede un inserimento *particolare* di un proprio attributo è **utente**, la cui *password* non deve essere visibile in chiaro per motivi di sicurezza. Viene infatti criptata tramite una funzionne crittografica di *ash* **md5**, già presente all'interno di PostgreSQL:  
+```SQL
+CREATE OR REPLACE PROCEDURE unitua.insert_utente (email varchar, pw varchar)
+    AS $$
+BEGIN
+    INSERT INTO unitua.utente(email, pw)
+    VALUES (email, md5(pw));
+END;
+$$ LANGUAGE plpgsql;
+```
+
+<br>
 Il DB prevede anche la presenza di procedure che aggiornino o elimino record dalle tabelle.  
-Prendiamo, ad esempio, la procedura che elimina un'iscritto da un appello e quella che aggiorni i valori di una valutazione:  
+Prendiamo, ad esempio, la procedura che elimina un iscritto da un appello e quella che aggiorna i valori di una valutazione:  
 
 ```SQL
 --Procedura che disiscrive uno studente da un appello:
@@ -272,11 +286,11 @@ $$ LANGUAGE plpgsql;
 
 Per visionare in maniera completa tutte le procedure di inserimento delle tabelle, cliccare sul seguente [link](../database/unitua_popolazione_tabelle.sql).  
 
-Oltre alle procedure di __insert__, __delete__ e __update__ all'interno delle tabelle, il DB è dotato di appositi [trigger](#funzion) e [trigger](#funzioni) in grado di far funzionare l'intero sistema coerentemente con le istruzioni date dalla traccia.  
+Oltre alle procedure di __insert__, __delete__ e __update__ all'interno delle tabelle, il DB è dotato di appositi [trigger](#trigger) e [funzioni](#funzioni) in grado di far funzionare l'intero sistema coerentemente con le istruzioni date dalla traccia.  
 Si noti che i trigger e le funzioni realizzate hanno soprattutto lo scopo di scongiurare qualsiasi anomalia di inserimento, cancellazione o aggiornamento da parte dell'utente finale che dovrà interfacciarsi con la base di dati tramite l'applicativo web.  
 
 #### TRIGGER:
-Vediamo i __*trigger*__ più rilevanti della proposta di soluzione (per visionarli tutti in maniera completa, cliccare [qui]('../../../database/unitua_popolazione_tabelle.sql')):  
+Vediamo i __*trigger*__ più rilevanti della proposta di soluzione (per visionarli tutti in maniera completa, cliccare [qui]('../database/unitua_popolazione_tabelle.sql')):  
 In maniera apparentemente contro-intuitiva, partiamo da una 'semplice' procedura di __*insert*__ all'interno della tabella __laurea__ (per visionare le funzioni che effettuano il calcolo corretto del voto di laurea clicca [qui](#funzioni)):
 ```SQL
 --Inserimento record della tabella laurea:
@@ -363,10 +377,10 @@ EXECUTE FUNCTION unitua.trigger_insert_storico();
 ```
 <br>
 
-A questo punto, il sistema di inserimento della laurea e tutte le conseguenze che esso porta funzionano in maniera corretta. Inoltre grazie alla scrittura di questi trigger, viene giustamente eseguita anche l'eventuale rinuncia agli studi, poiché l'eliminazione dello studente porta in cascata al popolamento delle tabelle __*ex studente*__ e __*storico valutazione*__, anche senza passare necessariamente dall'intert di __*laurea*__.  
+A questo punto, il sistema di inserimento della laurea, e tutte le conseguenze che esso porta, funzionano in maniera corretta. Inoltre grazie alla scrittura di questi trigger, viene giustamente eseguita anche l'eventuale rinuncia agli studi, poiché l'eliminazione dello studente porta in cascata al popolamento delle tabelle __*ex studente*__ e __*storico valutazione*__, anche senza passare necessariamente dall'intert di __*laurea*__.  
 <br>
 Altri **trigger** rilevanti sono, ad esempio, quelli che controllano che un docente inserisca le valutazioni correttamente.  
-Questi trigger, a differenza dei precedenti, non modificano le tabelle della base di dati, ma sollevano una **raise exception** (con stampa di un messaggio testuale) nel momento in cui si verifica la condizione di scatenamento del trigger.
+Questi, a differenza dei precedenti, non modificano le tabelle della base di dati, ma sollevano una **raise exception** (con stampa di un messaggio in formato testuale) nel momento in cui si verifica la condizione di scatenamento del trigger.
 
 ```SQL
 --1. Trigger di controllo sulle valutazioni (voto != 30 --> lode = false):
@@ -491,4 +505,119 @@ EXECUTE FUNCTION unitua.controllo_esame_al_giorno();
 ```
 
 #### FUNZIONI:
-Oltre alla procedure e ai trigger è necessario che il DB implementi anche tutte le funzioni che permettono di ritornare specifici valori nel momento in cui verrà utilizzato (tramite applicativo web e non solo).  
+Oltre alle procedure e ai trigger è necessario che il DB implementi anche tutte le funzioni che permettono di ritornare specifici valori nel momento in cui verrà utilizzato (tramite applicativo web e non solo).  
+La prima funzione essenziale e che salta subito all'occhio è quella che prevede l'identificazione di un utente facente parte del sistema. Il codice è il seguente:
+```SQL
+--Funzione per autenticazione utente:
+CREATE OR REPLACE FUNCTION unitua.verifica (
+    mail text,
+    pass text
+)
+RETURNS SETOF unitua.utente AS $$
+DECLARE
+    mail_verificato unitua.utente%ROWTYPE;
+BEGIN
+    SELECT email 
+    INTO mail_verificato
+    FROM unitua.utente
+    WHERE email = mail AND pw = md5(pass);
+	
+    RETURN NEXT mail_verificato;
+END;
+$$ LANGUAGE plpgsql;
+```
+<br>
+
+Proseguendo con il tema dell'autenticazione, un'altra funzione che il sistema presenta è quella che dà ad un utente la possibilità di modificare la propria password:
+```SQL
+CREATE OR REPLACE FUNCTION unitua.change_pw(
+    mail text,
+    old_pw text,
+    new_pw text
+)
+RETURNS INTEGER AS $$
+DECLARE 
+    aggiornato varchar;
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.utente AS u
+        WHERE u.pw = md5(old_pw)
+    ) THEN
+        UPDATE unitua.utente
+        SET pw = md5(new_pw)
+        WHERE email = mail
+	    RETURNING email INTO aggiornato;
+  
+    END IF; 
+    
+	IF aggiornato IS NOT NULL
+	THEN
+		RETURN '1';
+	ELSE
+		RETURN '0';
+	END IF;
+END;
+$$ LANGUAGE plpgsql;
+```
+<br>
+
+Altre funzioni rilevanti sono quelle che permettono il calcolo esatto del voto di **laurea** quando avviene una insert. In particolare, vi sono 2 funzioni predisposte al calcolo della media dei voti degli esami e una che, dati la matricola di uno studente ed i punti di bonus per argomento, restituisca il voto finale di conseguimento del titolo di studio.
+
+```SQL
+--Funzione di calcolo media voti di uno studente:
+CREATE OR REPLACE FUNCTION unitua.calcolo_media(
+    stud_matricola varchar
+)
+RETURNS numeric AS $$
+DECLARE media numeric;
+BEGIN
+    SELECT AVG(voto) INTO media
+    FROM unitua.valutazione
+    WHERE studente = stud_matricola;
+
+    RETURN media;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+```SQL
+CREATE OR REPLACE FUNCTION unitua.calcolo_voto_laurea(
+    stud_matricola varchar,
+    pti_bonus int
+)
+RETURNS unitua.voto_laurea AS $$
+DECLARE
+    media numeric;
+    voto_finale int;
+BEGIN
+    media := unitua.calcolo_media(stud_matricola);
+
+    --Costrutto switch per stabilire il voto di laurea finale:
+    CASE
+        WHEN media >= 20 AND media < 22.5 THEN
+            voto_finale := 76 + pti_bonus;
+        WHEN media >= 22.5 AND media < 25 THEN
+            voto_finale := 81 + pti_bonus;
+        WHEN media >= 25 AND media < 27.5 THEN
+            voto_finale := 86 + pti_bonus;
+        WHEN media >= 27.5 AND media < 30 THEN
+            voto_finale := 91 + pti_bonus;
+
+        ELSE
+            voto_finale := 60 + pti_bonus;
+    END CASE;
+
+    RETURN voto_finale;
+END;
+$$ LANGUAGE plpgsql;
+```
+
+<br>
+Esempio di insert in laurea:
+
+```SQL
+CALL unitua.insert_laurea(5, unitua.calcolo_voto_laurea('98007A', 5), '2023-04-20', false, '98007A', 100, 1);
+```
+<br>
+
