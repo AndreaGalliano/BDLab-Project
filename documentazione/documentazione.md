@@ -200,7 +200,7 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 
 ## SCRITTURA DEL DATABASE:
 Dopo aver capito quali sono i tipi di attributi, i loro vincoli intrarelazionali e i domini, si può a tutti gli effetti cominciare a scrivere il database.  
-Tutte le tabelle rispettano le clausole riportate sopra ed il codice completo del dump vuoto della base di dati è consultabile [qui](../../htdocs/database/unitua.sql).  
+Tutte le tabelle rispettano le clausole riportate sopra ed il codice completo del dump vuoto della base di dati è consultabile [qui](../database/unitua.sql).  
 <br>
 #### PROCEDURE:
 A questo punto sono state aggiunte le normali procedure di popolamento del DB, in modo tale da avere i primi record di prova per testarne il corretto funzionamento. Tutte le procedure sono scritte nel seguente formato:  
@@ -272,7 +272,7 @@ $$ LANGUAGE plpgsql;
 
 Per visionare in maniera completa tutte le procedure di inserimento delle tabelle, cliccare sul seguente [link](../database/unitua_popolazione_tabelle.sql).  
 
-Oltre alle procedure di __insert__, __delete__ e __update__ all'interno delle tabelle, il DB è dotato di apposite [funzioni](#trigger) e [trigger](#funzioni) in grado di far funzionare l'intero sistema coerentemente con le istruzioni date dalla traccia.  
+Oltre alle procedure di __insert__, __delete__ e __update__ all'interno delle tabelle, il DB è dotato di appositi [trigger](#funzion) e [trigger](#funzioni) in grado di far funzionare l'intero sistema coerentemente con le istruzioni date dalla traccia.  
 Si noti che i trigger e le funzioni realizzate hanno soprattutto lo scopo di scongiurare qualsiasi anomalia di inserimento, cancellazione o aggiornamento da parte dell'utente finale che dovrà interfacciarsi con la base di dati tramite l'applicativo web.  
 
 #### TRIGGER:
