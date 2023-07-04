@@ -10,7 +10,7 @@
 </head>
 <body>
     <?php
-        include_once('../../pagine/navbar4.php');
+        include_once('../../pagine/ex_studente/navbar4.php');
         include_once('../../script/check_login.php');
 
         if (isset($_SESSION['rinuncia'])) {

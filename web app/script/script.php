@@ -57,8 +57,20 @@
     function effettua_cambiamento() {
         if (isset($_POST['email']) && isset($_POST['old_pw']) && isset($_POST['new_pw']) && isset($_POST['conf_new_pw'])) {
             if ($_POST['new_pw'] != $_POST['conf_new_pw']) {
-                $_SESSION['errore_ins_pw'] = "Le 2 password nuove per effettuare il cambiamento non coincidono"; 
-                ('Location: pagine/cambio_pw.php');
+                if ($_SESSION['isStudente'] == true) {
+                    $_SESSION['errore_ins_pw'] = "Le 2 password nuove per effettuare il cambiamento non coincidono"; 
+                    header('Location: ../pagine/studente/cambio_pw.php');
+                } else {
+                    if ($_SESSION['isDocente'] == true) {
+                        $_SESSION['errore_ins_pw'] = "Le 2 password nuove per effettuare il cambiamento non coincidono"; 
+                        header('Location: ../pagine/docente/cambio_pw2.php');
+                    } else {
+                        if ($_SESSION['isSegreteria'] == true) {
+                            $_SESSION['errore_ins_pw'] = "Le 2 password nuove per effettuare il cambiamento non coincidono"; 
+                            header('Location: ../pagine/segreteria/cambio_pw3.php');
+                        }
+                    }
+                }
                 return;
             }
 
@@ -72,7 +84,17 @@
 
             if ($row1["email"] === null) {
                 $_SESSION['autenticazione_fallita'] = "La password attuale inserita non è corretta, riprova";
-                header('Location: ../pagine/pagine/cambio_pw.php');
+                if ($_SESSION['isStudente'] == true) {
+                    header('Location: ../pagine/studente/cambio_pw.php');
+                } else {
+                    if ($_SESSION['isDocente'] == true) {
+                        header('Location: ../pagine/docente/cambio_pw2.php');
+                    } else {
+                        if ($_SESSION['isSegreteria'] == true) {
+                            header('Location: ../pagine/segreteria/cambio_pw3.php');
+                        }
+                    }
+                }
                 return;
             }
 
@@ -86,21 +108,33 @@
 
             if ($row['change_pw'] == '0') {
                 $_SESSION['cambiamento_fallito'] = "Il cambiamento della tua password non è andato a buon fine";
-                $_SESSION['row'] = $row['change_pw'];
-                if (isset($_SESSION['isStudente'])) {
-                    header('Location: ../pagine/cambio_pw.php');
+                // $_SESSION['row'] = $row['change_pw'];
+                if (($_SESSION['isStudente']) == true) {
+                    header('Location: ../pagine/studente/cambio_pw.php');
                 } else {
-                    if (isset($_SESSION['isDocente'])) {
-                        header('Location: ../pagine/cambio_pw2.php');
+                    if (isset($_SESSION['isDocente']) == true) {
+                        header('Location: ../pagine/docente/cambio_pw2.php');
+                        return;
                     } else {
-                        if (isset($_SESSION['isSegreteria'])) {
-                            header('Location: ../pagine/cambio_pw3.php');
+                        if (isset($_SESSION['isSegreteria']) == true) {
+                            header('Location: ../pagine/segreteria/cambio_pw3.php');
+                            return;
                         }
                     }
                 }
             } else {
                 $_SESSION['cambiamento_fatto'] = "Cambiamento password avvenuto con successo!";
-                header('Location: ../pagine/cambio_pw.php');
+                if ($_SESSION['isStudente'] == true) {
+                    header('Location: ../pagine/studente/cambio_pw.php');
+                } else {
+                    if ($_SESSION['isDocente'] == true) {
+                        header('Location: ../pagine/docente/cambio_pw2.php');
+                    } else {
+                        if ($_SESSION['isSegreteria'] == true) {
+                            header('Location: ../pagine/segreteria/cambio_pw3.php');
+                        }
+                    }
+                }
             }
         }
     }

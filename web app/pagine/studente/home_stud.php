@@ -22,7 +22,7 @@
         $row = pg_fetch_assoc($res);
 
         if ($row['is_ex_stud'] == 1) {
-            header('Location: ../home_ex_stud.php');
+            header('Location: ../ex_studente/home_ex_stud.php');
         }
     ?>
 
