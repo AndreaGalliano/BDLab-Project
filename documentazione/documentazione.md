@@ -12,6 +12,11 @@
     - [Procedure](#procedure)
     - [Trigger](#trigger)
     - [Funzioni](#funzioni)
+- [Applicazione Web](#applicazione-web)
+    - [Lato Studente](#studente)
+    - [Lato Ex Studente](#ex-studente)
+    - [Lato Docente](#docente)
+    - [Lato Segreteria](#segreteria)
 
 
 ## INTRODUZIONE:
@@ -735,3 +740,22 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 ```
+
+## APPLICAZIONE WEB:
+
+
+
+
+### STUDENTE
+
+
+
+### EX STUDENTE
+
+
+
+### DOCENTE
+
+
+
+### SEGRETERIA
