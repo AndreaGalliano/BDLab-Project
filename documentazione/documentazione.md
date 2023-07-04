@@ -117,17 +117,17 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 |            |Carica accademica|ENUM|NOT NULL|Carica accademica = {'Ordinario', 'Associato', 'Ricercatore'}|
 |            |Utente email|varchar|FOREIGN KEY, NOT NULL|
 |   |   |   |   |
-|**STUDENTE**|**Matricola**|varchar|PRIMARY KEY|
+|**STUDENTE**|**Matricola**|varchar|PRIMARY KEY, MAX LENGTH = 6|
 |            |Nome|varchar|NOT NULL|
 |            |Cognome|varchar|NOT NULL|
-|            |CodFiscale|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 16|
+|            |CodFiscale|varchar|NOT NULL, UNIQUE, MAX LENGTH = 16|
 |            |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Data immatricolazione|date|NOT NULL|
 |            |Stato|ENUM|NOT NULL|Stato = {'In corso', 'Fuoricorso'}|
 |            |Utente email|varchar|FOREIGN KEY, NOT NULL|
 |   |   |   |   |
-|**EX STUDENTE**|**Matricola**|varchar|PRIMARY KEY|
+|**EX STUDENTE**|**Matricola**|varchar|PRIMARY KEY, MAX LENGTH = 6|
 |               |Nome|varchar|NOT NULL|
 |               |Cognome|varchar|NOT NULL|
 |               |CodFiscale|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 16|
@@ -200,7 +200,7 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 
 ## SCRITTURA DEL DATABASE:
 Dopo aver capito quali sono i tipi di attributi, i loro vincoli intrarelazionali e i domini, si può a tutti gli effetti cominciare a scrivere il database.  
-Tutte le tabelle rispettano le clausole riportate sopra ed il codice completo del dump vuoto della base di dati è consultabile [qui]('../../../database/unitua.sql').  
+Tutte le tabelle rispettano le clausole riportate sopra ed il codice completo del dump vuoto della base di dati è consultabile [qui](../../../database/unitua.sql).  
 <br>
 #### PROCEDURE:
 A questo punto sono state aggiunte le normali procedure di popolamento del DB, in modo tale da avere i primi record di prova per testarne il corretto funzionamento. Tutte le procedure sono scritte nel seguente formato:  
