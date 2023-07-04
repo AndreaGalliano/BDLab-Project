@@ -13,6 +13,7 @@
     - [Trigger](#trigger)
     - [Funzioni](#funzioni)
 - [Applicazione Web](#applicazione-web)
+    - [Login](#login)
     - [Lato Studente](#studente)
     - [Lato Ex Studente](#ex-studente)
     - [Lato Docente](#docente)
@@ -99,8 +100,8 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 Prima di realizzare la base di dati e scrivere in linguaggio SQL il dump, è bene definire tutti i vincoli intrarelazionali del sistema e tutti i domini degli attributi che andranno a comporre le tabelle.  
 Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di cui necessitano gli attributi, andando a sceglieri quelli che fanno al caso preso in esame.  
 
-|RELAZIONE   |ATTRIBUTO   |TIPO|VINCOLO INTRARELAZIONALE  |DOMINIO|
-|---------   |--------|--------|---------|----|
+|RELAZIONE   |ATTRIBUTO   |TIPO|VINCOLO INTRARELAZIONALE  |DOMINIO|REFERENCE     |
+|---------   |--------|--------|---------|----|----|
 |**UTENTE**  |**email**|varchar|PRIMARY KEY|
 |            |pw|varchar|NOT NULL|
 |   |   |   |   |
@@ -111,7 +112,7 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 |            |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Ruolo|ENUM|NOT NULL|Ruolo = {'Primo livello', 'Secondo livello'}|
-|            |Utente email|varchar|FOREIGN KEY, NOT NULL|
+|            |Utente email|varchar|FOREIGN KEY, NOT NULL| |*UTENTE*
 |   |   |   |   |
 |**DOCENTE** |**ID**|serial|PRIMARY KEY|
 |            |Nome|varchar|NOT NULL|
@@ -120,7 +121,8 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 |            |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Carica accademica|ENUM|NOT NULL|Carica accademica = {'Ordinario', 'Associato', 'Ricercatore'}|
-|            |Utente email|varchar|FOREIGN KEY, NOT NULL|
+|            |Utente email|varchar|FOREIGN KEY, NOT NULL|   |*UTENTE*
+|            |CdL|integer|FOREIGN KEY, NOT NULL|    |*CORSO DI LAUREA*
 |   |   |   |   |
 |**STUDENTE**|**Matricola**|varchar|PRIMARY KEY, MAX LENGTH = 6|
 |            |Nome|varchar|NOT NULL|
@@ -130,7 +132,8 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Data immatricolazione|date|NOT NULL|
 |            |Stato|ENUM|NOT NULL|Stato = {'In corso', 'Fuoricorso'}|
-|            |Utente email|varchar|FOREIGN KEY, NOT NULL|
+|            |Utente email|varchar|FOREIGN KEY, NOT NULL|   |*UTENTE*
+|            |CdL|integer|FOREIGN KEY, NOT NULL|    |*CORSO DI LAUREA*
 |   |   |   |   |
 |**EX STUDENTE**|**Matricola**|varchar|PRIMARY KEY, MAX LENGTH = 6|
 |               |Nome|varchar|NOT NULL|
@@ -139,7 +142,8 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 |               |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
 |               |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |               |Stato|ENUM|NOT NULL|Stato = {'In corso', 'Fuoricorso'}|
-|               |Utente email|varchar|FOREIGN KEY, NOT NULL|
+|               |Utente email|varchar|FOREIGN KEY, NOT NULL||*UTENTE*
+|               |CdL|integer|FOREIGN KEY, NOT NULL||*CORSO DI LAUREA*
 |   |   |   |   |
 |**CORSO DI LAUREA**|**Codice**|serial|PRIMARY KEY|
 |                   |Tipologia|ENUM|NOT NULL|Tipologia = {'Triennale', 'Magistrale', 'A ciclo unico'}|
@@ -149,16 +153,16 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 |                |Nome|varchar|NOT NULL|
 |                |Anno|ENUM|NOT NULL|Anno = {'1', '2', '3', '4', '5'}|
 |                |Descrizione|varchar|NOT NULL|
-|                |CdL|integer|FOREIGN KEY, NOT NULL|
-|                |Docente|integer|FOREIGN KEY, NOT NULL|
+|                |CdL|integer|FOREIGN KEY, NOT NULL|    |*CORSO DI LAUREA*
+|                |Docente|integer|FOREIGN KEY, NOT NULL|    |*DOCENTE*
 |   |   |   |   |
-|**PROPEDEUTICITA'**|**Insegnamento propedeutico**|integer|PPK, NOT NULL|
-|                   |**Insegnamento con propedeuticità**|integer|PPK, NOT NULL|
+|**PROPEDEUTICITA'**|**Insegnamento propedeutico**|integer|PPK, NOT NULL|   |*INSEGNAMENTO*
+|                   |**Insegnamento con propedeuticità**|integer|PPK, NOT NULL| |*INSEGNAMENTO*
 |   |   |   |   |
 |**ESAME**|**Codice esame**|serial|PRIMARY KEY|
 |         |Tipologia|ENUM|NOT NULL|Tipologia = {'Distanza', 'Presenza'}|
 |         |Modalità|ENUM|NOT NULL|Modalità = {'Scritto', 'Orale', 'Scritto + Orale'}|
-|         |Insegnamento|integer|FOREIGN KEY, NOT NULL|
+|         |Insegnamento|integer|FOREIGN KEY, NOT NULL|  |*INSEGNAMENTO*|
 |         |            |        |   |
 |**CALENDARIO**|**Codice appello**|serial|PRIMARY KEY|
 |              |Data esame|date|NOT NULL|
@@ -166,45 +170,45 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 |              |Aula|varchar|NOT NULL|
 |              |Anno accademico|integer|NOT NULL|
 |              |Aperto|boolean|NOT NULL|
-|              |Docente|integer|FOREIGN KEY, NOT NULL|
-|              |CdL|integer|FOREIGN KEY, NOT NULL|
+|              |Docente|integer|FOREIGN KEY, NOT NULL|  |*DOCENTE*
+|              |CdL|integer|FOREIGN KEY, NOT NULL|  |*CORSO DI LAUREA*
 |   |   |   |   |
-|**ISCRITTI**|**Docente**|integer|PPK, NOT NULL|
-|            |**Studente**|integer|PPK, NOT NULL|
-|            |**Esame**|integer|PPK, NOT NULL|
-|            |**Calendario**|integer|PPK, NOT NULL|
+|**ISCRITTI**|**Docente**|integer|PPK, NOT NULL|    |*DOCENTE*|
+|            |**Studente**|integer|PPK, NOT NULL|   |*STUDENTE*|
+|            |**Esame**|integer|PPK, NOT NULL|      |*ESAME*|
+|            |**Calendario**|integer|PPK, NOT NULL| |*CALENDARIO*|
 |   |   |   |   |
 |**VALUTAZIONE**|**Codice valutazione**|serial|PPK, NOT NULL|
-|               |**Studente**|integer|PPK, NOT NULL|
-|               |Calendario|integer|FOREIGN KEY, NOT NULL|
-|               |Esame|integer|FOREIGN KEY, NOT NULL|
-|               |Docente|integer|FOREIGN KEY, NOT NULL|
+|               |**Studente**|integer|PPK, NOT NULL|    |*STUDENTE*|
+|               |Calendario|integer|FOREIGN KEY, NOT NULL|      |*CALENDARIO*|
+|               |Esame|integer|FOREIGN KEY, NOT NULL|   |*ESAME*|
+|               |Docente|integer|FOREIGN KEY, NOT NULL| |*DOCENTE*|
 |               |Voto|integer|NOT NULL|18 <= Voto <= 30|
 |               |Lode|boolean|NOT NULL|
 |               |Respinto|boolean|NOT NULL|
 |               |Data verbalizzazione|date|NOT NULL|
 |   |   |   |   |
 |**STORICO VALUTAZIONE**|**Codice valutazione**|serial|PPK, NOT NULL|
-|                       |**Ex studente**|integer|PPK, NOT NULL|
-|                       |Calendario|integer|FOREIGN KEY, NOT NULL|
-|                       |Esame|integer|FOREIGN KEY, NOT NULL|
-|                       |Docente|integer|FOREIGN KEY, NOT NULL|
+|                       |**Ex studente**|integer|PPK, NOT NULL|     |*EX STUDENTE*|
+|                       |Calendario|integer|FOREIGN KEY, NOT NULL|  |*CALENDARIO*|
+|                       |Esame|integer|FOREIGN KEY, NOT NULL|   |*ESAME*|
+|                       |Docente|integer|FOREIGN KEY, NOT NULL|     |*DOCENTE*|
 |                       |Voto|integer|NOT NULL|18 <= Voto <= 30|
 |                       |Lode|boolean|NOT NULL|
 |                       |Respinto|boolean|NOT NULL|
 |                       |Data verbalizzazione|date|NOT NULL|
-|   |   |   |   |
+|                       |   |   |   |
 |**LAUREA**|**Codice**|serial|PRIMARY KEY|
 |          |Bonus|integer|NOT NULL|0 <= Bonus <= 6|
 |          |Voto|integer|NOT NULL|60 <= Voto <= 110|
 |          |data laurea|date|NOT NULL|
 |          |Lode|boolean|NOT NULL|
-|          |Studente|integer|FOREIGN KEY, NOT NULL|
-|          |Relatore|integer|FOREIGN KEY, NOT NULL|
-|          |CdL|integer|FOREIGN KEY, NOT NULL|
+|          |Studente|integer|NOT NULL|
+|          |Relatore|integer|FOREIGN KEY, NOT NULL|     |*DOCENTE*|
+|          |CdL|integer|FOREIGN KEY, NOT NULL|      |*CORSO DI LAUREA*|
 
 ## SCRITTURA DEL DATABASE:
-Dopo aver capito quali sono i tipi di attributi, i loro vincoli intrarelazionali e i domini, si può a tutti gli effetti cominciare a scrivere il database.  
+Dopo aver capito quali sono i tipi di attributi, i loro vincoli intrarelazionali, i domini e le reference, si può a tutti gli effetti cominciare a scrivere il database.  
 Tutte le tabelle chiaramente dovranno rispettare tutte le clausole riportate sopra senza presentare alcun tipo di anomalie e/o duplicati.  
 Il codice completo del dump vuoto della base di dati è consultabile [qui](../database/unitua.sql).  
 <br>
@@ -289,14 +293,14 @@ END;
 $$ LANGUAGE plpgsql;
 ```
 
-Per visionare in maniera completa tutte le procedure di inserimento delle tabelle, cliccare sul seguente [link](../database/unitua_popolazione_tabelle.sql).  
+Per visionare in maniera completa tutte le procedure di inserimento delle tabelle, cliccare sul [link](../database/unitua_popolazione_tabelle.sql).  
 
 Oltre alle procedure di __insert__, __delete__ e __update__ all'interno delle tabelle, il DB è dotato di appositi [trigger](#trigger) e [funzioni](#funzioni) in grado di far funzionare l'intero sistema coerentemente con le istruzioni date dalla traccia.  
-Si noti che i trigger e le funzioni realizzate hanno soprattutto lo scopo di scongiurare qualsiasi anomalia di inserimento, cancellazione o aggiornamento da parte dell'utente finale che dovrà interfacciarsi con la base di dati tramite l'applicativo web.  
+Si noti in particolare che molti dei trigger realizzati hanno lo scopo di scongiurare qualsiasi anomalia di inserimento, cancellazione o aggiornamento da parte dell'utente finale che dovrà interfacciarsi con la base di dati tramite l'applicativo web.  
 
 #### TRIGGER:
 Vediamo i __*trigger*__ più rilevanti della proposta di soluzione (per visionarli tutti in maniera completa, cliccare [qui](../database/unitua_popolazione_tabelle.sql)):  
-In maniera apparentemente contro-intuitiva, partiamo da una 'semplice' procedura di __*insert*__ all'interno della tabella __laurea__ (per visionare le funzioni che effettuano il calcolo corretto del voto di laurea clicca [qui](#funzioni)):
+In maniera apparentemente contro-intuitiva, partiamo da una 'semplice' procedura di __*insert*__ all'interno della tabella __laurea__ (per visionare le funzioni che effettuano il calcolo corretto del voto di laurea cliccare [qui](#funzioni)):
 ```SQL
 --Inserimento record della tabella laurea:
 
@@ -319,8 +323,8 @@ AS $$
     END;
 $$ LANGUAGE plpgsql;
 ```
-L'idea è che, nel momento in cui viene aggiunto un record alla tabella laurea, in maniera del tutto automatica uno studente passi dall'essere *attuale* all'essere di fatto un *__ex studente__*. Questo ci porta a riflettere sul bisogno di scrivere dei __trigger__ che facciano in modo tale che lo studente in questione venga *eliminato* dalla tabella __*studente*__ e venga subito dopo *aggiunto* alla tabella *__ex studente__*.  
-A pensarci bene, però, questo non basta: se uno studente passa da essere uno attuale a non esserlo più, anche tutti i record corrispondenti nella tabella *__valutazione__* devono essere eliminati e spostati opportunamente in *__storico valutazione__*.  
+L'idea è che, nel momento in cui viene aggiunto un record alla tabella laurea, automaticamente uno studente passi dall'essere *__studente__* all'essere di fatto un *__ex studente__*. Questo ci porta a riflettere sul bisogno di scrivere dei __trigger__ che facciano in modo tale che lo studente in questione venga *eliminato* proprio dalla tabella __*studente*__ e venga subito dopo *aggiunto* alla tabella *__ex studente__*.  
+A pensarci bene, però, questo non basta: se uno studente passa dall'essere attualmente iscritto a non esserlo più, anche tutti i relativi record corrispondenti nella tabella *__valutazione__* devono essere eliminati e spostati opportunamente in *__storico valutazione__*.  
 <br>
 Ecco i codici SQL dei trigger che gestiscono il caso descritto:
 
@@ -382,7 +386,7 @@ EXECUTE FUNCTION unitua.trigger_insert_storico();
 ```
 <br>
 
-A questo punto, il sistema di inserimento della laurea, e tutte le conseguenze che esso porta, funzionano in maniera corretta. Inoltre grazie alla scrittura di questi trigger, viene giustamente eseguita anche l'eventuale rinuncia agli studi, poiché l'eliminazione dello studente porta in cascata al popolamento delle tabelle __*ex studente*__ e __*storico valutazione*__, anche senza passare necessariamente dall'intert di __*laurea*__.  
+A questo punto, il sistema di inserimento della laurea, e tutte le conseguenze che esso porta, funzionano in correttamente. Inoltre grazie alla scrittura di questi trigger, viene giustamente eseguita anche l'eventuale rinuncia agli studi, poiché l'eliminazione dello studente porta in cascata al popolamento delle tabelle __*ex studente*__ e __*storico valutazione*__, anche senza passare necessariamente dall'intert di __*laurea*__.  
 <br>
 Altri **trigger** rilevanti sono, ad esempio, quelli che controllano che un docente inserisca le valutazioni correttamente.  
 Questi, a differenza dei precedenti, non modificano le tabelle della base di dati, ma sollevano una **raise exception** (con stampa di un messaggio in formato testuale) nel momento in cui si verifica la condizione di scatenamento del trigger.
@@ -567,7 +571,8 @@ $$ LANGUAGE plpgsql;
 ```
 <br>
 
-Altre funzioni rilevanti sono quelle che permettono il calcolo esatto del voto di **laurea** quando avviene una insert. In particolare, vi sono 2 funzioni predisposte al calcolo della media dei voti degli esami e una che, dati la matricola di uno studente ed i punti di bonus per argomento, restituisca il voto finale di conseguimento del titolo di studio.
+Altre funzioni rilevanti sono quelle che permettono il calcolo esatto del voto di **laurea** quando avviene una insert. In particolare, vi sono 2 funzioni predisposte al calcolo della media dei voti degli esami e una che, dati la matricola di uno studente ed i punti di bonus per argomento, restituisca il voto finale di conseguimento del titolo di studio.  
+Si tratta comunque di una semplificazione del calcolo del voto di laurea, poiché la base di dati non prevede esami con CFU e non viene calcolata alcuna *media ponderata*.
 
 ```SQL
 --Funzione di calcolo media voti di uno studente:
@@ -742,8 +747,67 @@ $$ LANGUAGE plpgsql;
 ```
 
 ## APPLICAZIONE WEB:
+L'applicativo Web del progetto prevede un sito, con algoritmica di bakcend realizzata interamente in **PHP**, implementa tutte le funzionalità del database, potendo interagire secondo le sue regole ed usufruendo dei servizi che offre mediante i codici scritti precedentemente in linguaggio SQL.  
 
+La *Web App* si occupa dunque di autenticare un utente, facendogli visualizzare l'apposita *homepage* in base al proprio dominio; permette l'interazione con il DB tramite una **navbar** e delle **card** che fanno capire intuitivamente al fruitore del servizio cosa può fare e come lo può fare. Ad esempio, l'utente **ex studente** avrà una visualizzazione della pagina estremamente limitata, non frequentando più l'università, ma è comunque possibile grazie a qualche click, avere a disposizione la carriera completa e, in caso si trattasse di un laureato, anche dei dati relativi proprio alla laurea conseguita.
 
+### LOGIN:
+Prima di documentare tutto ciò che possono fare i singoli utenti dall'applicazione, è bene che vengano opportunamente autenticati tramite le loro credenziali per questioni di funzionalità del sito e di sicurezza.  
+
+Il sito non fa altro che usufruire della precedente [funzione](#funzioni) SQL vista in precedenza per autenticare lo user. Ecco il codice PHP:
+```PHP
+function login() {
+        if (isset($_POST["username"]) && isset($_POST["password"])) {
+                include_once('../script/connection.php'); 
+                $sql = "SELECT * FROM unitua.verifica($1, $2)";
+                $res = pg_prepare($connection, "get_all_esito_attesa_acc", $sql);
+
+                $res = pg_execute($connection, "get_all_esito_attesa_acc", array($_POST["username"], $_POST["password"]));
+
+                $row = pg_fetch_assoc($res); // associo i campi della riga ai nomi dei campi della select del DB
+                pg_close($connection);
+                
+                if ($row["email"] === null) {
+                    $_SESSION['autenticazione_fallita'] = "Credenziali non corrette, riprova";
+                    header('Location: ../pagine/index.php');
+                } else {
+                    $_SESSION['isLogin'] = true;
+
+                    $_SESSION['email'] = $row["email"];
+                    
+                    $dominio = explode("@", $row["email"])[1];
+
+                    switch ($dominio) {
+                        case "studenti.unitua.it":
+                            $_SESSION['isStudente'] = true;
+                            $_SESSION['isDocente'] = false;
+                            $_SESSION['isSegreteria'] = false;
+                            header('Location: ../pagine/studente/home_stud.php');
+                            break;
+                        case "docenti.unitua.it":
+                            $_SESSION['isStudente'] = false;
+                            $_SESSION['isDocente'] = true;
+                            $_SESSION['isSegreteria'] = false;
+                            header('Location: ../pagine/docente/home_doc.php');
+                            break;
+                        case "segreteria.unitua.it":
+                            $_SESSION['isStudente'] = false;
+                            $_SESSION['isDocente'] = false;
+                            $_SESSION['isSegreteria'] = true;
+                            header('Location: ../pagine/segreteria/home_seg.php');
+                            break;
+                        default:
+                            $_SESSION['autenticazione_fallita'] = "Dominio non riconosciuto, riprova";
+                            header('Location: ../pagine/index.php');
+                            break;
+                    }
+                }
+        }
+    }
+
+```
+E' possibile notare che vengono utilizzate delle variabili di **sessione** per permettere ad uno studente, un docente o un membro della segreteria di rimanere autenticato sulla pagina fino a quando non verrà chiuso il browser dal quale viene visualizzato il sito.  
+Proprio alla luce di questo, vengono utilizzati dei controlli su tutte le pagine grazie al file [check_login.php](../web%20app/script/check_login.php), tranne per il file "iniziale" [index.php](../web%20app/pagine/index.php), sul quale viene effettuato il controllo di avvenuta autenticazione grazie a [check_not_login.php](../web%20app/script/check_not_login.php).
 
 
 ### STUDENTE
