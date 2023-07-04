@@ -200,7 +200,7 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 
 ## SCRITTURA DEL DATABASE:
 Dopo aver capito quali sono i tipi di attributi, i loro vincoli intrarelazionali e i domini, si può a tutti gli effetti cominciare a scrivere il database.  
-Tutte le tabelle rispettano le clausole riportate sopra ed il codice completo del dump vuoto della base di dati è consultabile [qui](../../../database/tree/main/unitua.sql).  
+Tutte le tabelle rispettano le clausole riportate sopra ed il codice completo del dump vuoto della base di dati è consultabile [qui](../../htdocs/database/unitua.sql).  
 <br>
 #### PROCEDURE:
 A questo punto sono state aggiunte le normali procedure di popolamento del DB, in modo tale da avere i primi record di prova per testarne il corretto funzionamento. Tutte le procedure sono scritte nel seguente formato:  
