@@ -51,14 +51,14 @@ La laurea, esattamente come le altre entità che compongono il DB, viene univoca
 Alla luce di ciò che abbiamo ipotizzato nel corso dell'analisi dei requisiti, è possibile comporre una prima versione di uno **schema entità-relazione** che tenga conto di tutte le proprietà delle entità e di come esse sono collegate fra di loro mediante relazioni.
 Oltre a questo, è opportuno comporre lo schema E.R. indicando anche le cardinalità che presentano le relazioni.  
 
-![Schema E.R.](ER_progetto_esame.png)  
+![Schema E.R.](ER_non_ristrutturato.jpg)  
   
 Come è possibile evincere dallo schema sopra riportato, vi è una gerarchia padre-figli riguardante gli utenti che compongono la base di dati e quelli che sono effettivamente i fruitori del sistema: i membri della segreteria, i docenti, gli studenti e gli ex studenti.  
 Come ci suggeriscono le regole di composizione di un qualsiasi DB, le generalizzazioni sono una semplificazione necessaria in fase di progettazione concettuale, che però non trovano realizzazione effettiva dalla fase di progettazione logica in poi. Diventa dunque necessaria una ristrutturazione di questo schema Entity Relationship, facendo in modo tale che l'entità padre sia **collegata alle figlie tramite una relazione** con carinalità 1:1.  
 
 __Ecco lo schema concettuale aggiornato:__
 
-![Schema E.R. ristrutturato](ER_ristrutturato.png)  
+![Schema E.R. ristrutturato](ER_ristrutturato.jpg)  
 <br>
 Un appunto necessario riguardante questo schema *Entity Relationhip* riguarda l'associazione ricorsiva **PROPEDEUTICITA'**, che risulta di fondamentale gestione per quanto concerne lo schema logico (sarà di fatto un'ulteriore relazione), per la realizzazione vera e propria del DB e per tutte le funzionalità dell'applicativo web, in particolare per quanto riguarda ciò che potrà fare/non fare lo studente.
 
