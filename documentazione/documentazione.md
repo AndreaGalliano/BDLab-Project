@@ -8,6 +8,7 @@
 - [Progettazione logica](#progettazione-logica)
 - [Normalizzazione](#normalizzazione)
 - [Vincoli intrarelazionali](#vincoli-intrarelazionali)
+- [Scrittura del Database](#scrittura-del-database)
 
 
 ## INTRODUZIONE:
@@ -87,7 +88,10 @@ Lo schema logico non presenta relazioni ed attributi che risultano predisposti a
 In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*valutazioni*__ e __*storico valutazioni*__, che dopo un'analisi iniziale potrebbe potrebbe pensare possa assumere, oltre alla classica forma del voto in trentesimi compreso fra 18 e 30, anche quella testuale di "*respinto*"; questo non risulta però corretto nel momento in cui si va ad applicare la **prima regola di normalizzazione**, che esprime il concetto di __*atomicità*__ degli attributi. Esattamente per questo motivo, è ragionevole avvalersi sia di un attributo *__voto__* numerico (che non presenti clausole di nullità, ma che sia compreso all'interno del dominio fra 18 e 30), sia di un attributo *__respinto__* boolean, che certifichi se il superamento o il mancato superamento di un certo esame da parte dello studente. Per le funzionalità necessarie al completo funzionamento del progetto, inoltre, l'attributo *__respinto__*, al contrario di *__voto__*, non deve essere nullo ([qui tutti i vincoli](#vincoli-intrarelazionali)).
 
 ## VINCOLI INTRARELAZIONALI:
-|RELAZIONE   |ATTRIBUTO   |TIPO|VINCOLO   |DOMINIO|
+Prima di realizzare la base di dati e scrivere in linguaggio SQL il dump, è bene definire tutti i vincoli intrarelazionali del sistema e tutti i domini degli attributi che andranno a comporre le tabelle.  
+Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di cui necessitano gli attributi, andando a sceglieri quelli che fanno al caso preso in esame.  
+
+|RELAZIONE   |ATTRIBUTO   |TIPO|VINCOLO INTRARELAZIONALE  |DOMINIO|
 |---------   |--------|--------|---------|----|
 |**UTENTE**  |**email**|varchar|PRIMARY KEY|
 |            |pw|varchar|NOT NULL|
@@ -99,7 +103,7 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 |            |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Ruolo|ENUM|NOT NULL|Ruolo = {'Primo livello', 'Secondo livello'}|
-|            |Utente email|varchar|FOREIGN KEY|
+|            |Utente email|varchar|FOREIGN KEY, NOT NULL|
 |   |   |   |   |
 |**DOCENTE** |**ID**|serial|PRIMARY KEY|
 |            |Nome|varchar|NOT NULL|
@@ -108,9 +112,9 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 |            |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Carica accademica|ENUM|NOT NULL|Carica accademica = {'Ordinario', 'Associato', 'Ricercatore'}|
-|            |Utente email|varchar|FOREIGN KEY|
+|            |Utente email|varchar|FOREIGN KEY, NOT NULL|
 |   |   |   |   |
-|**STUDENTE**|**Matricola**|varchar|PK - NOT NULL|
+|**STUDENTE**|**Matricola**|varchar|PRIMARY KEY|
 |            |Nome|varchar|NOT NULL|
 |            |Cognome|varchar|NOT NULL|
 |            |CodFiscale|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 16|
@@ -118,13 +122,156 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 |            |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |            |Data immatricolazione|date|NOT NULL|
 |            |Stato|ENUM|NOT NULL|Stato = {'In corso', 'Fuoricorso'}|
-|            |Utente email|varchar|FOREIGN KEY|
+|            |Utente email|varchar|FOREIGN KEY, NOT NULL|
 |   |   |   |   |
-|**EX STUDENTE**|**Matricola**|varchar|PK - NOT NULL|
+|**EX STUDENTE**|**Matricola**|varchar|PRIMARY KEY|
 |               |Nome|varchar|NOT NULL|
 |               |Cognome|varchar|NOT NULL|
 |               |CodFiscale|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 16|
 |               |Sesso|ENUM|NOT NULL|Sesso = {'M', 'F', 'Non specificato'} |
 |               |Cellulare|varchar|NOT NULL, UNIQUE, MAX_LENGTH = 10|
 |               |Stato|ENUM|NOT NULL|Stato = {'In corso', 'Fuoricorso'}|
-|               |Utente email|varchar|FOREIGN KEY|
+|               |Utente email|varchar|FOREIGN KEY, NOT NULL|
+|   |   |   |   |
+|**CORSO DI LAUREA**|**Codice**|serial|PRIMARY KEY|
+|                   |Tipologia|ENUM|NOT NULL|Tipologia = {'Triennale', 'Magistrale', 'A ciclo unico'}|
+|                   |Descrizione|varchar|NOT NULL|  
+|   |   |   |   |
+|**INSEGNAMENTO**|**Codice**|serial|PRIMARY KEY|
+|                |Nome|varchar|NOT NULL|
+|                |Anno|ENUM|NOT NULL|Anno = {'1', '2', '3', '4', '5'}|
+|                |Descrizione|varchar|NOT NULL|
+|                |CdL|integer|FOREIGN KEY, NOT NULL|
+|                |Docente|integer|FOREIGN KEY, NOT NULL|
+|   |   |   |   |
+|**PROPEDEUTICITA'**|**Insegnamento propedeutico**|integer|PPK, NOT NULL|
+|                   |**Insegnamento con propedeuticità**|integer|PPK, NOT NULL|
+|   |   |   |   |
+|**ESAME**|**Codice esame**|serial|PRIMARY KEY|
+|         |Tipologia|ENUM|NOT NULL|Tipologia = {'Distanza', 'Presenza'}|
+|         |Modalità|ENUM|NOT NULL|Modalità = {'Scritto', 'Orale', 'Scritto + Orale'}|
+|         |Insegnamento|integer|FOREIGN KEY, NOT NULL|
+|         |            |        |   |
+|**CALENDARIO**|**Codice appello**|serial|PRIMARY KEY|
+|              |Data esame|date|NOT NULL|
+|              |Ora|time|NOT NULL|
+|              |Aula|varchar|NOT NULL|
+|              |Anno accademico|integer|NOT NULL|
+|              |Aperto|boolean|NOT NULL|
+|              |Docente|integer|FOREIGN KEY, NOT NULL|
+|              |CdL|integer|FOREIGN KEY, NOT NULL|
+|   |   |   |   |
+|**ISCRITTI**|**Docente**|integer|PPK, NOT NULL|
+|            |**Studente**|integer|PPK, NOT NULL|
+|            |**Esame**|integer|PPK, NOT NULL|
+|            |**Calendario**|integer|PPK, NOT NULL|
+|   |   |   |   |
+|**VALUTAZIONE**|**Codice valutazione**|serial|PPK, NOT NULL|
+|               |**Studente**|integer|PPK, NOT NULL|
+|               |Calendario|integer|FOREIGN KEY, NOT NULL|
+|               |Esame|integer|FOREIGN KEY, NOT NULL|
+|               |Docente|integer|FOREIGN KEY, NOT NULL|
+|               |Voto|integer|NOT NULL|18 <= Voto <= 30|
+|               |Lode|boolean|NOT NULL|
+|               |Respinto|boolean|NOT NULL|
+|               |Data verbalizzazione|date|NOT NULL|
+|   |   |   |   |
+|**STORICO VALUTAZIONE**|**Codice valutazione**|serial|PPK, NOT NULL|
+|                       |**Ex studente**|integer|PPK, NOT NULL|
+|                       |Calendario|integer|FOREIGN KEY, NOT NULL|
+|                       |Esame|integer|FOREIGN KEY, NOT NULL|
+|                       |Docente|integer|FOREIGN KEY, NOT NULL|
+|                       |Voto|integer|NOT NULL|18 <= Voto <= 30|
+|                       |Lode|boolean|NOT NULL|
+|                       |Respinto|boolean|NOT NULL|
+|                       |Data verbalizzazione|date|NOT NULL|
+|   |   |   |   |
+|**LAUREA**|**Codice**|serial|PRIMARY KEY|
+|          |Bonus|integer|NOT NULL|0 <= Bonus <= 6|
+|          |Voto|integer|NOT NULL|60 <= Voto <= 110|
+|          |data laurea|date|NOT NULL|
+|          |Lode|boolean|NOT NULL|
+|          |Studente|integer|FOREIGN KEY, NOT NULL|
+|          |Relatore|integer|FOREIGN KEY, NOT NULL|
+|          |CdL|integer|FOREIGN KEY, NOT NULL|
+
+## SCRITTURA DEL DATABASE:
+Dopo aver capito quali sono i tipi di attributi, i loro vincoli intrarelazionali e i domini, si può a tutti gli effetti cominciare a scrivere il database.  
+Tutte le tabelle rispettano le clausole riportate sopra ed il codice completo del dump vuoto della base di dati è consultabile [qui]('../../../database/unitua.sql').  
+<br>
+#### PROCEDURE:
+A questo punto sono state aggiunte le normali procedure di popolamento del DB, in modo tale da avere i primi record di prova per testarne il corretto funzionamento. Tutte le procedure sono scritte nel seguente formato:  
+```SQL
+--Esempio di inserimento record della tabella studente:
+
+CREATE OR REPLACE PROCEDURE unitua.insert_studente(
+    matricola varchar(6), 
+    nome varchar,
+    cognome varchar, 
+    codFiscale varchar(16), 
+    sesso unitua.sex, 
+    cellulare varchar(10), 
+    data_immatricolazione date, 
+    stato unitua.stato_studente,
+    utente_email varchar,
+	CdL_codice int
+)
+AS $$
+    BEGIN
+        INSERT INTO unitua.studente(matricola, nome, cognome, codFiscale, sesso, cellulare, data_immatricolazione, stato, utente_email, CdL)
+        VALUES (matricola, nome, cognome, codFiscale, sesso, cellulare, data_immatricolazione, stato, utente_email, CdL_codice);
+    END;
+$$ LANGUAGE plpgsql;
+```
+
+Per visionare in maniera completa tutte le procedure di inserimento delle tabelle, cliccare sul seguente [link](../database/unitua_popolazione_tabelle.sql).  
+
+Oltre alle procedure di __insert__ all'interno delle tabelle, il DB è dotato di apposite [funzioni](#trigger) e [trigger](#funzioni) in grado di far funzionare l'intero sistema coerentemente con le istruzioni date dalla traccia.  
+Si noti che i trigger e le funzioni realizzate hanno soprattutto lo scopo di scongiurare qualsiasi anomalia di inserimento, cancellazione o aggiornamento da parte dell'utente finale che dovrà interfacciarsi con la base di dati tramite l'applicativo web.  
+
+#### TRIGGER:
+Vediamo i __*trigger*__ più rilevanti della proposta di soluzione (per visionarli tutti in maniera completa, cliccare [qui]('../../../database/unitua_popolazione_tabelle.sql')):  
+In maniera apparentemente contro-intuitiva, partiamo da una 'semplice' procedura di __*insert*__ all'interno della tabella __laurea__ (per visionare le funzioni che effettuano il calcolo corretto del voto di laurea clicca [qui](#funzioni)):
+```SQL
+--Inserimento record della tabella laurea:
+
+SELECT pg_get_serial_sequence('unitua.laurea', 'codice');
+SELECT setval(pg_get_serial_sequence('unitua.laurea', 'codice'), 1000, false);
+
+CREATE OR REPLACE PROCEDURE unitua.insert_laurea(
+    bonus int,
+    voto unitua.voto_laurea,
+    data_laurea date,
+    lode boolean,
+    studente varchar,
+    relatore int,
+    CdL int
+)
+AS $$
+    BEGIN
+        INSERT INTO unitua.laurea(bonus, voto, data_laurea, lode, studente, relatore, CdL)
+        VALUES (bonus, voto, data_laurea, lode, studente, relatore, CdL);
+    END;
+$$ LANGUAGE plpgsql;
+```
+L'idea è che, nel momento in cui viene aggiunto un record alla tabella laurea, in maniera del tutto automatica uno studente passi dall'essere *attuale* all'essere di fatto un *__ex studente__*. Questo ci porta a riflettere sul bisogno di scrivere dei __trigger__ che facciano in modo tale che lo studente in questione venga *eliminato* dalla tabella __*studente*__ e venga subito dopo *aggiunto* alla tabella *__ex studente__*.  
+A pensarci bene, però, questo non basta:
+
+```SQL
+--Trigger per l'eliminazione dei record dalla tabella studente:
+
+CREATE OR REPLACE FUNCTION unitua.trigger_delete_studente()
+RETURNS TRIGGER AS $$
+BEGIN
+    DELETE FROM unitua.studente 
+    WHERE matricola = NEW.studente;
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_delete_studente
+AFTER INSERT ON unitua.laurea
+FOR EACH ROW
+EXECUTE FUNCTION unitua.trigger_delete_studente();
+```
+#### FUNZIONI:
