@@ -26,26 +26,48 @@
                 header('Location: ../pagine/segreteria/conf_update_seg2.php');
             }
 
+            $querySeg = "SELECT * FROM unitua.get_segretario($1)";
+            $res_seg = pg_prepare($connection, "", $querySeg);
+            $res_seg = pg_execute($connection, "", array($_POST['id']));
+            $row_seg = pg_fetch_assoc($res_seg);
+
             echo "<ul class='list-group' id='centrato'>";
             
             echo "<form method='POST' action='../../script/segreteria/conf_update_seg1.php'>";
             echo "<li class='list-group-item'>";
+            echo "<label for='id'>ID segretario/a: </label>";
             echo "<input type='number' name='id' id='id' value='".$_POST['id']."' readonly />";
             echo "</li>";
 
             echo "<li class='list-group-item'>";
+            echo "<label for='nome'>Nome attuale: ".$row_seg['nome']."</label>";
             echo "<input type='text' name='nome' id='nome' placeholder='Reinserisci il nome' required />";
             echo "</li>";
 
             echo "<li class='list-group-item'>";
+            echo "<label for='cognome'>Cognome attuale: ".$row_seg['cognome']."</label>";
             echo "<input type='text' name='cognome' id='cognome' placeholder='Reinserisci il cognome' required />";
             echo "</li>";
 
             echo "<li class='list-group-item'>";
+            echo "<label for='codfiscale'>Codice fiscale attuale: ".$row_seg['codfiscale']."</label>";
             echo "<input type='text' name='codFiscale' id='codFiscale' placeholder='Reinserisci il codice fiscale' maxlength='16' required />";
             echo "</li>";
 
             echo "<li class='list-group-item'>";
+
+            $sesso = "";
+            if ($row_seg['sesso'] == 'M') {
+                $sesso = "Maschio";
+            } else {
+                if ($row_seg['sesso'] == 'F') {
+                    $sesso = "Femmina";
+                } else {
+                    $sesso = "Non specificato";
+                }
+            }
+
+            echo "<label for='sesso'>Sesso attuale: ".$sesso."</label>";
             echo "<select class='form-control' id='sesso' name='sesso' required>";
             echo "<option value='M'>Maschio</option>";
             echo "<option value='F'>Femmina</option>";
@@ -54,10 +76,12 @@
             echo "</li>";
 
             echo "<li class='list-group-item'>";
+            echo "<label for='cellulare'>N. di telefono attuale: ".$row_seg['cellulare']."</label>";
             echo "<input type='text' name='cellulare' id='cellulare' placeholder='Reinserisci il numero di telefono' maxlength='10' required />";
             echo "</li>";
 
             echo "<li class='list-group-item'>";
+            echo "<label for='ruolo'>Ruolo attuale: ".$row_seg['ruolo']."</label>";
             echo "<select class='form-control' id='ruolo' name='ruolo' required>";
             echo "<option value='Primo livello'>Primo livello</option>";
             echo "<option value='Secondo livello'>Secondo livello</option>";

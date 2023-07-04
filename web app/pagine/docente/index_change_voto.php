@@ -43,21 +43,25 @@
                     switch ($key) {
                         case 'codice':
                             echo "<li class='list-group-item'>";
+                            echo "<label for='codice_valutazione'>Codice valutazione:</label>";
                             echo "<input type='number' id='codice_valutazione' name='codice_valutazione' value='".$value."' readonly />";
                             echo "</li>";
                             break;
                         case 'studente':
                             echo "<li class='list-group-item'>";
+                            echo "<label for='studente'>Matricola studente:</label>";
                             echo "<input type='text' id='studente' name='studente' value='".$value."' readonly />";
                             echo "</li>";
                             break;
                         case 'calendario':
                             echo "<li class='list-group-item'>";
+                            echo "<label for='codice_appello'>Codice appello:</label>";
                             echo "<input type='number' id='codice_appello' name='codice_appello' value='".$value."' readonly />";
                             echo "</li>";
                             break;
                         case 'esame':
                             echo "<li class='list-group-item'>";
+                            echo "<label for='codice_esame'>Codice esame:</label>";
                             echo "<input type='number' id='codice_esame' name='codice_esame' value='".$value."' readonly />";
                             echo "</li>";
                             break;
@@ -66,6 +70,7 @@
                             break;
                         case 'data_verbalizzazione':
                             echo "<li class='list-group-item'>";
+                            echo "<label for='data_verbalizzazione'>Data verbalizzazione:</label>";
                             echo "<input type='date' id='data_verbalizzazione' name='data_verbalizzazione' value='".$value."' readonly />";
                             echo "</li>";
                             break;

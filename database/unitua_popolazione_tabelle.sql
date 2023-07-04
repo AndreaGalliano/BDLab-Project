@@ -2306,3 +2306,25 @@ $$ LANGUAGE plpgsql;
 SELECT * FROM unitua.verifica_mat('05460A', 'andrea.galliano@studenti.unitua.it');
 SELECT * FROM unitua.verifica_mat('05460A', 'luca.corradini@studenti.unitua.it');
 */
+
+--Funzione che dato l'ID di un segretario restituisce tutte le sue informazioni personali:
+CREATE OR REPLACE FUNCTION unitua.get_segretario (
+    id_in integer
+)
+RETURNS SETOF unitua.segreteria AS $$
+DECLARE
+    record_out unitua.segreteria%ROWTYPE;
+BEGIN
+    SELECT *
+    INTO record_out
+    FROM unitua.segreteria AS s 
+    WHERE s.id = id_in;
+
+    RETURN NEXT record_out;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_segretario(200);
+*/
