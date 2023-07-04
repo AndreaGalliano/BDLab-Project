@@ -290,7 +290,7 @@ Oltre alle procedure di __insert__, __delete__ e __update__ all'interno delle ta
 Si noti che i trigger e le funzioni realizzate hanno soprattutto lo scopo di scongiurare qualsiasi anomalia di inserimento, cancellazione o aggiornamento da parte dell'utente finale che dovrà interfacciarsi con la base di dati tramite l'applicativo web.  
 
 #### TRIGGER:
-Vediamo i __*trigger*__ più rilevanti della proposta di soluzione (per visionarli tutti in maniera completa, cliccare [qui]('../database/unitua_popolazione_tabelle.sql')):  
+Vediamo i __*trigger*__ più rilevanti della proposta di soluzione (per visionarli tutti in maniera completa, cliccare [qui](../database/unitua_popolazione_tabelle.sql)):  
 In maniera apparentemente contro-intuitiva, partiamo da una 'semplice' procedura di __*insert*__ all'interno della tabella __laurea__ (per visionare le funzioni che effettuano il calcolo corretto del voto di laurea clicca [qui](#funzioni)):
 ```SQL
 --Inserimento record della tabella laurea:
@@ -614,10 +614,124 @@ $$ LANGUAGE plpgsql;
 ```
 
 <br>
-Esempio di insert in laurea:
+Esempio di chiamata della procedura di insert nella tabella laurea:
 
 ```SQL
 CALL unitua.insert_laurea(5, unitua.calcolo_voto_laurea('98007A', 5), '2023-04-20', false, '98007A', 100, 1);
 ```
 <br>
 
+Le altre funzioni facenti parte della base di dati sono delle **getter**, che restituiscono uno o più valori secondo ciò di cui necessita l'utente. Spesso queste funzioni ususfruiscono di apposite viste materializzate che permettano una restituzione completa del record.  
+Ecco alcuni esempi:
+
+```SQL
+--Creazione della vista per restituire i dati completi dalla funzione:
+CREATE OR REPLACE VIEW unitua.vista_studente_completo AS
+    SELECT s.*, cdl.*
+    FROM unitua.studente AS s
+    JOIN unitua.corso_di_laurea AS cdl
+    ON cdl.codice = s.CdL;
+```
+
+```SQL
+--Funzione per restituire le informazioni di uno studente:
+CREATE OR REPLACE FUNCTION unitua.get_info(
+	mail text
+)
+RETURNS SETOF unitua.vista_studente_completo AS $$
+DECLARE
+	all_info unitua.vista_studente_completo%ROWTYPE;
+BEGIN
+	SELECT * 
+	INTO all_info
+	FROM unitua.vista_studente_completo as s
+	WHERE s.utente_email = mail;
+	
+	RETURN NEXT all_info;
+END;
+$$ LANGUAGE plpgsql;
+```
+<br>
+
+```SQL
+--Vista per produrre il calendario completo degli esami:
+CREATE OR REPLACE VIEW unitua.vista_calendario AS
+    SELECT c.codice_appello, c.data_esame, c.ora, c.aula, c.aperto,
+    e.codice AS codice_esame, i.nome_insegnamento,
+	d.id AS codice_docente, d.nome, d.cognome,  d.cdl, 
+	cd.tipologia, cd.descrizione
+    FROM unitua.calendario AS c
+    JOIN unitua.docente AS d
+    ON c.docente = d.id
+    JOIN unitua.corso_di_laurea AS cd
+    ON c.CdL = cd.codice
+    JOIN unitua.esame AS e
+    ON c.esame = e.codice
+    JOIN unitua.insegnamento AS i 
+    ON e.insegnamento = i.codice;
+```
+
+```SQL
+--Funzione per visualizzare il calendario completo degli esami per un certo studente:
+CREATE OR REPLACE FUNCTION unitua.get_calendario (
+    corso_di_laurea integer
+)
+RETURNS SETOF unitua.vista_calendario AS $$
+DECLARE
+    all_info_cal unitua.vista_calendario%ROWTYPE;
+BEGIN
+    FOR all_info_cal IN
+        SELECT *
+        FROM unitua.vista_calendario AS vc 
+        WHERE vc.cdl = corso_di_laurea AND vc.aperto = true
+    LOOP
+        RETURN NEXT all_info_cal;
+    END LOOP;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
+```
+<br>
+
+```SQL
+--Creazione della vista per disiscrizione/visione iscrizioni confermate:
+CREATE OR REPLACE VIEW unitua.vista_iscrizione AS
+    SELECT isc.studente, c.codice_appello, c.aperto, c.data_esame, c.ora, c.aula, 
+    e.codice AS codice_esame, i.nome_insegnamento,
+    d.id AS codice_docente, d.nome, d.cognome, d.cdl,
+    cd.tipologia, cd.descrizione
+    FROM unitua.iscritti AS isc 
+    JOIN unitua.docente AS d 
+    ON isc.docente = d.id 
+    JOIN unitua.esame AS e 
+    ON isc.esame = e.codice
+    JOIN unitua.insegnamento AS i 
+    ON e.insegnamento = i.codice
+	JOIN unitua.corso_di_laurea AS cd
+	ON i.cdl = cd.codice
+    JOIN unitua.calendario AS c 
+    ON isc.calendario = c.codice_appello;
+```
+
+```SQL
+--Funzione che restituisce le iscrizioni di uno studente ad uno o più esami:
+CREATE OR REPLACE FUNCTION unitua.get_iscrizioni (
+    matricola_in text
+)
+RETURNS SETOF unitua.vista_iscrizione AS $$
+DECLARE 
+    all_info_iscrizione unitua.vista_iscrizione%ROWTYPE;
+BEGIN
+    FOR all_info_iscrizione IN 
+        SELECT *
+        FROM unitua.vista_iscrizione AS vi 
+        WHERE vi.studente = matricola_in AND vi.aperto = true
+    LOOP
+        RETURN NEXT all_info_iscrizione;
+    END LOOP;
+
+    RETURN;
+END;
+$$ LANGUAGE plpgsql;
+```
