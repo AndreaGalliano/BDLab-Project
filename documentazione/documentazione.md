@@ -747,9 +747,9 @@ $$ LANGUAGE plpgsql;
 ```
 
 ## APPLICAZIONE WEB:
-L'applicativo Web del progetto prevede un sito, con algoritmica di bakcend realizzata interamente in **PHP**, implementa tutte le funzionalità del database, potendo interagire secondo le sue regole ed usufruendo dei servizi che offre mediante i codici scritti precedentemente in linguaggio SQL.  
+L'applicativo Web del progetto prevede un sito, con algoritmica di backend realizzata interamente in **PHP**, che implementa tutte le funzionalità del database, potendo interagire secondo le sue regole ed usufruendo dei servizi che offre mediante i codici scritti precedentemente in linguaggio SQL.  
 
-La *Web App* si occupa dunque di autenticare un utente, facendogli visualizzare l'apposita *homepage* in base al proprio dominio; permette l'interazione con il DB tramite una **navbar** e delle **card** che fanno capire intuitivamente al fruitore del servizio cosa può fare e come lo può fare. Ad esempio, l'utente **ex studente** avrà una visualizzazione della pagina estremamente limitata, non frequentando più l'università, ma è comunque possibile grazie a qualche click, avere a disposizione la carriera completa e, in caso si trattasse di un laureato, anche dei dati relativi proprio alla laurea conseguita.
+La *Web App* si occupa dunque di autenticare un utente, facendogli visualizzare l'apposita *homepage* in base al proprio dominio; permette l'interazione con il DB tramite un'apposita **navbar** e delle **card** che fanno capire intuitivamente al fruitore del servizio cosa può fare e come si può muovere sulla piattaforma a sua disposizione. Ad esempio, l'utente **ex studente** avrà una visualizzazione della pagina estremamente limitata, non frequentando più l'università, ma gli è comunque possibile grazie a qualche click, avere a disposizione la carriera completa e, in caso si trattasse di un laureato, anche dei dati relativi alla laurea stessa.
 
 ### LOGIN:
 Prima di documentare tutto ciò che possono fare i singoli utenti dall'applicazione, è bene che vengano opportunamente autenticati tramite le loro credenziali per questioni di funzionalità del sito e di sicurezza.  
