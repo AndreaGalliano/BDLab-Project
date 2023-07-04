@@ -37,7 +37,7 @@
                             $_SESSION['isStudente'] = false;
                             $_SESSION['isDocente'] = false;
                             $_SESSION['isSegreteria'] = true;
-                            header('Location: ../pagine/home_seg.php');
+                            header('Location: ../pagine/segreteria/home_seg.php');
                             break;
                         default:
                             $_SESSION['autenticazione_fallita'] = "Dominio non riconosciuto, riprova";

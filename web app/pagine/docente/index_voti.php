@@ -26,7 +26,7 @@
         }
     ?>
 
-    <form method="POST" action="../../script/index_voto.php">
+    <form method="POST" action="../../script/docente/index_voto.php">
     <div class="form-group" id="divform">
             <label for="studente">Matricola studente:</label>
             <input type="text" class="form-control" id="studente" aria-describedby="studente" name="studente" value='<?php echo $_POST['matricola']; ?>' readonly>

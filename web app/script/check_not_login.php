@@ -9,7 +9,7 @@
             header('Location: ../pagine/docente/home_doc.php');
         }
         if ($_SESSION['isSegreteria']) {
-            header('Location: ../pagine/home_seg.php');
+            header('Location: ../pagine/segreteria/home_seg.php');
         }
     }
 ?>
