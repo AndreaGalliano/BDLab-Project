@@ -6,13 +6,16 @@
 - [Analisi dei requisiti](#studio-della-realtà-dinteresse-e-analisi-dei-requisiti)
 - [Progettazione concettuale](#progettazione-concettuale)
 - [Progettazione logica](#progettazione-logica)
-- [Normalizzazione](#normalizzazione)
+    - [Normalizzazione](#normalizzazione)
 - [Vincoli intrarelazionali](#vincoli-intrarelazionali)
 - [Scrittura del Database](#scrittura-del-database)
+    - [Procedure](#procedure)
+    - [Trigger](#trigger)
+    - [Funzioni](#funzioni)
 
 
 ## INTRODUZIONE:
-Il progettot d'esame prevede la realizzazione di una piattaforma di gestione di insegnamenti ed esami universitari, con relativo controllo di tutte le entità e funzionalità che la piattaforma stessa deve avere per funzionare in maniera corretta.  
+Il progetto d'esame prevede la realizzazione di una piattaforma di gestione di insegnamenti ed esami universitari, con relativo controllo di tutte le entità e funzionalità che la piattaforma stessa deve avere per funzionare in maniera corretta.  
 La proposta di soluzione è atta a rappresentare fedelmente e in maniera completa la realtà d'interesse, scongiurando possibilità di dati incosistenti, duplicati e/o  ambiguità. Ogni scelta implementativa è opportunamente motivata per far funzionare tutti i punti che compongono il progetto (database relazionale con funzioni e trigger e applicativo web che si interfaccia con il DB per la visualizzazione dei dati).
 
 ## Studio della realtà d'interesse e analisi dei requisiti:
@@ -224,9 +227,52 @@ AS $$
 $$ LANGUAGE plpgsql;
 ```
 
+Il DB prevede anche la presenza di procedure che aggiornino o elimino record dalle tabelle.  
+Prendiamo, ad esempio, la procedura che elimina un'iscritto da un appello e quella che aggiorni i valori di una valutazione:  
+
+```SQL
+--Procedura che disiscrive uno studente da un appello:
+CREATE OR REPLACE PROCEDURE unitua.delete_iscritto (
+    docente_in integer,
+    matricola_in text,
+    esame_in integer,
+    calendario_in integer
+)
+AS $$
+    BEGIN
+        DELETE FROM unitua.iscritti AS i 
+        WHERE i.docente = docente_in AND i.studente = matricola_in AND i.esame = esame_in AND i.calendario = calendario_in;
+    END;
+$$ LANGUAGE plpgsql;
+```
+
+```SQL
+--Procedura 2 (promossi) che aggiorna la tabella valutazione dati il codice dell'appello, il codice dell'esame, del docente e la matricola dello studente:
+CREATE OR REPLACE PROCEDURE unitua.update_valutazione2 (
+	cod_valutazione integer,
+    cod_appello integer,
+    cod_esame integer, 
+    id_doc integer,
+    matricola text,
+    voto_in integer,
+    lode_in boolean
+)
+AS $$
+BEGIN
+    UPDATE unitua.valutazione AS v
+    SET calendario = cod_appello,
+		voto = voto_in,
+        lode = lode_in,
+		respinto = false
+    WHERE v.codice = cod_valutazione AND v.studente = matricola
+	AND v.docente = id_doc AND v.esame = cod_esame;
+END;
+$$ LANGUAGE plpgsql;
+```
+
 Per visionare in maniera completa tutte le procedure di inserimento delle tabelle, cliccare sul seguente [link](../database/unitua_popolazione_tabelle.sql).  
 
-Oltre alle procedure di __insert__ all'interno delle tabelle, il DB è dotato di apposite [funzioni](#trigger) e [trigger](#funzioni) in grado di far funzionare l'intero sistema coerentemente con le istruzioni date dalla traccia.  
+Oltre alle procedure di __insert__, __delete__ e __update__ all'interno delle tabelle, il DB è dotato di apposite [funzioni](#trigger) e [trigger](#funzioni) in grado di far funzionare l'intero sistema coerentemente con le istruzioni date dalla traccia.  
 Si noti che i trigger e le funzioni realizzate hanno soprattutto lo scopo di scongiurare qualsiasi anomalia di inserimento, cancellazione o aggiornamento da parte dell'utente finale che dovrà interfacciarsi con la base di dati tramite l'applicativo web.  
 
 #### TRIGGER:
@@ -255,7 +301,9 @@ AS $$
 $$ LANGUAGE plpgsql;
 ```
 L'idea è che, nel momento in cui viene aggiunto un record alla tabella laurea, in maniera del tutto automatica uno studente passi dall'essere *attuale* all'essere di fatto un *__ex studente__*. Questo ci porta a riflettere sul bisogno di scrivere dei __trigger__ che facciano in modo tale che lo studente in questione venga *eliminato* dalla tabella __*studente*__ e venga subito dopo *aggiunto* alla tabella *__ex studente__*.  
-A pensarci bene, però, questo non basta:
+A pensarci bene, però, questo non basta: se uno studente passa da essere uno attuale a non esserlo più, anche tutti i record corrispondenti nella tabella *__valutazione__* devono essere eliminati e spostati opportunamente in *__storico valutazione__*.  
+<br>
+Ecco i codici SQL dei trigger che gestiscono il caso descritto:
 
 ```SQL
 --Trigger per l'eliminazione dei record dalla tabella studente:
@@ -274,4 +322,173 @@ AFTER INSERT ON unitua.laurea
 FOR EACH ROW
 EXECUTE FUNCTION unitua.trigger_delete_studente();
 ```
+
+```SQL
+--Trigger per l'aggiunta dei record in ex_studente:
+
+CREATE OR REPLACE FUNCTION unitua.trigger_insert_ex_studente()
+RETURNS TRIGGER AS $$
+BEGIN
+    INSERT INTO unitua.ex_studente (matricola, nome, cognome, codFiscale, sesso, cellulare, data_immatricolazione, stato, utente_email, CdL)
+	VALUES (OLD.matricola, OLD.nome, OLD.cognome, OLD.codFiscale, OLD.sesso, OLD.cellulare, OLD.data_immatricolazione, OLD.stato, OLD.utente_email, OLD.CdL);
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_insert_ex_studente
+AFTER DELETE ON unitua.studente
+FOR EACH ROW
+EXECUTE FUNCTION unitua.trigger_insert_ex_studente();
+```
+
+```SQL
+--Trigger spostamento da valutazione a storico_valutazione:
+
+CREATE OR REPLACE FUNCTION unitua.trigger_insert_storico()
+RETURNS TRIGGER AS $$
+DECLARE valutazione unitua.valutazione%ROWTYPE;
+BEGIN
+    INSERT INTO unitua.storico_valutazione(ex_studente, calendario, esame, docente, voto, lode, respinto, data_verbalizzazione)
+	VALUES (OLD.studente, OLD.calendario, OLD.esame, OLD.docente, OLD.voto, OLD.lode, OLD.respinto, OLD.data_verbalizzazione);
+    
+    RETURN OLD;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER trigger_insert_storico
+AFTER DELETE ON unitua.valutazione
+FOR EACH ROW
+EXECUTE FUNCTION unitua.trigger_insert_storico();
+```
+<br>
+
+A questo punto, il sistema di inserimento della laurea e tutte le conseguenze che esso porta funzionano in maniera corretta. Inoltre grazie alla scrittura di questi trigger, viene giustamente eseguita anche l'eventuale rinuncia agli studi, poiché l'eliminazione dello studente porta in cascata al popolamento delle tabelle __*ex studente*__ e __*storico valutazione*__, anche senza passare necessariamente dall'intert di __*laurea*__.  
+<br>
+Altri **trigger** rilevanti sono, ad esempio, quelli che controllano che un docente inserisca le valutazioni correttamente.  
+Questi trigger, a differenza dei precedenti, non modificano le tabelle della base di dati, ma sollevano una **raise exception** (con stampa di un messaggio testuale) nel momento in cui si verifica la condizione di scatenamento del trigger.
+
+```SQL
+--1. Trigger di controllo sulle valutazioni (voto != 30 --> lode = false):
+CREATE OR REPLACE FUNCTION unitua.controllo_lode()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.valutazione
+        WHERE NEW.voto <> 30 AND NEW.lode = true
+    ) THEN
+        RAISE EXCEPTION 'Impossibile inserire la lode allo studente, il voto è pari a %', NEW.voto;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER controllo_lode
+BEFORE INSERT ON unitua.valutazione
+FOR EACH ROW
+EXECUTE FUNCTION unitua.controllo_lode();
+```
+
+```SQL
+--2. Trigger di controllo sulle valutazioni (se voto >= 18, respinto = false):
+CREATE OR REPLACE FUNCTION unitua.controlla_respinto()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.valutazione
+        WHERE NEW.voto >= 18 AND NEW.respinto = true
+    ) THEN
+        RAISE EXCEPTION 'Errore nell inserimento del voto. Lo studente ha ricevuto un voto pari a %, non è stato respinto.', NEW.voto;
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER controlla_respinto
+BEFORE INSERT ON unitua.valutazione
+FOR EACH ROW
+EXECUTE FUNCTION unitua.controlla_respinto();
+```
+
+```SQL
+--3. Trigger di controllo sulla valutazione (voto = null allora respinto = true):
+CREATE OR REPLACE FUNCTION unitua.controlla_insufficienza()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.valutazione
+        WHERE NEW.voto IS NULL AND NEW.respinto = false
+    ) THEN
+        RAISE EXCEPTION 'Lo studente deve necessariamente essere respinto poiché il voto è = null.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER controlla_insufficienza
+AFTER INSERT ON unitua.valutazione
+FOR EACH ROW
+EXECUTE FUNCTION unitua.controlla_insufficienza();
+```
+<br>
+
+Altri **trigger** rilevanti sono quelli che non permettono ad un docente di inserire più di un esame al giorno dello stesso insegnamento e che controllino che una certa aula non sia già occupata ad un certo orario nel momento in cui viene fissato un nuovo appello d'esame:
+
+```SQL
+--Trigger ora e aula esame:
+CREATE OR REPLACE FUNCTION unitua.controllo_ora_aula()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.calendario
+        WHERE NEW.ora = ora AND NEW.aula = aula AND NEW.data_esame = data_esame
+    ) THEN
+        RAISE EXCEPTION 'Prenotazione non disponibile. Questa aula è già occupata.';
+    END IF;
+
+    RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER controllo_ora_aula
+BEFORE INSERT ON unitua.calendario
+FOR EACH ROW
+EXECUTE FUNCTION unitua.controllo_ora_aula();
+```
+
+```SQL
+--Trigger su calendario (solo 1 esame al giorno per insegnamento):
+CREATE OR REPLACE FUNCTION unitua.controllo_esame_al_giorno()
+RETURNS TRIGGER AS $$
+BEGIN
+    IF EXISTS (
+        SELECT 1
+        FROM unitua.calendario AS c
+		JOIN unitua.insegnamento AS i
+		ON c.docente = i.docente
+		JOIN unitua.esame AS e
+		ON e.insegnamento = i.codice
+        WHERE c.data_esame = NEW.data_esame AND i.codice = e.insegnamento
+    ) THEN
+        RAISE EXCEPTION 'Non è possibile inserire più di un esame al giorno per lo stesso insegnamento.';
+    END IF;
+	
+	RETURN NEW;
+END;
+$$ LANGUAGE plpgsql;
+
+CREATE TRIGGER controllo_esame_al_giorno
+BEFORE INSERT ON unitua.calendario
+FOR EACH ROW
+EXECUTE FUNCTION unitua.controllo_esame_al_giorno();
+```
+
 #### FUNZIONI:
+Oltre alla procedure e ai trigger è necessario che il DB implementi anche tutte le funzioni che permettono di ritornare specifici valori nel momento in cui verrà utilizzato (tramite applicativo web e non solo).  
