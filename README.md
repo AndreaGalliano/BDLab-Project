@@ -5,10 +5,10 @@ Il progetto prevede la realizzazione di una piattaforma di creazione e gestione 
 <br>
 <br>
 
-La documentazione del progetto è consultabile [qui](documentazione/documentazione.md), mentre il manuale utente per l'installazione del codice e la verifica del funzionamento è consultabile [qui](documentazione/manuale_utente.md).  
+La **documentazione** del progetto è consultabile [qui](documentazione/documentazione.md), mentre il **manuale utente** per l'installazione del codice e la verifica del funzionamento è consultabile [qui](documentazione/manuale_utente.md).  
 
 
-Il codice SQL del dump vuoto del DB è consultabile [qui](database/unitua.sql).  
-Il codice SQL delle procedure, dei trigger e delle funzioni del DB è consultabile [qui](database/unitua_popolazione_tabelle.sql).
+Il codice SQL del **dump vuoto del DB** è consultabile [qui](database/unitua.sql).  
+Il codice SQL relativo al **riempimento delle tabelle, alle procedure, ai trigger e alle funzioni** del DB è consultabile [qui](database/unitua_popolazione_tabelle.sql).
 
 Il codice .php dell'applicativo web è consultabile [qui](<web app/>).
