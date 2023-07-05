@@ -1425,7 +1425,7 @@ I membri della segreteria sono gli utenti che godono delle maggiori libertà per
 5. Aggiungere una nuova laurea;
 6. Visualizzare tutti gli studenti, gli ex studenti, i docenti e gli insegnamenti previsti dai corsi di laurea attivati dall'ateneo.
 
-Lo script di gestione per la creazione di un nuovo profilo, che raccoglie i dati necessari da una **POST**, crea automaticamente la mail istituizionale dell'utente e, nel caso in cui si trattasse di un nuovo studente, anche il suo numero di matricola viene generato in maniera automatica dallo script.
+Lo script di gestione per la creazione di un nuovo profilo, che raccoglie i dati necessari da una **POST**, crea automaticamente la mail istituizionale dell'utente e, nel caso in cui si trattasse di un nuovo studente, anche il suo numero di matricola viene *generato* in maniera automatica dallo script.
 
 ```PHP
 <?php
