@@ -23,7 +23,7 @@
 ## INTRODUZIONE:
 Il progetto d'esame prevede la realizzazione di una piattaforma di gestione di insegnamenti ed esami universitari, con relativo controllo di tutte le entità e funzionalità che la piattaforma stessa deve possedere per funzionare correttamente.  
 La proposta di soluzione ha lo scopo di rappresentare fedelmente e nella maniera più completa possibile la realtà d'interesse, scongiurando la possibilità di dati incosistenti, duplicati e/o  ambiguità.   
-Ogni scelta implementativa è opportunamente motivata e documentata ed ha l'obiettivo di evitare malfunzionamenti all'interno del sistema realizzato (per *"sistema"* si intende l'intera proposta di soluzione, che comprende la **progettazione concettuale e logica** del DB, la realizzazione di quest'ultimo su **PostgreSQL** e lo sviluppo dell'**applicativo web** che ne sfrutta la struttura e i servizi).
+Ogni scelta implementativa è opportunamente motivata e documentata ed ha l'obiettivo di evitare malfunzionamenti all'interno del sistema realizzato (per *"sistema"* si intende l'intera proposta di soluzione, che comprende la **progettazione concettuale e logica** del DB, la realizzazione di quest'ultimo su **PostgreSQL 15** e lo sviluppo dell'**applicativo web** che ne sfrutta la struttura e i servizi).
 
 ## Studio della realtà d'interesse e analisi dei requisiti:
 Il primo passo per realizzare al meglio la base di dati è studiare approfonditamente la realtà d'interesse e analizzare i requisiti in modo tale da avere un'idea solida su come realizzare uno schema concettuale completo.  
