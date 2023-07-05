@@ -1414,3 +1414,201 @@ Allo stesso modo, ma con logica inversa, funziona la chiusura di un appello, che
 Qui i link per le [pagine](../web%20app/pagine/docente/) visualizzabili dai profili docenti ed i relativi [script](../web%20app/script/docente/) di gestione.
 
 ### SEGRETERIA
+I membri della segreteria sono gli utenti che godono delle maggiori libertà per quanto riguarda la modellazione della base di dati. Essi possono infatti:
+1. Aggiungere nuovi utenti (studenti, docenti e/o membri della segreteria) e gestirli;
+3. Aggiungere nuovi Corsi di Laurea e gestirli;
+4. Aggiungere nuovi insegnamenti, esami con la relativa gestione;
+5. Aggiungere una nuova laurea;
+6. Visualizzare tutti gli studenti, gli ex studenti, i docenti e gli insegnamenti previsti dai corsi di laurea attivati dall'ateneo.
+
+Lo script di gestione per la creazione di un nuovo profilo, che raccoglie i dati necessari da una POST, crea automaticamente la mail istituizionale dell'utente e, nel caso in cui si trattasse di un nuovo studente, anche il suo numero di matricola viene generato in maniera automatica dallo script.
+
+```PHP
+<?php
+    session_start();
+    include_once('../../script/connection.php');
+    if (isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['password']) && isset($_POST['codFiscale']) && isset($_POST['sesso']) && isset($_POST['cellulare']) && isset($_POST['cdl']) && !isset($_POST['carica'])) {
+        // Studente:
+        $nome = strtolower($_POST['nome']);
+        $cognome = strtolower($_POST['cognome']);
+        $email = $nome.".".$cognome."@studenti.unitua.it"; 
+
+        // echo "La mail è: ".$email;
+        
+        $query1 = "CALL unitua.insert_utente($1, $2)";
+        $res1 = pg_prepare($connection, "rep", $query1);
+        $res1 = pg_execute($connection, "rep", array($email, $_POST['password']));
+        
+        if ($res1) {
+            $affectedRows = pg_affected_rows($res1);
+
+            if ($affectedRows > 0) {
+                $_SESSION['insert'] = pg_last_error($connection);
+                header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+            } else {
+                $matricola = "";
+
+                for ($i = 0; $i < 6; $i ++) {
+                    $randNum = mt_rand(0, 9);
+                    $matricola .= $randNum;
+                }
+
+                $dataOdierna = date('Y-m-d');
+                $stato = "In corso";
+
+                $query2 = "CALL unitua.insert_studente($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)";
+                $res2 = pg_prepare($connection, "rep_ok", $query2);
+                $res2 = pg_execute($connection, "rep_ok", array($matricola, $_POST['nome'], $_POST['cognome'], $_POST['codFiscale'], $_POST['sesso'], $_POST['cellulare'], $dataOdierna, $stato, $email, $_POST['cdl']));
+
+                if ($res2) {
+                    $affectedRows2 = pg_affected_rows($res2);
+                    if ($affectedRows2 == 0) {
+                        $_SESSION['insert'] = "Inserimento dello studente avvenuto con successo!";
+                        header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+                    } else {
+                        $_SESSION['insert'] = pg_last_error($connection);
+                        header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+                    }
+                }
+            }
+        }
+
+    } else {
+        if (isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['password']) && isset($_POST['codFiscale']) && isset($_POST['sesso']) && isset($_POST['cellulare']) && isset($_POST['carica']) && isset($_POST['cdl'])) {
+            // Docente:
+            $nome = strtolower($_POST['nome']);
+            $cognome = strtolower($_POST['cognome']);
+            $email = $nome.".".$cognome."@docenti.unitua.it"; 
+
+            $query1 = "CALL unitua.insert_utente($1, $2)";
+            $res1 = pg_prepare($connection, "rep", $query1);
+            $res1 = pg_execute($connection, "rep", array($email, $_POST['password']));
+
+            if ($res1) {
+                $affectedRows = pg_affected_rows($res1);
+
+                if ($affectedRows > 0) {
+                    $_SESSION['insert'] = pg_last_error($connection);
+                    header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+                } else {
+                    $query2 = "CALL unitua.insert_docente($1, $2, $3, $4, $5, $6, $7, $8)";
+                    $res2 = pg_prepare($connection, "rep_ok", $query2);
+                    $res2 = pg_execute($connection, "rep_ok", array($_POST['nome'], $_POST['cognome'], $_POST['codFiscale'], $_POST['sesso'], $_POST['cellulare'], $_POST['carica'], $email, $_POST['cdl']));
+
+                    if ($res2) {
+                        $affectedRows2 = pg_affected_rows($res2);
+
+                        if ($affectedRows2 > 0) {
+                            $_SESSION['insert'] = pg_last_error($connection);
+                            header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+                        } else {
+                            $_SESSION['insert'] = "Inserimento del docente avvenuto con successo!";
+                            header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+                        }
+                    }
+                }
+            }
+        } else {
+            if (isset($_POST['nome']) && isset($_POST['cognome']) && isset($_POST['password']) && isset($_POST['codFiscale']) && isset($_POST['sesso']) && isset($_POST['cellulare']) && isset($_POST['ruolo'])) {
+                // Segreteria:
+                $nome = strtolower($_POST['nome']);
+                $cognome = strtolower($_POST['cognome']);
+                $email = $nome.".".$cognome."@segreteria.unitua.it"; 
+
+                $query1 = "CALL unitua.insert_utente($1, $2)";
+                $res1 = pg_prepare($connection, "rep", $query1);
+                $res1 = pg_execute($connection, "rep", array($email, $_POST['password']));
+
+                if ($res1) {
+                    $affectedRows = pg_affected_rows($res1);
+
+                    if ($affectedRows > 0) {
+                        $_SESSION['insert'] = pg_last_error($connection);
+                        header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+                    } else {
+                        $query2 = "CALL unitua.insert_membro_segreteria($1, $2, $3, $4, $5, $6, $7)";
+                        $res2 = pg_prepare($connection, "rep_ok", $query2);
+                        $res2 = pg_execute($connection, "rep_ok", array($_POST['nome'], $_POST['cognome'], $_POST['codFiscale'], $_POST['sesso'], $_POST['cellulare'], $_POST['ruolo'], $email));
+
+                        if ($res2) {
+                            $affectedRows2 = pg_affected_rows($res2);
+
+                            if ($affectedRows2 > 0) {
+                                $_SESSION['insert'] = pg_last_error($connection);
+                                header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+                            } else {
+                                $_SESSION['insert'] = "Inserimento del membro della segreteria avvenuto con successo!";
+                                header('Location: ../../pagine/segreteria/conf_insert_utente.php');
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+?>
+```
+<br>
+Un'altra funzionalità caratteristica della segreteria è quella che permette l'inserimento di una nuova laurea:
+<br>
+<br>
+
+```PHP
+<?php
+    session_start();
+    if(isset($_POST['bonus']) && isset($_POST['data']) && isset($_POST['lode']) && isset($_POST['studente']) && isset($_POST['relatore']) && isset($_POST['cdl'])) {
+        include_once('../../script/connection.php');
+
+        $query1 = "SELECT * FROM unitua.is_stud($1)";
+        $res1 = pg_prepare($connection, "", $query1);
+        $res1 = pg_execute($connection, "", array($_POST['studente']));
+        $row1 = pg_fetch_assoc($res1);
+
+        if ($row1['is_stud'] == 0) {
+            $_SESSION['errore_cdl'] = "Lo matricola inserita non corrisponde a nessuno studente all'interno del sistema!";
+            header('Location: ../../pagine/segreteria/errore_cdl.php');
+        }
+
+        $query2 = "SELECT * FROM unitua.is_doc($1)";
+        $res2 = pg_prepare($connection, "", $query2);
+        $res2 = pg_execute($connection, "", array($_POST['relatore']));
+        $row2 = pg_fetch_assoc($res2);
+
+        if ($row2['is_doc'] == 0) {
+            $_SESSION['errore_cdl'] = "L'ID inserito non corrisponde a nessun docente all'interno del sistema!";
+            header('Location: ../../pagine/segreteria/errore_cdl.php');
+        }
+
+        $query3 = "SELECT * FROM unitua.calcolo_media($1)";
+        $res3 = pg_prepare($connection, "", $query3);
+        $res3 = pg_execute($connection, "", array($_POST['studente']));
+        $row3 = pg_fetch_assoc($res3);
+
+        $query4 = "SELECT * FROM unitua.calcolo_voto_laurea($1, $2)";
+        $res4 = pg_prepare($connection, "", $query4);
+        $res4 = pg_execute($connection, "", array($row3['calcolo_media'], $_POST['bonus']));
+        $row4 = pg_fetch_assoc($res4);
+
+        $query5 = "CALL unitua.insert_laurea($1, $2, $3, $4, $5, $6, $7)";
+        $res5 = pg_prepare($connection, "", $query5);
+        $res5 = pg_execute($connection, "", array($_POST['bonus'], $row4['calcolo_voto_laurea'], $_POST['data'], $_POST['lode'], $_POST['studente'], $_POST['relatore'], $_POST['cdl']));
+
+        if ($res5) {
+            $affectedRows = pg_affected_rows($res5);
+
+            if ($affectedRows == 0) {
+                $_SESSION['inserimento_laurea'] = "Inserimento della laurea avvenuto con successo!";
+                header('Location: ../../pagine/segreteria/conf_ins_laurea.php');
+            } else {
+                $_SESSION['inserimento_laurea'] = pg_last_error($connection);
+                header('Location: ../../pagine/segreteria/conf_ins_laurea.php');
+            }
+        } else {
+            $_SESSION['inserimento_laurea'] = pg_last_error($connection);
+            header('Location: ../../pagine/segreteria/conf_ins_laurea.php');
+        }
+    }
+?>
+```
+
+Qui i link per la visualizzazione di tutte le [pagine](../web%20app/pagine/segreteria/) visualizzabili dai profili della segreteria ed i relativi [script](../web%20app/script/segreteria/) di gestione.
