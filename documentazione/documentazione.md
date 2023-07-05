@@ -64,7 +64,7 @@ La laurea, esattamente come le altre entità che compongono il DB, viene univoca
 Gli attributi di questa entità coincidono con **Valutazione**.
 
 ## PROGETTAZIONE CONCETTUALE:  
-Alla luce di ciò che abbiamo appurato nel corso dell'analisi dei requisiti, è possibile comporre una prima versione di uno **schema entità-relazione** che tenga conto di tutte le proprietà delle entità e di come esse sono collegate fra di loro mediante relazioni.  
+Alla luce di ciò che abbiamo appurato nel corso dell'analisi dei requisiti necessari, è possibile comporre una prima versione di uno **schema entità-relazione** che tenga conto di tutte le proprietà delle entità e di come esse sono collegate fra di loro mediante relazioni.  
 Oltre a questo, è opportuno formare lo schema **E.R.** indicando anche le cardinalità che presentano le relazioni.  
 
 ![Schema E.R.](ER_non_ristrutturato.jpg)  

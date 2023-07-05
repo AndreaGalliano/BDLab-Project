@@ -1,6 +1,6 @@
 # MANUALE UTENTE
 
-Dopo aver scaricato tutte le diractory contenute all'interno della repository, seguire i seguenti passaggi per la parte relativa alla base di dati e all'applicazione web.
+Dopo aver scaricato tutte le directory contenute all'interno della repository, seguire i seguenti passaggi per la parte relativa alla base di dati e all'applicazione web.
 
 ## 1) Database:
 Per creare un database "unitua" vuoto:
