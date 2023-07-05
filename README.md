@@ -12,3 +12,5 @@ Il codice SQL del **dump vuoto del DB** è consultabile [qui](database/unitua.sq
 Il codice SQL relativo al **riempimento delle tabelle, alle procedure, ai trigger e alle funzioni** del DB è consultabile [qui](database/unitua_popolazione_tabelle.sql).
 
 Il codice .php dell'applicativo web è consultabile [qui](<web app/>).
+
+La directory [img](/img/) contiene le immagini necessarie alla Web App per caricare le immagini delle varie card, nel caso in cui si volesse scaricare il codice sorgente per testarne il completo funzionamento.
