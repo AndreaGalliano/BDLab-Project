@@ -21,26 +21,28 @@
 
 
 ## INTRODUZIONE:
-Il progetto d'esame prevede la realizzazione di una piattaforma di gestione di insegnamenti ed esami universitari, con relativo controllo di tutte le entità e funzionalità che la piattaforma stessa deve avere per funzionare in maniera corretta.  
-La proposta di soluzione è atta a rappresentare fedelmente e in maniera completa la realtà d'interesse, scongiurando possibilità di dati incosistenti, duplicati e/o  ambiguità. Ogni scelta implementativa è opportunamente motivata per far funzionare tutti i punti che compongono il progetto (database relazionale con funzioni e trigger e applicativo web che si interfaccia con il DB per la visualizzazione dei dati).
+Il progetto d'esame prevede la realizzazione di una piattaforma di gestione di insegnamenti ed esami universitari, con relativo controllo di tutte le entità e funzionalità che la piattaforma stessa deve possedere per funzionare correttamente.  
+La proposta di soluzione ha lo scopo di rappresentare fedelmente e in maniera il più completa possibile la realtà d'interesse, scongiurando la possibilità di dati incosistenti, duplicati e/o  ambiguità.   
+Ogni scelta implementativa è opportunamente motivata ed ha l'obiettivo di evitare malfunzionamenti all'interno del sistema realizzato (per *"sistema"* si intende l'intera proposta di soluzione, che comprende la progettazione concettuale, logica del DB, la realizzazione di quest'ultimo su **PostgreSQL** e lo sviluppo dell'applicativo web  che ne sfrutta la struttura e i servizi).
 
 ## Studio della realtà d'interesse e analisi dei requisiti:
 Il primo passo per realizzare al meglio la base di dati è studiare approfonditamente la realtà d'interesse e analizzare i requisiti in modo tale da avere un'idea solida su come realizzare uno schema concettuale completo.  
-Partendo con ordine, la prima cosa che salta all'occhio è la necessità di realizzazione delle utenze che compongono il database, proprio per questo motivo sono necessarie le seguenti 4 entità:  
-1. **UTENTE** : si tratta di un qualsiasi individuo, facente parte del DB, che è in grado di interfacciarsi con le relative funzionalità mediante un opportuno sistema di autenticazione (nel nostro caso si è optato per una *classica* autenticazione realizzata tramite email e password).  
+Partendo con ordine, la prima cosa che salta all'occhio è la necessità di realizzazione delle utenze che compongono il database, proprio per questo motivo sono necessarie le seguenti 5 entità:  
+1. **UTENTE** : si tratta di un qualsiasi individuo, facente parte del DB, che è in grado di interfacciarsi con le relative funzionalità mediante un opportuno sistema di autenticazione (nel nostro caso si è optato per una *classica* autenticazione realizzata tramite **email** e **password**).  
 Ciò che ci permette di identificare univocamente ogni utente è proprio la mail.  
-Salta subito all'occhio che non tutti gli utenti sono uguali ed è essenziale *scomporli* grazie alle 3 entità elencate sotto;  
-2. **SEGRETERIA** : è l'entità che rappresenta un qualsiasi membro della segreteria dell'università, che deve poter essere opportunamente identificato e svolgere le attività classiche per un qualsiasi membro di una segreteria della realtà d'interesse (vedremo più avanti che proprio il profilo del segreterio/a gode di particolari libertà all'interno dell'applicativo web, soprattutto se comparato agli altri utenti del sistema).  
-Ogni membro della segreteria dovrà presentare quindi un codice identificativo (ID), il proprio nome, cognome, codice fiscale, il sesso, il numero di telefono e il suo ruolo (che può dividersi in *primo livello* e *secondo livello*; questo attributo è di grande rilevanza all'interno della Web App: un segretario o una segretaria di primo livello, infatti, si presuppone possa aggiungere a sua volta altri membri della segreteria, mentre un impiegato di secondo livello può farlo solo con profili di studenti o docenti).
-3. **DOCENTE** : si tratta dei prof. che gestiscono tutto ciò che concerne gli insegnamenti, gli esami, i calendari ecc...  
+Salta subito all'occhio che non tutti gli utenti sono uguali ed è essenziale *scomporli* grazie alle 4 entità che verranno elencate sotto.  
+2. **SEGRETERIA** : è l'entità che rappresenta un qualsiasi membro della segreteria dell'Università, che deve poter essere opportunamente identificato e deve poter svolgere le attività classiche di un qualsiasi membro del reparto segreteria della realtà d'interesse (vedremo più avanti che proprio il profilo del segreterio/a gode di particolari libertà all'interno dell'applicativo web, soprattutto se comparato agli altri utenti del sistema).  
+Ogni membro della segreteria dovrà presentare quindi un codice identificativo univoco (ID), il proprio nome, cognome, codice fiscale, il sesso, il numero di telefono e il suo ruolo (che può dividersi in *primo livello* e *secondo livello*; questo attributo è di grande rilevanza all'interno della Web App: un segretario e una segretaria di primo livello, infatti, si presuppone possano aggiungere a loro volta altri membri della segreteria, mentre un impiegato di secondo livello può farlo solo con profili di studenti o docenti).
+3. **DOCENTE** : si tratta dei Prof. che gestiscono tutto ciò che concerne gli insegnamenti, gli esami, i calendari, le valutazioni e le lauree.  
 Un docente è composto dal suo ID, dal nome, cognome, dal codice fiscale, dal sesso, il numero di telefono e dalla sua carica accademica (che si divide in *ordinario*, *associato* e *ricercatore*).  
-Intuitivamente si capisce subito che la chiave primaria che comporrà questa entità dovrà essere chiave esterna per tutte le altre relative alla gestione delle funzionalità del docente stesso.
-4. **STUDENTE** : sono gli studenti iscritti ai vari corsi di laurea dell'ateneo e sono identificati univocamente tramite il loro numero di matricola. Possono iscriversi agli esami, prendere valutazione e conseguire la laurea.  
+Intuitivamente si capisce subito che la chiave primaria che comporrà questa entità dovrà essere chiave esterna per tutte le altre relative alla gestione delle funzionalità del docente stesso. Un'altra scelta implementativa riguardante i docenti riguarda il fatto che abbiano uno e un solo CdL di riferimento, e solo all'interno di esso gli è possibile gestire degli insegnamenti.
+4. **STUDENTE** : sono gli studenti iscritti ai vari corsi di laurea dell'ateneo e sono identificati univocamente tramite il loro numero di matricola. Possono iscriversi agli esami, prendere valutazioni e conseguire la laurea nel corso al quale sono iscritti.  
 Oltre alla matricola, uno studente presenta il proprio nome e cognome, il codice fiscale, il sesso, il numero di telefono, la data di immatricolazione e lo stato (che può essere *in corso* o *fuoricorso*).
-5. **EX STUDENTE** : sono gli studenti che hanno terminato il loro percorso di studi; all'interno di questa entità sono compresi sia gli studenti che hanno terminato gli studi tramite conseguimento della laurea, sia quelli che hanno effettuato la rinuncia. Devono comunque poter avere un vero e proprio archivio dati sul loro percorso universitario passato e si interfacciano con la base di dati tramite login e password, esattamente come gli altri utenti.  
-I suoi attributi sono esattamente gli stessi dello studente attualmente iscritto, con la differenza che *fanno tutti parte del passato*.
+Si presti particolare attenziona al fatto che uno studente potrà prendere visione degli insegnamenti degli altri Corsi di Laurea, ma non gli sarà possibile iscriversi ai relativi esami.  
+5. **EX STUDENTE** : sono gli studenti che hanno terminato il loro percorso di studi; all'interno di questa entità sono compresi sia gli studenti che hanno terminato gli studi tramite conseguimento della Laurea, sia quelli che hanno effettuato la rinuncia. Devono comunque poter avere un vero e proprio archivio dati sul loro percorso universitario passato e si interfacciano con la base di dati tramite login e password, esattamente come gli altri utenti.  
+I suoi attributi sono esattamente gli stessi dello studente attualmente iscritto, con la differenza che *fanno tutti parte del "passato"*.
 
-Una volta assimilate le utenze da realizzare, è il momento di analizzare le restanti entità che compongono la base di dati: dapprima risulta necessaria la gestione dei vari corsi di laurea, dei relativi insegnamenti ed esami e, conseguentemente, anche del relativo calendario degli appelli d'esame.  
+Una volta assimilate le utenze da realizzare, è il momento di analizzare le restanti entità che compongono la base di dati: dapprima risulta necessaria la gestione dei vari corsi di laurea, dei relativi insegnamenti ed esami e, conseguentemente, anche del relativo calendario degli appelli d'esame, dal quale nasceranno inevitabilmente degli elenchi di studenti iscritti agli esami.  
 Successivamente ci si occuperà delle valutazioni che un docente dà (e che, parallelamente, uno studente riceve) e del conseguimento della laurea da parte degli studenti.  
 Infine è bene comporre correttamente un __archivio__ che faccia in modo *conservare* le valutazioni passate degli ex studenti.  
 Dunque, seguendo proprio l'ordine dell'analisi appena fatta abbiamo:  
@@ -76,21 +78,21 @@ Un appunto necessario riguardante questo schema *Entity Relationhip* riguarda l'
 Una volta conclusa la fase di progettazione concettuale, è tempo di concentrarsi sulla progettazione logica, andando a creare le relazioni e andando ad applicare, ove necessaario, le opportune regole di normalizzazione.  
 Coerentemente con le regole di composizione dello schema logico, andranno sottolineate eventuali chiavi primarie e/o esterne.  
 <br>
-*Lo schema logico si presenta al momento così:*  
-- **Corsi di laurea** (<u>Codice</u>, tipologia, descrizione)
-- **Utenti** (<u>E-mail</u>, password)  
-- **Studenti** (<u>Matricola</u>, nome, cognome, codice fiscale, sesso, cellulare, data immatricolazione, stato, *utente email*)  
-- **Docenti** (<u>ID docente</u>, nome, cognome, codice fiscale, sesso, cellulare, carica accademica, *utente email*)  
-- **Segreteria** (<u>ID</u>, nome, cognome, codice fiscale, sesso, cellulare, ruolo, *utente email*)  
-- **Ex Studenti** (<u>Matricola</u>, nome, cognome, codice fiscale, sesso, cellulare, stato, *utente email*)  
-- **Lauree** (<u>Codice</u>, ex studente, *relatore*, voto, data laurea, lode, punti bonus) 
-- **Insegnamenti** (<u>Codice</u>, nome, anno esame, descrizione, *docente*, *corso di laurea*)   
-- **Propedeuticità** (<u>*Esame propedeutico*</u>, <u>*esame con propedeuticità*</u>)
-- **Esami** (<u>Codice</u>, *insegnamento*, tipologia, modalità)  
-- **Calendari** (<u>Codice appello</u>, *esame*, *docente*, data esame, ora, aula, aperto, anno accademico)  
-- **Iscritti** (<u>*docente*</u>, <u>*studente*</u>, <u>*esame*</u>, <u>*calendario*</u>)  
-- **Valutazioni** (<u>Codice valutazione</u>, *studente*, *calendario*, *esame*, *docente*, voto, lode, respinto, data di verbalizzazione)  
-- **Storico Valutazioni** (<u>Codice valutazione</u>, *studente*, *calendario*, *esame*, *docente*, voto, lode, respinto, data di verbalizzazione)  
+Lo schema logico si presenta al momento così (le chiavi primarie sono evidenziate in **grassetto**, mentre le chiavi esterne in *corsivo*):  
+- **Corsi di laurea** (**Codice**, tipologia, descrizione)
+- **Utenti** (**E-mail**, password)  
+- **Studenti** (**Matricola**, nome, cognome, codice fiscale, sesso, cellulare, data immatricolazione, stato, *utente email*)  
+- **Docenti** (**ID docente**, nome, cognome, codice fiscale, sesso, cellulare, carica accademica, *utente email*)  
+- **Segreteria** (**ID**, nome, cognome, codice fiscale, sesso, cellulare, ruolo, *utente email*)  
+- **Ex Studenti** (**Matricola**, nome, cognome, codice fiscale, sesso, cellulare, stato, *utente email*)  
+- **Lauree** (**Codice**, ex studente, *relatore*, voto, data laurea, lode, punti bonus) 
+- **Insegnamenti** (**Codice**, nome, anno esame, descrizione, *docente*, *corso di laurea*)   
+- **Propedeuticità** (***Esame propedeutico***, ***esame con propedeuticità***)
+- **Esami** (**Codice**, *insegnamento*, tipologia, modalità)  
+- **Calendari** (**Codice appello**, *esame*, *docente*, data esame, ora, aula, aperto, anno accademico)  
+- **Iscritti** (***docente***, ***studente***, ***esame***, ***calendario***)  
+- **Valutazioni** (**Codice valutazione**, *studente*, *calendario*, *esame*, *docente*, voto, lode, respinto, data di verbalizzazione)  
+- **Storico Valutazioni** (**Codice valutazione**, *studente*, *calendario*, *esame*, *docente*, voto, lode, respinto, data di verbalizzazione)  
 
 ### NORMALIZZAZIONE:
 Lo schema logico non presenta relazioni ed attributi che risultano predisposti all'inconsistenza dei dati e ad evenutali violazioni delle 4 regole di normalizzazione.  
@@ -100,7 +102,7 @@ In particolare, va posto l'accento sull'attributo *__voto__* della relazione __*
 Prima di realizzare la base di dati e scrivere in linguaggio SQL il dump, è bene definire tutti i vincoli intrarelazionali del sistema e tutti i domini degli attributi che andranno a comporre le tabelle.  
 Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di cui necessitano gli attributi, andando a sceglieri quelli che fanno al caso preso in esame.  
 
-|RELAZIONE   |ATTRIBUTO   |TIPO|VINCOLO INTRARELAZIONALE  |DOMINIO|REFERENCE     |
+|RELAZIONE   |ATTRIBUTO   |TIPO|VINCOLI INTRARELAZIONALI  |DOMINIO|REFERENCE     |
 |---------   |--------|--------|---------|----|----|
 |**UTENTE**  |**email**|varchar|PRIMARY KEY|
 |            |pw|varchar|NOT NULL|
@@ -209,7 +211,7 @@ Oltre a questo, è buona prassi definire ragionevolmente anche i tipi di dato di
 
 ## SCRITTURA DEL DATABASE:
 Dopo aver capito quali sono i tipi di attributi, i loro vincoli intrarelazionali, i domini e le reference, si può a tutti gli effetti cominciare a scrivere il database.  
-Tutte le tabelle chiaramente dovranno rispettare tutte le clausole riportate sopra senza presentare alcun tipo di anomalie e/o duplicati.  
+Tutte le tabelle chiaramente dovranno rispettare le clausole riportate sopra senza presentare alcun tipo di anomalie e/o duplicati.  
 Il codice completo del dump vuoto della base di dati è consultabile [qui](../database/unitua.sql).  
 <br>
 
@@ -807,19 +809,608 @@ function login() {
 
 ```
 E' possibile notare che vengono utilizzate delle variabili di **sessione** per permettere ad uno studente, un docente o un membro della segreteria di rimanere autenticato sulla pagina fino a quando non verrà chiuso il browser dal quale viene visualizzato il sito.  
-Proprio alla luce di questo, vengono utilizzati dei controlli su tutte le pagine grazie al file [check_login.php](../web%20app/script/check_login.php), tranne per il file "iniziale" [index.php](../web%20app/pagine/index.php), sul quale viene effettuato il controllo di avvenuta autenticazione grazie a [check_not_login.php](../web%20app/script/check_not_login.php).
-
+Proprio alla luce di questo, vengono utilizzati dei controlli su tutte le pagine grazie al file [check_login.php](../web%20app/script/check_login.php), tranne per il file "iniziale" [index.php](../web%20app/pagine/index.php), sul quale viene effettuato il controllo di avvenuta autenticazione grazie a [check_not_login.php](../web%20app/script/check_not_login.php).  
+A questo punto, in base al proprio dominio dopo il carattere '@' della mail, l'utente verrà opportunamente smistato nella **Homepage** di riferimento.
 
 ### STUDENTE
+Lo studente deve poter essere in grado di:  
+1. Poter prendere visione dei dati personali;
+2. Cambiare password;
+3. Effettuare la rinuncia agli studi;
+4. Effettuale il logout;
+5. Iscriversi agli esami;
+6. Disiscriversi dagli esami;
+7. Consultare la propria carriera (sia nella sua totalità, sia per quanto riguarda solo le valutazioni sufficienti);
+8. Prendere visione delle iscrizioni confermate agli esami;
+9. Consultare gli insegnamenti attivati per gli altri Corsi di Laurea.  
 
+I codici riguardanti la visione dei dati personali, il cambiamento della password ed il logout sono pressoché identici per ogni utente (per quanto riguarda la stampa dei dati personali, cambiano solamente alcuni attributi restituiti da **unitua.studente**, **unitua.docente** e **unitua.segreteria**, ma lo *scheletro* del codice è uguale).
 
+- Estrazione dei dati personali:
+```PHP
+<body>
+    <?php
+        include_once('navbar.php');
+        include_once('../../script/check_login.php');
+        
+        include_once('../../script/connection.php'); 
+
+        $query = "SELECT * FROM unitua.get_info($1)";
+
+        $res = pg_prepare($connection, "get_all_esito_attesa_acc", $query);
+        $res = pg_execute($connection, "get_all_esito_attesa_acc", array($_SESSION['email']));
+        
+        $mail_splittata = explode(".", $_SESSION['email']);
+        $nome = strtoupper($mail_splittata[0]);
+        $mail_splittata2 = explode("@", $mail_splittata[1]);
+        $cognome = strtoupper($mail_splittata2[0]);
+
+        echo "<h2>Dati personali dell'utente: ".$nome." ".$cognome."</h2>";
+
+        if ($res) {
+            $row = pg_fetch_assoc($res);
+        } else {
+            echo "Errore: ".pg_last_error($connection);
+        }
+    ?>
+    <ul class="list-group">
+        <li class="list-group-item">
+            <?php 
+                echo "Matricola: ".$row['matricola']; 
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                echo "Codice fiscale: ".$row['codfiscale'];
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                if ($row['sesso'] == 'M') {
+                    echo "Sesso: Maschio";
+                } else {
+                    if ($row['sesso'] == 'F') {
+                        echo "Sesso: Femmina";
+                    } else {
+                        echo "Sesso: Non specificato";
+                    }
+                }
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                echo "Cellulare: ".$row['cellulare'];
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                echo "Data di immatricolazione: ".$row['data_immatricolazione'];
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                echo "Stato: ".$row['stato'];
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                echo "E-mail: ".$row['utente_email'];
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                echo "Codice corso di laurea: ".$row['cdl'];
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                echo "Tipologia laurea: ".$row['tipologia'];
+            ?>
+        </li>
+        <li class="list-group-item">
+            <?php
+                echo "Descrizione: ".$row['descrizione'];
+            ?>
+        </li>
+    </ul>
+</body>
+```
+
+- Cambiamento della password:
+```PHP
+function effettua_cambiamento() {
+        if (isset($_POST['email']) && isset($_POST['old_pw']) && isset($_POST['new_pw']) && isset($_POST['conf_new_pw'])) {
+            if ($_POST['new_pw'] != $_POST['conf_new_pw']) {
+                if ($_SESSION['isStudente'] == true) {
+                    $_SESSION['errore_ins_pw'] = "Le 2 password nuove per effettuare il cambiamento non coincidono"; 
+                    header('Location: ../pagine/studente/cambio_pw.php');
+                } else {
+                    if ($_SESSION['isDocente'] == true) {
+                        $_SESSION['errore_ins_pw'] = "Le 2 password nuove per effettuare il cambiamento non coincidono"; 
+                        header('Location: ../pagine/docente/cambio_pw2.php');
+                    } else {
+                        if ($_SESSION['isSegreteria'] == true) {
+                            $_SESSION['errore_ins_pw'] = "Le 2 password nuove per effettuare il cambiamento non coincidono"; 
+                            header('Location: ../pagine/segreteria/cambio_pw3.php');
+                        }
+                    }
+                }
+                return;
+            }
+
+            include_once('../script/connection.php'); 
+
+            $primo_test = "SELECT * FROM unitua.verifica($1, $2)";
+
+            $res1 = pg_prepare($connection, "get_all_esito_attesa_acc", $primo_test);
+            $res1 = pg_execute($connection, "get_all_esito_attesa_acc", array($_POST["email"], $_POST["old_pw"]));
+            $row1 = pg_fetch_assoc($res1); 
+
+            if ($row1["email"] === null) {
+                $_SESSION['autenticazione_fallita'] = "La password attuale inserita non è corretta, riprova";
+                if ($_SESSION['isStudente'] == true) {
+                    header('Location: ../pagine/studente/cambio_pw.php');
+                } else {
+                    if ($_SESSION['isDocente'] == true) {
+                        header('Location: ../pagine/docente/cambio_pw2.php');
+                    } else {
+                        if ($_SESSION['isSegreteria'] == true) {
+                            header('Location: ../pagine/segreteria/cambio_pw3.php');
+                        }
+                    }
+                }
+                return;
+            }
+
+            $sql = "SELECT * FROM unitua.change_pw($1, $2, $3)";
+
+            $res = pg_prepare($connection, "get_all_esito_attesa", $sql);
+            $res = pg_execute($connection, "get_all_esito_attesa", array($_POST["email"], $_POST['old_pw'], $_POST["new_pw"]));
+            $row = pg_fetch_assoc($res);
+
+            pg_close($connetion);
+
+            if ($row['change_pw'] == '0') {
+                $_SESSION['cambiamento_fallito'] = "Il cambiamento della tua password non è andato a buon fine";
+                // $_SESSION['row'] = $row['change_pw'];
+                if (($_SESSION['isStudente']) == true) {
+                    header('Location: ../pagine/studente/cambio_pw.php');
+                } else {
+                    if (isset($_SESSION['isDocente']) == true) {
+                        header('Location: ../pagine/docente/cambio_pw2.php');
+                        return;
+                    } else {
+                        if (isset($_SESSION['isSegreteria']) == true) {
+                            header('Location: ../pagine/segreteria/cambio_pw3.php');
+                            return;
+                        }
+                    }
+                }
+            } else {
+                $_SESSION['cambiamento_fatto'] = "Cambiamento password avvenuto con successo!";
+                if ($_SESSION['isStudente'] == true) {
+                    header('Location: ../pagine/studente/cambio_pw.php');
+                } else {
+                    if ($_SESSION['isDocente'] == true) {
+                        header('Location: ../pagine/docente/cambio_pw2.php');
+                    } else {
+                        if ($_SESSION['isSegreteria'] == true) {
+                            header('Location: ../pagine/segreteria/cambio_pw3.php');
+                        }
+                    }
+                }
+            }
+        }
+    }
+```
+
+- Logout:
+```PHP
+function logout() {
+        session_start();
+        session_unset();
+        header('Location: ../pagine/index.php');
+    }
+```
+<br>
+Oltre a queste funzioni, la più significativa per quanto riguarda uno studente è sicuramente quella che riguarda le iscrizioni agli esami, che vanno opportunamente gestite tenendo conto soprattutto delle propedeuticità definite dal CdL di riferimento (visualizzabili proprio in fondo alla pagina delle iscrizioni agli appelli d'esame).
+<br>
+Il codice che gestisce questa funzionalità prevede una pagina, contenente un form con campi readonly ed uno script che raccoglie la richiesta, la elabora ed emette la risposta (ovvero se allo studente è possibile iscriversi all'esame dell'appello selezionato oppure no).  
+<br>
+Il codice della pagina che l'utente visualizza è la seguente:
+<br>
+<br>
+
+```PHP
+<?php
+        include_once('navbar.php');
+        include_once('../../script/check_login.php');
+
+        include_once('../../script/connection.php'); 
+
+        $query1 = "SELECT * FROM unitua.get_cdl($1)";
+
+        $res1 = pg_prepare($connection, "get_all", $query1);
+        $res1 = pg_execute($connection, "get_all", array($_SESSION['email']));
+        $row1 = pg_fetch_assoc($res1);
+        //echo "<p>".$row['get_cdl']."</p>";
+
+        $query2 = "SELECT * FROM unitua.get_calendario($1)";
+        $res2 = pg_prepare($connection, "get_all_esito", $query2);
+        $res2 = pg_execute($connection, "get_all_esito", array($row1['get_cdl']));
+        //$row2 = pg_fetch_assoc($res2);
+
+        echo "<ul class='list-group' id='centrato'>";
+
+        $anno_corrente = date('Y');
+        $flag = false;
+
+        while ($row2 = pg_fetch_assoc($res2)) {
+            echo "<form method='POST' action='../../script/studente/index_iscrizione.php'>";
+            foreach ($row2 as $key => $value) {
+                $annoData = date('Y', strtotime($row2['data_esame']));
+                if ($anno_corrente == $annoData) {
+                    if (str_contains($key, '_')) {
+                        $campi_chiave = explode("_", $key);
+                        echo "<li class='list-group-item'>";
+                        echo strtoupper($campi_chiave[0])." ".strtoupper($campi_chiave[1]).": ";
+                        echo "<input type='text' id='".$campi_chiave[0]." ".$campi_chiave[1]."' name='".$campi_chiave[0]." ".$campi_chiave[1]."' value='".$value."' readonly />";
+                        echo "</li>";
+                    } else {
+                        if ($key == 'aperto') {
+                            continue;
+                        } else {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": ";
+                            echo "<input type='text' id='".$key."' name='".$key."' value='".$value."' readonly />";
+                            echo "</li>";
+                        }
+                    }
+                } else {
+                    $flag = true;
+                }
+            }
+            if (!$flag) {
+                echo "<input type='submit' class='btn btn-primary' id='bottone_iscr'>";
+                echo "</form><br><br>";
+            } else {
+                $flag = false;
+            }
+        }
+
+        echo "</ul>";
+
+        echo "<h5 id='scritta_is'>Tabella delle propedeuticità:</h5>";
+
+        $query3 = "SELECT * FROM unitua.get_cdl($1)";
+
+        $res3 = pg_prepare($connection, "esito", $query3);
+        $res3 = pg_execute($connection, "esito", array($_SESSION['email']));
+        $row3 = pg_fetch_assoc($res3);
+
+        $query4 = "SELECT * FROM unitua.get_prop($1)";
+
+        $res4 = pg_prepare($connection, "esito_q", $query4);
+        $res4 = pg_execute($connection, "esito_q", array($row3['get_cdl']));
+
+        echo "<ul class='list-group' id='centrato'>";
+
+        while ($row4 = pg_fetch_assoc($res4)) {
+            foreach ($row4 as $key => $value) {
+                if (!str_contains($key, "rn")) {
+                    if (str_contains($key, '_')) {
+                    $campi_chiave = explode("_", $key);
+                    echo "<li class='list-group-item'>";
+                    echo strtoupper($campi_chiave[0])." ".strtoupper($campi_chiave[1]).": ".$value;
+                    echo "</li>";
+                } else {
+                    if ($value == 't') {
+                        echo "<li class='list-group-item'>";
+                        echo strtoupper($key).": Sì";
+                    } else {
+                        if ($value == 'f') {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": No";
+                        } else {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": ".$value;
+                        }
+                    }
+                    echo "</li>";
+                    }
+                }
+            }
+            echo "<br><br>";
+        }
+
+        echo "</ul>";
+    ?>
+```
+
+Lo script di gestione è invece questo:
+```PHP
+<?php
+    session_start();
+    if (isset($_POST['codice_appello']) && isset($_POST['codice_docente']) && isset($_POST['codice_esame'])) {
+        
+        include_once("../../script/connection.php");
+
+        $query1 = "SELECT * FROM unitua.get_matricola($1)";
+
+        $res1 = pg_prepare($connection, "get_all", $query1);
+        $res1 = pg_execute($connection, "get_all", array($_SESSION['email']));
+        $row1 = pg_fetch_assoc($res1); //Adesso ho la matricola dello studente
+        //print_r($row1);
+
+        $query_convert = "SELECT * FROM unitua.get_ins($1)";
+
+        $res_conv = pg_prepare($connection, "check", $query_convert);
+        $res_conv = pg_execute($connection, "check", array($_POST['codice_esame']));
+        $row_convert = pg_fetch_assoc($res_conv);
+
+        $query_check = "SELECT * FROM unitua.check_esame($1)";
+
+        $res_check = pg_prepare($connection, "ok", $query_check);
+        $res_check = pg_execute($connection, "ok", array($row_convert['get_ins']));
+        $row_check = pg_fetch_assoc($res_check);
+
+        if ($row_check['check_esame'] == 't') {
+            $query_check2 = "SELECT * FROM unitua.passato($1, $2)";
+
+            $res_check2 = pg_prepare($connection, "ok2", $query_check2);
+            $res_check2 = pg_execute($connection, "ok2", array($row1['get_matricola'], $_POST['codice_esame']));
+            $row_check2 = pg_fetch_assoc($res_check2);
+
+            if ($row_check2['passato'] == 't') {
+                header('Location: ../../pagine/conf_iscrizione.php');
+                $query2 = "CALL unitua.insert_iscritto($1, $2, $3, $4)";
+
+                $res2 = pg_prepare($connection, "get_all_res", $query2);
+                $res2 = pg_execute($connection, "get_all_res", array($_POST['codice_docente'], $row1['get_matricola'], $_POST['codice_esame'], $_POST['codice_appello']));
+
+                if ($res2 == false) {
+                    $errorMessage = pg_last_error($connection);
+                    if (strpos($errorMessage, 'duplicate key value violates unique constraint') !== false) {
+                        $_SESSION['iscrizione'] = 'Non puoi iscriverti ad un esame in cui risulti già iscritto!';
+                    } else {
+                        $_SESSION['iscrizione'] = "Errore durante l'iscrizione all'esame!";
+                }
+                header('Location: ../../pagine/studente/conf_iscrizione.php');
+                } else {
+                    $_SESSION['iscrizione'] = 'Iscrizione avvenuta con successo! ';
+                    header('Location: ../../pagine/studente/conf_iscrizione.php');
+                }
+            } else {
+                $_SESSION['iscrizione'] = "Non puoi iscriverti ad un esame se non hai prima superato quello propedeutico";
+                header('Location: ../../pagine/studente/conf_iscrizione.php');
+            }
+
+        } else {
+            $query2 = "CALL unitua.insert_iscritto($1, $2, $3, $4)";
+
+            try {
+                $res2 = pg_prepare($connection, "get_all_res", $query2);
+                $res2 = pg_execute($connection, "get_all_res", array($_POST['codice_docente'], $row1['get_matricola'], $_POST['codice_esame'], $_POST['codice_appello']));
+
+                if ($res2 == false) {
+                    $errorMessage = pg_last_error($connection);
+                    if (strpos($errorMessage, 'duplicate key value violates unique constraint') !== false) {
+                        $_SESSION['iscrizione'] = 'Non puoi iscriverti ad un esame in cui risulti già iscritto! ';
+                    } else {
+                        $_SESSION['iscrizione'] = "Errore durante l'iscrizione all'esame! ".pg_fetch_assoc($res2); //Qui
+                    }
+                header('Location: ../../pagine/studente/conf_iscrizione.php');
+                } else {
+                    $_SESSION['iscrizione'] = 'Iscrizione avvenuta con successo! ';
+                    header('Location: ../../pagine/studente/conf_iscrizione.php');
+                }
+            } catch (Exception $e) {
+                echo "Eccezione: ".$e->getMessage();
+            }
+        }        
+    }
+?>
+```
+
+Qui i link per visionare **tutti** i codici .php delle [pagine](../web%20app/pagine/studente/) e degli [script](../web%20app/script/studente/) dell'applicativo Web relativi alle funzionalità dello studente.  
+<br>
 
 ### EX STUDENTE
+Come già detto precedentemente, un ex studente avrà meno libertà di navigazione all'interno del sito, in quanto la uniche funzionalità che sono previste per questo profilo sono:
+1. Cambiamento della password;
+2. Logout;
+3. Visione di tutte le valutazioni;
+4. **Opzionale**: visione dei dati relativi alla laurea conseguita.  
 
+Qui riportati i codici delle pagine che restituiscono i dati relativi alle valutazioni prese e alla laurea:
 
+- Storico valutazioni:
+```PHP
+<?php
+        include_once('navbar4.php');
+        include_once('../../script/check_login.php');
+
+        include_once('../../script/connection.php');
+
+        $query1 = "SELECT * FROM unitua.get_ex_matricola($1)";
+        $res1 = pg_prepare($connection, "", $query1);
+        $res1 = pg_execute($connection, "", array($_SESSION['email']));
+        $row1 = pg_fetch_assoc($res1);
+
+        $query2 = "SELECT * FROM unitua.storico_valutazione WHERE ex_studente=$1";
+        $res2 = pg_prepare($connection, "", $query2);
+        $res2 = pg_execute($connection, "", array($row1['get_ex_matricola']));
+
+        while ($row = pg_fetch_assoc($res2)) {
+            echo "<ul class='list-group' id='centrato'>";
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case 'calendario':
+                        $flag = true;
+                        echo "<li class='list-group-item'>";
+                        echo "CODICE APPELLO: ".$value;
+                        echo "</li>";
+                        break;
+                    case 'esame':
+                        echo "<li class='list-group-item'>";
+                        echo "CODICE ESAME: ".$value;
+                        echo "</li>";
+                        break;
+                    case 'docente':
+                        echo "<li class='list-group-item'>";
+                        echo "ID DOCENTE: ".$value;
+                        echo "</li>";
+                        break;
+                    case 'voto':
+                        if ($value != null) {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": ".$value;
+                            echo "</li>";
+                        }
+                        break;
+                    case 'lode':
+                        if ($key == 'true') {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": Sì";
+                            echo "</li>";
+                        }
+                        break;
+                    case 'respinto':
+                        if ($value == 't') {
+                            echo "<li class='list-group-item'>";
+                            echo "RESPINTO: Sì";
+                            echo "</li>";
+                        } else {
+                            echo "<li class='list-group-item'>";
+                            echo "RESPINTO: No";
+                            echo "</li>";
+                        }
+                        break;
+                        
+                }
+            }
+            echo "</ul>";
+        }
+        echo "<br><br>";
+    ?>
+```
+
+- Laurea:
+```PHP
+<?php
+        include_once('navbar4.php');
+        include_once('../../script/check_login.php');
+
+        include_once('../../script/connection.php');
+
+        $query1 = "SELECT * FROM unitua.get_ex_matricola($1)";
+        $res1 = pg_prepare($connection, "", $query1);
+        $res1 = pg_execute($connection, "", array($_SESSION['email']));
+        $row1 = pg_fetch_assoc($res1); 
+        
+        $query = "SELECT * FROM unitua.laurea WHERE studente=$1";
+        $res = pg_prepare($connection, "", $query);
+        $res = pg_execute($connection, "", array($row1['get_ex_matricola']));
+
+        while ($row = pg_fetch_assoc($res)) {
+            echo "<ul class='list-group' id='centrato'>";
+            foreach ($row as $key => $value) {
+                switch ($key) {
+                    case 'studente':
+                        echo "<li class='list-group-item'>";
+                        echo "MATRICOLA STUDENTE: ".$value;
+                        echo "</li>";
+                    case 'codice':
+                        echo "<li class='list-group-item'>";
+                        echo "CODICE LAUREA: ".$value;
+                        echo "</li>";
+                        break;
+                    case 'voto':
+                        echo "<li class='list-group-item'>";
+                        echo strtoupper($key).": ".$value;
+                        echo "</li>";
+                        break;
+                    case 'data_laurea':
+                        echo "<li class='list-group-item'>";
+                        echo "DATA LAUREA: ".$value;
+                        echo "</li>";
+                        break;
+                    case 'lode':
+                        if ($key == 'true') {
+                            echo "<li class='list-group-item'>";
+                            echo strtoupper($key).": Sì";
+                            echo "</li>";
+                        }
+                        break;
+                    case 'relatore':
+                        echo "<li class='list-group-item'>";
+                        echo "ID DOCENTE RELATORE: ".$value;
+                        echo "</li>";
+                        break;
+                    case 'cdl':
+                        echo "<li class='list-group-item'>";
+                        echo "CODICE CDL: ".$value;
+                        echo "</li>";
+                        break;
+                }
+            }
+            echo "</ul>";
+        }
+        echo "<br><br>";
+    ?>
+```
+Per consultare tutti i codici .php delle pagine visualizzate da un ex studente cliccare sul [link](../web%20app/pagine/ex_studente/).
 
 ### DOCENTE
+All'interno del sistema, un docente, oltre alle generiche funzionalità di un utente qualsiasi, deve poter:
+1. Inserire appelli d'esame;
+2. Chiudere gli appelli aperti;
+3. Vedere gli studenti iscritti agli appelli d'esame;
+4. Registrare i voti;
+5. Modificare i voti in caso di errore;
+6. Prendere visione delle sessioni di laurea alle quali ha partecipato come relatore.
 
+Partendo con ordine, vediamo lo **script** dell'inserimento di un nuovo appello, che prende i dati d'interesse da un **form** e, dopo aver estratto l'ID del docente grazie alla funzione SQL *get_info_doc()*, chiama la procedura *insert_calendario()* che inserisce un nuovo appello d'esame:
 
+```PHP
+<?php
+    session_start();
+    if (isset($_POST['data_esame']) && isset($_POST['ora']) && isset($_POST['aula']) && isset($_POST['codice_esame']) && isset($_POST['anno'])) {
+        include_once('../../script/connection.php');
+
+        $query1 = "SELECT * FROM unitua.get_info_doc($1)";
+        $res1 = pg_prepare($connection, "rep", $query1);
+        $res1 = pg_execute($connection, "rep", array($_SESSION['email']));
+        $row1 = pg_fetch_assoc($res1);
+
+        $query_esame = "SELECT * FROM unitua.get_es($1)";
+        $res_esame = pg_prepare($connection, "ok", $query_esame);
+        $res_esame = pg_execute($connection, "ok", array($_POST['codice_esame']));
+        $row_esame = pg_fetch_assoc($res_esame);
+
+        //Inserisco l'appello adesso che ho tutti i dati necessari:
+        $query2 = "CALL unitua.insert_calendario($1, $2, $3, $4, $5, $6, $7, $8)";
+        $res2 = pg_prepare($connection, "rep_ok", $query2);
+        $res2 = pg_execute($connection, "rep_ok", array($_POST['data_esame'], $_POST['ora'], $_POST['aula'], true, $row_esame['get_es'], $_POST['anno'], $row1['id'], $row1['cdl']));
+
+        if ($res2) {
+            $affectedRows = pg_affected_rows($res2);
+
+            if ($affectedRows > 0) {
+                $_SESSION['insert_appello'] = pg_last_error($connection);
+                header('Location: ../../pagine/docente/conf_cal.php');
+            } else {
+                $_SESSION['insert_appello'] = "Inserimento dell'appello avvenuto con successo!";
+                header('Location: ../../pagine/docente/conf_cal.php');
+            }
+        } else {
+            $_SESSION['insert_appello'] = "Errore nell'inserimento dell'appello...";
+            header('Location: ../../pagine/docente/conf_cal.php');
+        }
+    }
+?>
+```
+Allo stesso modo, ma con logica inversa, funziona la chiusura di un appello, che non fa altro che aggiornare l'attributo **aperto** da *true* a *false*.  
+Qui i link per le [pagine](../web%20app/pagine/docente/) visualizzabili dai profili docenti ed i relativi [script](../web%20app/script/docente/) di gestione.
 
 ### SEGRETERIA
