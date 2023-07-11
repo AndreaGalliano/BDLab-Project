@@ -23,7 +23,7 @@
         </div>
         <div class="form-group" id="divform">
             <label for="anno_insegnamento">Anno in cui è previsto l'insegnamento:</label>
-            <input type="number" class="form-control" id="anno_insegnamento" aria-describedby="anno_insegnamento" name="anno_insegnamento" placeholder="Inserisci l'anno dell'insegnamento" min="1" max="5" required>
+            <input type="text" class="form-control" id="anno_insegnamento" aria-describedby="anno_insegnamento" name="anno_insegnamento" placeholder="Inserisci l'anno dell'insegnamento" required>
         </div>
         <div class="form-group" id="divform">
             <label for="descrizione">Descrizione insegnamento:</label>
@@ -31,13 +31,22 @@
         </div>
         <div class="form-group" id="divform">
             <label for="docente">Docente responsabile dell'insegnamento:</label>
-            <input type="number" class="form-control" id="docente" aria-describedby="docente" name="docente" placeholder="Inserisci il docente" min="100" required>
+            <input type="number" class="form-control" id="docente" aria-describedby="docente" name="docente" placeholder="Inserisci il docente" min="100" required />
         </div>
         <div class="form-group" id="divform">
             <label for="cdl">Corso di Laurea:</label>
-            <input type="number" class="form-control" id="cdl1" aria-describedby="cdl" name="cdl" placeholder="Inserisci il codice del CdL" min="1" required>
+            <input type="number" class="form-control" id="cdl1" aria-describedby="cdl" name="cdl" placeholder="Inserisci il codice del CdL" min="1" required />
         </div>
+
         <br>
+        
+        <div class="form-group" id="divform">
+            <label for="modalita">Propedeuticità:</label>
+            <input type="number" class="form-control" id="propedeutico" aria-describedby="propedeutico" name="propedeutico" placeholder="Inserisci esame propedeutico" min="300" />
+        </div>
+
+        <br>
+
         <div class="form-group" id="divform">
             <label for="tipologia">Tipologia d'esame:</label>
             <select class="form-control" id="tipologia" name="tipologia" required>
@@ -45,7 +54,7 @@
                 <option value="Distanza">Distanza</option>
             </select>
         </div>
-        
+
         <div class="form-group" id="divform">
             <label for="modalita">Modalità d'esame:</label>
             <select class="form-control" id="modalita" name="modalita" required>
