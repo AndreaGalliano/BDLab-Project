@@ -22,7 +22,7 @@
 
             if ($row['is_doc'] == 0) {
                 $_SESSION['modifica_doc'] = "L'ID inserito non corrisponde a nessun docente del sistema!";
-                header('Location: ../pagine/conf_update_doc2.php');
+                header('Location: conf_update_doc2.php');
             }
 
             echo "<ul class='list-group' id='centrato'>";
