@@ -23,7 +23,7 @@
 
             if ($row['is_seg'] == 0) {
                 $_SESSION['modifica_seg'] = "L'ID inserito non corrisponde a nessun membro della segreteria nel sistema!";
-                header('Location: ../pagine/segreteria/conf_update_seg2.php');
+                header('Location: conf_update_seg2.php');
             }
 
             $querySeg = "SELECT * FROM unitua.get_segretario($1)";

@@ -1263,72 +1263,6 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
---Vista per esami propedeutici 1:
-CREATE OR REPLACE VIEW unitua.esami_con_propedeuticita AS
-    SELECT cd.codice AS codice_cdl, i.nome_insegnamento AS insegnamento_dipendente
-    FROM unitua.insegnamento AS i
-	JOIN unitua.propedeuticita AS p
-	ON i.codice = p.insegnamento_con_propedeuticita
-    JOIN unitua.corso_di_laurea AS cd
-    ON i.cdl = cd.codice;
-	
-SELECT * FROM unitua.esami_con_propedeuticita;
-
---Vista per esami propedeutici 2:
-CREATE OR REPLACE VIEW unitua.esami_propedeutici AS 
-    SELECT i.nome_insegnamento AS insegnamento_propedeutico
-    FROM unitua.insegnamento AS i 
-    JOIN unitua.propedeuticita AS p 
-    ON i.codice = p.insegnamento_propedeutico;
-
-SELECT * FROM unitua.esami_propedeutici;
-
---Unione delle 2 viste:
-CREATE OR REPLACE VIEW unitua.vista_prop_completa AS 
-    SELECT v1.*, v2.*
-    FROM (
-        SELECT *, ROW_NUMBER() OVER (
-            ORDER BY insegnamento_dipendente
-        )
-        AS rn1 
-        FROM unitua.esami_con_propedeuticita
-    ) v1
-    FULL JOIN (
-        SELECT *, ROW_NUMBER() OVER (
-            ORDER BY insegnamento_propedeutico
-        ) 
-        AS rn2
-        FROM unitua.esami_propedeutici
-    ) v2 
-    ON v1.rn1 = v2.rn2;
-
-SELECT * FROM unitua.vista_prop_completa;
-
---Funzione che restituisce le propedeuticità di un cdl avuto per argomento:
-CREATE OR REPLACE FUNCTION unitua.get_prop (
-    cdl_in integer 
-)
-RETURNS SETOF unitua.vista_prop_completa AS $$
-DECLARE 
-    all_prop unitua.vista_prop_completa%ROWTYPE;
-BEGIN
-    FOR all_prop IN 
-        SELECT *
-        FROM unitua.vista_prop_completa AS vpc 
-        WHERE codice_cdl = cdl_in
-    LOOP
-        RETURN NEXT all_prop;
-    END LOOP;
-
-    RETURN;
-END;
-$$ LANGUAGE plpgsql;
-
-/*
---Chiamata di verifica:
-SELECT * FROM unitua.get_prop(1);
-*/
-
 --Funzione booleana che dato il codice di un esame stabilisce se ha propedeuticità:
 CREATE OR REPLACE FUNCTION unitua.check_esame (
     esame_in integer 
@@ -1464,6 +1398,27 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
+--Funzione che, dato l'ID di un docente come argomento, restituisca tutti i suoi dati personali:
+CREATE OR REPLACE FUNCTION unitua.get_info_doc2 (
+    id_in integer
+)
+RETURNS SETOF unitua.all_docente AS $$
+DECLARE
+    all_info_doc unitua.all_docente%ROWTYPE;
+BEGIN
+    SELECT *
+    INTO all_info_doc
+    FROM unitua.all_docente AS ad 
+    WHERE ad.id = id_in;
+
+    RETURN NEXT all_info_doc;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_info_doc2(101);
+*/
 
 --Vista completa con insegnamenti del docente (non con COUNT):
 CREATE OR REPLACE VIEW unitua.all_ins AS 
@@ -2327,4 +2282,28 @@ $$ LANGUAGE plpgsql;
 /*
 --Query di verifica:
 SELECT * FROM unitua.get_segretario(200);
+*/
+
+SELECT * FROM unitua.propedeuticita;
+
+--Funzione che dato il codice di un insegnamento ne restituisce il nome:
+CREATE OR REPLACE FUNCTION unitua.get_ins_name (
+    code_in integer
+)
+RETURNS TEXT AS $$
+DECLARE 
+    nome_out text;
+BEGIN
+    SELECT i.nome_insegnamento
+    INTO nome_out
+    FROM unitua.insegnamento AS i 
+    WHERE i.codice = code_in;
+
+    RETURN nome_out;
+END;
+$$ LANGUAGE plpgsql;
+
+/*
+--Query di verifica:
+SELECT * FROM unitua.get_ins_name(300);
 */

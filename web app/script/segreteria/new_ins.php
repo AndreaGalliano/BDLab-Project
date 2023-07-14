@@ -5,10 +5,12 @@
     if (isset($_POST['nome_insegnamento']) && isset($_POST['anno_insegnamento']) && isset($_POST['descrizione']) && isset($_POST['docente']) && isset($_POST['cdl']) && isset($_POST['tipologia']) && isset($_POST['modalita'])) {
         // echo "entrato";
 
-        $queryDoc = "SELECT * FROM unitua.get_info_doc($1)";
+        $queryDoc = "SELECT * FROM unitua.get_info_doc2($1)";
         $resDoc = pg_prepare($connection, "", $queryDoc);
-        $resDoc = pg_execute($connection, "", array($_SESSION['email']));
+        $resDoc = pg_execute($connection, "", array($_POST['docente']));
         $rowDoc = pg_fetch_assoc($resDoc);
+
+        // print_r($rowDoc);
 
         if ($rowDoc['cdl'] != $_POST['cdl']) {
             $_SESSION['nuovo_ins'] = "L'ID docente non coincide con il CdL in cui insegna!";
@@ -31,9 +33,32 @@
                     $query3 = "CALL unitua.insert_esame($1, $2, $3)";
                     $res3 = pg_prepare($connection, "", $query3);
                     $res3 = pg_execute($connection, "", array($row['get_ins_code'], $_POST['tipologia'], $_POST['modalita']));
+                    
+                    if (isset($_POST['propedeutico'])) {
+                        $query5 = "CALL unitua.insert_propedeuticita($1, $2)";
+                        $res5 = pg_prepare($connection, "", $query5);
+                        $res5 = pg_execute($connection, "", array($_POST['propedeutico'], $row['get_ins_code']));
 
-                    $_SESSION['nuovo_ins'] = "Inserimento dell'insegnamento e dell'esame avvenuto con successo!";
-                    header('Location: ../../pagine/segreteria/conf_new_ins.php');
+                        if ($res5) {
+                            $affRows2 = pg_affected_rows($res5);
+
+                            if ($affRows2 == 0) {
+                                $_SESSION['nuovo_ins'] = "Inserimento dell'insegnamento avvenuto con successo!";
+                                header('Location: ../../pagine/segreteria/conf_new_ins.php');
+                            } else {
+                                $msg_error = explode(".", pg_last_error($connection));
+                                $_SESSION['nuovo_ins'] = $msg_error[0];
+                                header('Location: ../../pagine/segreteria/conf_new_ins.php');
+                            }
+                        } else {
+                            $msg_error = explode(".", pg_last_error($connection));
+                            $_SESSION['nuovo_ins'] = $msg_error[0];
+                            header('Location: ../../pagine/segreteria/conf_new_ins.php');
+                        }
+                    } else {
+                        $_SESSION['nuovo_ins'] = "Inserimento dell'insegnamento e dell'esame avvenuto con successo!";
+                        header('Location: ../../pagine/segreteria/conf_new_ins.php');
+                    }
                 } else {
                     $msg_error = explode(".", pg_last_error($connection));
                     $_SESSION['nuovo_ins'] = $msg_error[0];

@@ -70,6 +70,7 @@
 
         echo "<h5 id='scritta_is'>Tabella delle propedeuticità:</h5>";
 
+        /*
         $query3 = "SELECT * FROM unitua.get_cdl($1)";
 
         $res3 = pg_prepare($connection, "esito", $query3);
@@ -106,6 +107,47 @@
                     }
                     echo "</li>";
                     }
+                }
+            }
+            echo "<br><br>";
+        }
+
+        */
+
+        $query4 = "SELECT * FROM unitua.propedeuticita";
+
+        $res4 = pg_prepare($connection, "esito_q", $query4);
+        $res4 = pg_execute($connection, "esito_q", array());
+
+        echo "<ul class='list-group' id='centrato'>";
+
+        while ($row4 = pg_fetch_assoc($res4)) {
+            foreach ($row4 as $key => $value) {
+                switch ($key) {
+                    case 'insegnamento_propedeutico':
+                        echo "<li class='list-group-item'> Insegnamento propedeutico: ";
+                        
+                        $query_prop1 = "SELECT * FROM unitua.get_ins_name($1)";
+                        $res_prop1 = pg_prepare($connection, "", $query_prop1);
+                        $res_prop1 = pg_execute($connection, "", array($row4['insegnamento_propedeutico']));
+                        $row_prop1 = pg_fetch_assoc($res_prop1);
+
+                        echo $row_prop1['get_ins_name'];
+
+                        echo "</li>";
+                        break;
+                    case 'insegnamento_con_propedeuticita':
+                        echo "<li class='list-group-item'> Insegnamento con propedeuticità: ";
+                        
+                        $query_prop2 = "SELECT * FROM unitua.get_ins_name($1)";
+                        $res_prop2 = pg_prepare($connection, "", $query_prop2);
+                        $res_prop2 = pg_execute($connection, "", array($row4['insegnamento_con_propedeuticita']));
+                        $row_prop2 = pg_fetch_assoc($res_prop2);
+
+                        echo $row_prop2['get_ins_name'];
+
+                        echo "</li>";
+                        break;
                 }
             }
             echo "<br><br>";
